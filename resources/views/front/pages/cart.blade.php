@@ -8,7 +8,7 @@
         :main-url="route('home.index')"
         :main-url-name="'Anasayfa'"
         :child-url="route('page.cart')"
-        :child-url-name="'Sepet'" xmlns="http://www.w3.org/1999/html"/>
+        :child-url-name="'Sepet'"/>
 
     <div class="site-section">
         <div class="container">

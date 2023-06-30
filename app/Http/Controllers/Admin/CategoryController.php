@@ -36,9 +36,6 @@ class CategoryController extends Controller
 
         $imageName = Helper::getFileName($request->name, $request->image, "images/categories/");
 
-//        $is_main_category = $request->categoryType == "main";
-
-//        if ($is_main_category) $request->validate(["image" => 'required']);
         $is_main_category = $request->categoryType == "main";
 
         if ($is_main_category) {
@@ -105,7 +102,6 @@ class CategoryController extends Controller
 
             } else {
 
-//                $imageName = isset($request->image) ? $this->getImgName($request) : null;
                 $imageName = Helper::getFileName($request->name, $request->image, "images/categories/");
                 $tempImg = $category->image;
 

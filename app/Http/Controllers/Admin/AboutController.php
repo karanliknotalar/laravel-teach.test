@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Helper\Helper;
+use App\Http\Requests\Admin\AboutRequest;
 use App\Models\About;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
@@ -15,12 +16,10 @@ class AboutController extends Controller
         return view("admin.pages.about.edit", compact("about"));
     }
 
-    public function update(Request $request)
+    public function update(AboutRequest $request)
     {
-//        return $request->all();
-        $about = About::firstOrFail();
 
-//        return $about;
+        $about = About::firstOrFail();
 
         $imageName = Helper::getFileName($request->title, $request->image, "images/about/");
 

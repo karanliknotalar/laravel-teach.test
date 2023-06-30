@@ -66,28 +66,7 @@
                             @endforeach
                         @endif
                     </div>
-
-                    @if($products->hasPages())
-                        <div class="row" data-aos="fade-up">
-                            <div class="col-md-12 text-center">
-                                <div class="site-block-27">
-                                    <ul>
-                                        @if($products->previousPageUrl())
-                                            <li><a href="{{ $products->previousPageUrl() }}">&lt;</a></li>
-                                        @endif
-                                        @foreach($products->getUrlRange(1, ceil($products->total() / $products->perPage())) as $page => $url)
-                                            <li class="{{ $products->currentPage() == $page ? "active" : "" }}">
-                                                <a href="{{ $url }}">{{ $page }}</a>
-                                            </li>
-                                        @endforeach
-                                        @if($products->hasMorePages())
-                                            <li><a href="{{ $products->nextPageUrl() }}">&gt;</a></li>
-                                        @endif
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    @endif
+                    {!! $products->links('pagination::front-products') !!}
                 </div>
 
                 <div class="col-md-3 order-1 mb-5 mb-md-0">

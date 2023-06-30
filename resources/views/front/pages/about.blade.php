@@ -12,8 +12,8 @@
 
     <div class="site-section border-bottom" data-aos="fade">
         <div class="container">
-            <div class="row mb-12">
-                <div>
+            <div class="row">
+                <div class="col-12">
                     <div class="col-md-6 float-left mr-5 mb-2 px-0">
                         <div class="block-16">
                             <figure>
@@ -21,14 +21,14 @@
                                      alt="{{ $about->title ?? "" }}"
                                      class="img-fluid rounded">
                                 <a href="{{ $about->channel ?? "" }}"
-                                   class="play-button popup-vimeo">
-                                    <span class="ion-md-play"></span>
+                                   class="play-button popup-vimeo text-center bg-danger btn-success pt-3">
+                                    <i class="icon-youtube-play"></i>
                                 </a>
                             </figure>
                         </div>
                     </div>
                     <div>
-                        <div class="site-section-heading mb-4">
+                        <div class="mb-4">
                             <h2 class="text-black">{{ $about->title ?? "" }}</h2>
                         </div>
                         <div>

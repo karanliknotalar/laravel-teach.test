@@ -35,28 +35,28 @@
                     :value="$product->sort_description ?? ''"
                     :title="'Kısa Açıklama'"/>
 
-{{--                <x-admin.helpers.input-text--}}
-{{--                    :name="'price'"--}}
-{{--                    :value="$product->price ?? '0.00'"--}}
-{{--                    :title="'Fiyat'"--}}
-{{--                    :input-type="'numeric'"/>--}}
+                {{--                <x-admin.helpers.input-text--}}
+                {{--                    :name="'price'"--}}
+                {{--                    :value="$product->price ?? '0.00'"--}}
+                {{--                    :title="'Fiyat'"--}}
+                {{--                    :input-type="'numeric'"/>--}}
 
-{{--                <x-admin.helpers.input-text--}}
-{{--                    :name="'size'"--}}
-{{--                    :value="$product->size ?? ''"--}}
-{{--                    :title="'Beden (Virgüllerle Ayırarak)'"--}}
-{{--                    :input-type="'numeric'"/>--}}
+                {{--                <x-admin.helpers.input-text--}}
+                {{--                    :name="'size'"--}}
+                {{--                    :value="$product->size ?? ''"--}}
+                {{--                    :title="'Beden (Virgüllerle Ayırarak)'"--}}
+                {{--                    :input-type="'numeric'"/>--}}
 
-{{--                <x-admin.helpers.input-text--}}
-{{--                    :name="'color'"--}}
-{{--                    :value="$product->color ?? ''"--}}
-{{--                    :title="'Renk (Virgüllerle Ayırarak)'"/>--}}
+                {{--                <x-admin.helpers.input-text--}}
+                {{--                    :name="'color'"--}}
+                {{--                    :value="$product->color ?? ''"--}}
+                {{--                    :title="'Renk (Virgüllerle Ayırarak)'"/>--}}
 
-{{--                <x-admin.helpers.input-text--}}
-{{--                    :name="'quantity'"--}}
-{{--                    :value="$product->quantity ?? ''"--}}
-{{--                    :title="'Stok'"--}}
-{{--                    :input-type="'numeric'"/>--}}
+                {{--                <x-admin.helpers.input-text--}}
+                {{--                    :name="'quantity'"--}}
+                {{--                    :value="$product->quantity ?? ''"--}}
+                {{--                    :title="'Stok'"--}}
+                {{--                    :input-type="'numeric'"/>--}}
 
                 <div class="form-floating mb-3">
                     <select class="form-select" aria-label="Kategori Seçin" name="category_id">
@@ -114,14 +114,15 @@
                             :title="'Stok'"
                             :input-type="'numeric'"/>
                         <div class="px-1 py-1">
-                            <button type="button" class="btn btn-danger p-1 btnsil mx-1 btnRemove"
-                                    tabindex="0"
-                                    data-bs-placement="top"
-                                    data-bs-toggle="popover"
-                                    data-bs-trigger="hover"
-                                    data-bs-content="Sil">
-                                <i class="mdi mdi-delete"></i>
-                            </button>
+
+                            <x-admin.helpers.button
+                                :class="'btn btn-danger p-1 btnsil mx-1 btnRemove'"
+                                :message="'Sil'"
+                                :over-text="true">
+                                <x-slot:text>
+                                    <i class="mdi mdi-delete"></i>
+                                </x-slot:text>
+                            </x-admin.helpers.button>
                         </div>
                     </div>
                 </x-slot>
@@ -136,7 +137,7 @@
     <script>
         $("#addProductDetail").on("click", function () {
             let product = $(".productDetail");
-            product.parent().append(product.last().clone());
+            product.last().clone().insertBefore(product.last());
         });
     </script>
     <script>

@@ -60,7 +60,8 @@
                             <div class="px-1 py-1">
                                 <x-admin.helpers.button
                                     :class="'btn btn-danger p-1 btnsil mx-1 btnRemove'"
-                                    :message="'Sil'">
+                                    :message="'Sil'"
+                                    :over-text="true">
                                     <x-slot:text>
                                         <i class="mdi mdi-delete"></i>
                                     </x-slot:text>
@@ -86,7 +87,7 @@
     <script>
         $("#addProductDetail").on("click", function () {
             let product = $(".productDetail");
-            product.last().clone().insertBefore(product.parent().children().last());
+            product.last().clone().insertBefore(product.last());
         });
     </script>
     <script>

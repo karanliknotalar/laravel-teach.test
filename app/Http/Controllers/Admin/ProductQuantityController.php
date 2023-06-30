@@ -38,8 +38,8 @@ class ProductQuantityController extends Controller
         $product_id = decrypt($request->product_id);
         $check = Product::where("id", $product_id)->select("id");
 
-        $ProductQuantity = ProductQuantity::query()->where("product_id", $product_id);
-        $result = $ProductQuantity->delete();
+        $productQuantity = ProductQuantity::query()->where("product_id", $product_id);
+        $result = $productQuantity->delete();
 
         if ($check && $result) {
 

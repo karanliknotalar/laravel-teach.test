@@ -27,7 +27,9 @@
                 </h4>
 
                 @if(isset($quantities))
-                    <input type="hidden" value="{{ encrypt($quantities[0]->product_id) ?? "" }}" name="product_id">
+                    <input type="hidden"
+                           value="{{ isset($quantities[0]->product_id) ? encrypt($quantities[0]->product_id) : "" }}"
+                           name="product_id">
                     @foreach($quantities as $quantity)
                         <div class="d-flex productDetail">
                             <x-admin.helpers.input-text

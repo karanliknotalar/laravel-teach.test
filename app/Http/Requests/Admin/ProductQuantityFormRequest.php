@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Admin;
 
+use App\Rules\NumericOrDecimal;
 use Illuminate\Foundation\Http\FormRequest;
 
 class ProductQuantityFormRequest extends FormRequest
@@ -22,10 +23,12 @@ class ProductQuantityFormRequest extends FormRequest
     public function rules(): array
     {
         return [
-            "price.*" => 'required|min:1',
+            "price.*" => ['required',
+                'min:1',
+                new NumericOrDecimal()],
             "size.*" => 'required|min:1',
             "color.*" => 'required|min:1',
-            "quantity.*" => 'required|min:1',
+            "quantity.*" => 'required|min:1|numeric',
             "product_id" => "required",
         ];
     }

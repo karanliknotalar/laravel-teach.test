@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Admin;
 
+use App\Rules\NumericOrDecimal;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Route;
 
@@ -46,8 +47,10 @@ class ProductFormRequest extends FormRequest
             "sort_description" => 'required|min:15',
             "size.*" => 'required|min:1',
             "color.*" => 'required|min:1',
-            "price.*" => 'required|min:1',
-            "quantity.*" => 'required|min:1',
+            "price.*" => ['required',
+                'min:1',
+                new NumericOrDecimal()],
+            "quantity.*" => 'required|min:1|numeric',
             "category_id" => 'required|numeric',
         ];
     }

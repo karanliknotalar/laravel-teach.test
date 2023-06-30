@@ -9,7 +9,6 @@ use App\Models\Product;
 use App\Models\ProductQuantity;
 use Exception;
 use Illuminate\Routing\Controller;
-use Illuminate\Support\Str;
 
 class ProductController extends Controller
 {

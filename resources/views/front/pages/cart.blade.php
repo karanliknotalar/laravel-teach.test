@@ -28,16 +28,17 @@
                             </thead>
                             <tbody>
                             @if(isset($cartItems))
-                                @foreach($cartItems as $id=>$cartItem)
-
+                                @foreach($cartItems as $cartItem)
                                     <tr>
                                         <td class="product-thumbnail">
                                             <img src="{{ asset($cartItem["image"] ?? "images/cloth_1.jpg")  }}"
                                                  alt="{{ $cartItem["name"] }}" class="img-fluid">
                                         </td>
                                         <td class="product-name">
-                                            <a href="{{ route("page.product", [$id ?? "", $cartItem["slug_name"] ?? ""]) }}">
-                                                <h2 class="h5 text-black">{{ $cartItem["name"] }}</h2></a>
+                                            <a href="{{ route("page.product", [$cartItem["slug_name"] ?? ""]) }}">
+                                                <h2 class="h5 text-black">{{ $cartItem["name"] }}</h2>
+                                            </a>
+                                            <span>{{ $cartItem["color"] ?? "" }}</span> - <span>{{ $cartItem["size"] ?? "" }}</span>
                                         </td>
                                         <td>{{ number_format($cartItem["price"], 2) }} TL</td>
                                         <td>
@@ -67,7 +68,8 @@
                                         <td>
                                             <form action="{{ route("cart.remove-cart") }}" method="post">
                                                 @csrf
-                                                <input type="hidden" name="id" value="{{ $id }}">
+                                                <input type="hidden" name="product_id" value="{{ encrypt($cartItem["product_id"]) }}">
+                                                <input type="hidden" name="product_quantity_id" value="{{ encrypt($cartItem["product_quantity_id"]) }}">
                                                 <input role="button" type="submit" value="X"
                                                        class="btn btn-primary btn-sm" id="removeCard">
                                             </form>

@@ -19,7 +19,7 @@
                          alt="{{ $product->name }}" class="img-fluid">
                 </div>
                 <div class="col-md-6 col-lg-6 my-sm-3 my-md-0">
-                    <form action="" method="POST" id="cardForm">
+                    <form action="" method="POST" id="cartForm">
                         @csrf
                         <input type="hidden" name="product_id" value="{{ encrypt($product->id) }}">
                         <h2 class="text-black mb-3">{{ $product->name }}</h2>
@@ -59,7 +59,7 @@
                         <p><strong
                                 class="text-primary h4 mb-4 price">{{ number_format($product->low_price->price, 2) ?? "" }}
                                 TL</strong></p>
-                        <p><span id="addCard" class="buy-now btn btn-sm btn-primary">Sepete Ekle</span></p>
+                        <p><span id="addCart" class="buy-now btn btn-sm btn-primary">Sepete Ekle</span></p>
                     </form>
                 </div>
             </div>
@@ -110,33 +110,31 @@
 @section("js")
     <script src="{{ asset('/') }}jquery-toast/jquery.toast.min.js"></script>
     <script>
+        function toastMsg(icon, title, message) {
+            $.toast({
+                heading: title,
+                text: message,
+                showHideTransition: 'slide',
+                icon: icon,
+                position: 'bottom-right',
+                hideAfter: 1500,
+            });
+        }
+
         $(document).ready(function () {
-            $("#addCard").click(function () {
+            $("#addCart").click(function () {
 
                 $.ajax({
                     method: "POST",
                     url: "{{ route("cart.add-cart") }}",
-                    data: $("#cardForm").serialize(),
-                    success: function (sonuc) {
-                        if (sonuc === "ok") {
-                            $.toast({
-                                heading: 'Success',
-                                text: 'Başarıyla Sepete Eklendi',
-                                showHideTransition: 'slide',
-                                icon: 'success',
-                                position: 'bottom-right',
-                                hideAfter: 1500,
-                            });
-
-                        } else {
-                            $.toast({
-                                heading: 'Stok',
-                                text: 'Stok sınırını aştınız',
-                                showHideTransition: 'slide',
-                                icon: 'error',
-                                position: 'bottom-right',
-                                hideAfter: 1500,
-                            });
+                    data: $("#cartForm").serialize(),
+                    success: function (response) {
+                        if (response.success) {
+                            toastMsg("success", "Başarılı", response.message)
+                        } else if (response.quantity) {
+                            toastMsg("error", "Stok", response.message)
+                        } else if (response.error) {
+                            toastMsg("error", "Ürün", response.message)
                         }
                     }
                 })

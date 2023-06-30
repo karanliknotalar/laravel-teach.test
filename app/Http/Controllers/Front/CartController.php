@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Front;
 
 use App\Models\Product;
+use App\Models\ProductQuantity;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 
@@ -25,44 +26,66 @@ class CartController extends Controller
 
     public function add_cart(Request $request)
     {
-        return response($request->all());
+//        return response($request->all());
 
-        $product_id = $request->id;
+        $product_id = decrypt($request->product_id);
         $quantity = $request->quantity;
         $size = $request->size;
+        $color = $request->color;
+
+//        return $product_id
+
         $cartItems = session("cart", []);
 
-        $product = Product::find($product_id);
+        if (Product::where("id", $product_id)->exists()) {
 
-        if ($request->quantity < $product->quantity) {
-            if (array_key_exists($product_id, $cartItems)) {
-                $cartItems[$product_id]["quantity"] += $quantity;
-            } else {
-                $cartItems[$product_id] = [
-                    "name" => $product->name,
-                    "slug_name" => $product->slug_name,
-                    "image" => $product->image,
-                    "price" => $product->price,
-                    "quantity" => $quantity,
-                    "size" => $size,
-                ];
-            }
-            session(["cart" => $cartItems]);
+            if ($productQuantity = ProductQuantity::where([["product_id", "=", $product_id], ["size", "=", $size], ["color", "=", $color], ["quantity", ">=", $quantity]])->first()) {
 
-            return "ok";
-        } else {
-            return "stok";
-        }
+                $cartId = $product_id . "_" . $productQuantity->id;
+
+                if (array_key_exists($cartId, $cartItems)) {
+
+                    $cartItems[$cartId]["quantity"] += $quantity;
+
+                } else {
+
+                    $product = Product::where("id", $product_id)->first();
+
+                    $cartItems[$cartId] = [
+                        "name" => $product->name,
+                        "slug_name" => $product->slug_name,
+                        "image" => $product->image,
+                        "price" => $productQuantity->price,
+                        "quantity" => $request->quantity,
+                        "size" => $size,
+                        "color" => $color,
+                        "product_id" => $product_id,
+                        "product_quantity_id" => $productQuantity->id,
+                    ];
+                }
+                session(["cart" => $cartItems]);
+
+                return response(["success" => true, "message" => "ürün sepete eklendi"]);
+            } else
+                return response(["quantity" => true, "message" => "stok yetersiz"]);
+        } else
+            return response(["error" => true, "message" => "ürün ile ilgili bir sorun oluştu"]);
 
     }
 
     public function remove_cart(Request $request)
     {
+        $product_id = decrypt($request->product_id);
+        $productQuantity = decrypt($request->product_quantity_id);
+
+        $id = $product_id . "_" . $productQuantity;
+
         $cartItems = session()->pull('cart', []);
 
-        if (array_key_exists($request->id, $cartItems)) {
-            unset($cartItems[$request->id]);
+        if (array_key_exists($id, $cartItems)) {
+            unset($cartItems[$id]);
         }
+
         session(["cart" => $cartItems]);
         return back();
     }

@@ -10,18 +10,16 @@ use Illuminate\Routing\Controller;
 
 class ProductsController extends Controller
 {
-//    private function filterQuery($input_array, $include_between = false, $include_orderby = false)
-//    {
-//        if (!array_key_exists("order", $tmp) || !array_key_exists("director", $tmp)) {
-//            unset($tmp["order"]);
-//            unset($tmp["director"]);
-//        }
-//        return $tmp;
-//    }
-
 
     public function products(Request $request, $category_slug = null, $category_id = null, $sub_category = null)
     {
+        foreach ($request->query() as $key => $value) {
+
+            if (empty($value)){
+                unset($request[$key]);
+            }
+        }
+
         $products = Product::where("status", "=", 1)
             ->join("product_quantities", "products.id", "product_quantities.product_id")
             ->orderBy("products.created_at", "desc")
@@ -37,7 +35,7 @@ class ProductsController extends Controller
                     $query->whereIn("size", explode(",", $request->size));
                 if (isset($request->color))
                     $query->whereIn("color", explode(",", $request->color));
-                if (isset($request->min) && isset($request->max))
+                if (isset($request->min) || isset($request->max))
                     $query->whereBetween("price", [$request->min ?? 0, $request->max ?? $this->getMinMax(false)]);
                 return $query;
             })
@@ -49,7 +47,7 @@ class ProductsController extends Controller
                     ->limit(1);
             })
             ->with("category:id,name,slug_name")
-            ->orderBy($request->order ?? "name", $request->director?? "asc")
+            ->orderBy($request->order ?? "name", $request->director ?? "asc")
             ->whereHas("category", function ($query) use ($category_id) {
                 if (isset($category_id))
                     $query->where("category_id", $category_id)->orWhere("parent_id", $category_id);

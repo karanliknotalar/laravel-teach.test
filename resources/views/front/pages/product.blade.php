@@ -27,10 +27,10 @@
 
                         <div class="form-group mb-3">
                             <select class="form-control" id="size" name="size">
-                                @foreach($product->product_quantity as $product_quantity)
-                                    <option {{ $product_quantity->size == $product->low_price->size ? "selected" : "" }}
-                                            value="{{ $product_quantity->size }}">
-                                        {{ $product_quantity->size }}
+                                @foreach($product->product_size as $product_size)
+                                    <option {{ $product_size->size == $product->low_price->size ? "selected" : "" }}
+                                            value="{{ $product_size->size }}">
+                                        {{ $product_size->size }}
                                     </option>
                                 @endforeach
                             </select>

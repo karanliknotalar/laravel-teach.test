@@ -26,7 +26,7 @@ class Product extends Model
         return $this->hasOne(Category::class, "id", "category_id")->where("status", "=", 1);
     }
 
-    public function product_quantity(): HasMany
+    public function product_size(): HasMany
     {
         return $this->hasMany(ProductQuantity::class, "product_id", "id")
             ->groupBy("product_quantities.size", "product_quantities.product_id");

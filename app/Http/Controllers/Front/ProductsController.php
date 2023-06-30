@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Front;
 
 use App\Models\Product;
 use App\Models\ProductQuantity;
+use DB;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 
@@ -13,6 +14,7 @@ class ProductsController extends Controller
     {
         $tmp = [];
         foreach ($input_array as $key => $value) {
+
             if ($key == "size" && !empty($value))
                 $tmp["size"] = $value;
             if ($key == "color" && !empty($value))
@@ -60,7 +62,14 @@ class ProductsController extends Controller
                 "products.*",
                 "product_quantities.id as product_quantities_id",
                 "product_quantities.price",
+                "product_quantities.size",
+                "product_quantities.color",
             ])
+            ->where(function ($query) use ($request) {
+                if (isset($request->start_price) && isset($request->end_price))
+                    $query->whereBetween("price", [$request->start_price, $request->end_price]);
+                return $query->where($this->filterQuery($request->query()));
+            })
             ->where('product_quantities.price', function ($query) {
                 $query->select('price')
                     ->from('product_quantities')
@@ -68,18 +77,11 @@ class ProductsController extends Controller
                     ->orderBy('price')
                     ->limit(1);
             })
-            ->where(function ($query) use ($request) {
-                if (isset($request->start_price) && isset($request->end_price)) {
-                    $query->whereBetween("price", [$request->start_price, $request->end_price]);
-                }
-                return $query->where($this->filterQuery($request->query()));
-            })
             ->with("category:id,name,slug_name")
             ->orderBy($order_column, $order_director)
             ->whereHas("category", function ($query) use ($category_id) {
-                if (isset($category_id)) {
+                if (isset($category_id))
                     $query->where("category_id", $category_id)->orWhere("parent_id", $category_id);
-                }
                 return $query;
             })
             ->paginate(12)
@@ -92,7 +94,7 @@ class ProductsController extends Controller
 
         $colors = $this->getSizesOrColors("color", $category_id);
 
-        return view("front.pages.products", compact("products",  "sizes", "colors"));
+        return view("front.pages.products", compact("products", "sizes", "colors"));
     }
 
     public function getSizesOrColors($column, $category_id = null)
@@ -112,7 +114,7 @@ class ProductsController extends Controller
             })
             ->select([
                 "product_quantities.{$column}",
-                \DB::raw("COUNT(product_quantities.{$column}) as {$column}_count")
+                DB::raw("COUNT(product_quantities.{$column}) as {$column}_count")
             ])
             ->groupBy("product_quantities.{$column}")
             ->get();

@@ -128,8 +128,8 @@
                             <h3 class="mb-3 h6 text-uppercase text-black d-block">Renk</h3>
                             @if(isset($colors))
                                 @foreach($colors as $color)
-                                    <a href="#" class="d-flex color-item align-items-center">
-                                        {{--                                        <span class="{{ $temp_color ?? "" }} color d-inline-block rounded-circle mr-2"></span>--}}
+                                    <a href="{{ request()->fullUrlWithQuery(["color" => $color->color]) }}"
+                                       class="d-flex color-item align-items-center">
                                         <span
                                             class="text-black">{{ $color->color }} ({{ $color->color_count }})</span>
                                     </a>

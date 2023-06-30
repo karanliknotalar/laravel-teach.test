@@ -40,7 +40,7 @@ class Helper
     {
         $slug = Str::slug($value);
 
-        if ($model->where($column, $value)->exists()) {
+        if ($model->where($column, $slug)->exists()) {
 
             $result = $model->where($column, 'LIKE', '%' . $slug . '%')->latest('id')->value($column);
 

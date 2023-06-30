@@ -93,8 +93,8 @@
 
 @section("js")
     <x-admin.datatable.datatable-js
-        :column-defs-targets="'[0,4,5]'"
-        :order-index="'6'"
+        :column-defs-targets="'[2, 3]'"
+        :order-index="'0git '"
         :director="'desc'"/>
 
     <!-- sweetalert2 Init js -->

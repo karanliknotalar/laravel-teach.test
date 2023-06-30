@@ -97,23 +97,9 @@ class ProductController extends Controller
 
         $max_price = $this->getMinMax(false);
 
-        $sizes = ProductQuantity::join("products", "product_quantities.product_id", "products.id")
-            ->where("products.status", "=", 1)
-            ->select([
-                "product_quantities.size",
-                \DB::raw("COUNT(product_quantities.size) as size_count")
-            ])
-            ->groupBy("product_quantities.size")
-            ->get();
+        $sizes = $this->getSizesOrColors("size", $category_id);
 
-        $colors = ProductQuantity::join("products", "product_quantities.product_id", "products.id")
-            ->where("products.status", "=", 1)
-            ->select([
-                "product_quantities.color",
-                \DB::raw("COUNT(product_quantities.color) as color_count")
-            ])
-            ->groupBy("product_quantities.color")
-            ->get();
+        $colors = $this->getSizesOrColors("color", $category_id);
 
         return view("front.pages.products", compact("products", "min_price", "max_price", "sizes", "colors"));
     }
@@ -151,5 +137,28 @@ class ProductController extends Controller
             return $result->min("product_quantities.price");
         else
             return $result->max("product_quantities.price");
+    }
+
+    public function getSizesOrColors($column, $category_id = null)
+    {
+        return ProductQuantity::join("products", "product_quantities.product_id", "products.id")
+            ->where("products.status", "=", 1)
+            ->whereIn('products.category_id', function ($query) use ($category_id) {
+                if (isset($category_id)) {
+                    $query->select('categories.id')
+                        ->from('categories')
+                        ->where('categories.id', $category_id)
+                        ->orWhere('categories.parent_id', $category_id);
+                } else {
+                    $query->select('categories.id')
+                        ->from('categories');
+                }
+            })
+            ->select([
+                "product_quantities.{$column}",
+                \DB::raw("COUNT(product_quantities.{$column}) as {$column}_count")
+            ])
+            ->groupBy("product_quantities.{$column}")
+            ->get();
     }
 }

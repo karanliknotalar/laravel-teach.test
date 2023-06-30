@@ -16,13 +16,15 @@ class ProductController extends Controller
     public function product(Request $request, $id, $slug_name = null)
     {
         $product = Product::with("product_quantity:product_id,size")
+            ->with("low_price:product_id,size,color,price")
             ->where("status", "=", 1)
             ->where("id", "=", $id)
             ->firstOrFail();
 
 //        return $product;
 
-        $f_products = Product::where("status", "=", 1)
+        $f_products = Product::query()->with("low_price:product_id,price")
+            ->where("status", "=", 1)
             ->where("category_id", "=", $product->category_id)
             ->where("id", "!=", $product->id)
             ->inRandomOrder()

@@ -29,7 +29,10 @@
                         <div class="form-group mb-3">
                             <select class="form-control" id="size" name="size">
                                 @foreach($product->product_quantity as $product_quantity)
-                                    <option value="{{ $product_quantity->size }}">{{ $product_quantity->size }}</option>
+                                    <option {{ $product_quantity->size == $product->low_price->size ? "selected" : "" }}
+                                            value="{{ $product_quantity->size }}">
+                                        {{ $product_quantity->size }}
+                                    </option>
                                 @endforeach
                             </select>
                         </div>
@@ -54,7 +57,9 @@
                             </div>
                         </div>
 
-                        <p><strong class="text-primary h4 mb-4 price"></strong></p>
+                        <p><strong
+                                class="text-primary h4 mb-4 price">{{ number_format($product->low_price->price, 2) ?? "" }}
+                                TL</strong></p>
                         <p><span id="addCard" class="buy-now btn btn-sm btn-primary">Sepete Ekle</span></p>
                     </form>
                 </div>
@@ -88,7 +93,7 @@
                                                 <a href="{{ route("page.product", [$f_product->id, $f_product->slug_name]) }}">{{ $f_product->name }}</a>
                                             </h3>
                                             <p class="mb-0">{{ $f_product->sort_description ?? "" }}</p>
-                                            <p class="text-primary font-weight-bold">{{ number_format($f_product->price, 2) }}
+                                            <p class="text-primary font-weight-bold">{{ number_format($f_product->low_price->price, 2) }}
                                                 TL</p>
                                         </div>
                                     </div>
@@ -141,6 +146,8 @@
     </script>
     <script>
         $(document).ready(function () {
+            let first = true;
+
             function getColor() {
                 $.ajax({
                     method: "POST",
@@ -160,8 +167,9 @@
                                     value: p.color,
                                     text: p.color
                                 }));
+                                color.find('option[value="{{ $product->low_price->color }}"]')
+                                    .prop('selected', first && (p.color === "{{ $product->low_price->color }}"));
                             });
-
                             getPrice();
                         }
                     }

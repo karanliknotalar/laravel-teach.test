@@ -32,4 +32,9 @@ class Product extends Model
             ->groupBy("product_quantities.size", "product_quantities.product_id");
     }
 
+    public function low_price(): HasOne
+    {
+        return $this->hasOne(ProductQuantity::class, "product_id", "id")
+            ->orderBy("product_quantities.price");
+    }
 }

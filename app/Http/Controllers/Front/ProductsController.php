@@ -77,7 +77,7 @@ class ProductsController extends Controller
                     ->orderBy('price')
                     ->limit(1);
             })
-            ->with("category:id,name,slug_name")
+            ->with("category:id,name,slug")
             ->orderBy($order_column, $order_director)
             ->whereHas("category", function ($query) use ($category_id) {
                 if (isset($category_id))

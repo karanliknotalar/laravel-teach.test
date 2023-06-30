@@ -74,14 +74,14 @@
                         <ul class="dropdown">
                             @foreach($categories->where("parent_id", null) as $category)
                                 <li class="has-children">
-                                    <a href="{{ route("page.products_with_category", ['id'=> $category->id, 'category'=>$category->slug_name]) }}">{{ $category->name }}</a>
+                                    <a href="{{ route("page.products_with_category", ['id'=> $category->id, 'category'=>$category->slug]) }}">{{ $category->name }}</a>
                                     <ul class="dropdown">
                                         @foreach($category->sub_categories as $sub_category)
                                             <li>
                                                 <a href="{{ route("page.products_with_category",
                                                             [
-                                                                'category'=> $category->slug_name,
-                                                                'sub_category'=>$sub_category->slug_name,
+                                                                'category'=> $category->slug,
+                                                                'sub_category'=>$sub_category->slug,
                                                                 'id' => $sub_category->id,
                                                             ]) }}">{{ $sub_category->name }}</a>
                                             </li>

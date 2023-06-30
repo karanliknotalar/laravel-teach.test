@@ -29,7 +29,7 @@ class ProductSeeder extends Seeder
                 Product::create([
                     "category_id" => $category->id,
                     "name" => $name,
-                    "slug_name" => Str::slug($name),
+                    "slug" => Str::slug($name),
                     "image" => null,
                     "description" => "Uzun Açıklama",
                     "sort_description" => "Kısa Açıklama",

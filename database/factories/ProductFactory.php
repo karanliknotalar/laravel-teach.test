@@ -22,7 +22,7 @@ class ProductFactory extends Factory
         return [
             "category_id" => random_int(1, 9),
             "name" => $name,
-            "slug_name" => Str::slug($name),
+            "slug" => Str::slug($name),
             "image" => null,
             "description" => "Uzun Açıklama",
             "sort_description" => "Kısa Açıklama",

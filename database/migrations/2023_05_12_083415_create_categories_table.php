@@ -15,7 +15,7 @@ return new class extends Migration {
             $table->id();
             $table->unsignedBigInteger("parent_id")->nullable();
             $table->string("name", 50);
-            $table->string("slug_name", 100);
+            $table->string("slug", 100);
             $table->text("description")->nullable();
             $table->string("seo_description")->nullable();
             $table->string("seo_keywords")->nullable();

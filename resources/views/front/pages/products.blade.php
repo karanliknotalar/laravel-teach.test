@@ -47,7 +47,7 @@
                                 <div class="col-sm-6 col-lg-4 mb-4" data-aos="fade-up">
                                     <div class="block-4 text-center border">
                                         <figure class="block-4-image">
-                                            <a href="{{ route("page.product", [$product->id, $product->slug_name]) }}">
+                                            <a href="{{ route("page.product", ["slug" => $product->slug]) }}">
                                                 <img
                                                     src="{{ $product->image != null ? asset($product->image) : asset("images/cloth_1.jpg") }}"
                                                     alt="{{ $product->name }}" class="img-fluid">
@@ -55,7 +55,7 @@
                                         </figure>
                                         <div class="block-4-text p-4">
                                             <h3>
-                                                <a href="{{ route("page.product", [$product->id, $product->slug_name]) }}">{{ $product->name }}</a>
+                                                <a href="{{ route("page.product", ["slug" => $product->slug]) }}">{{ $product->name }}</a>
                                             </h3>
                                             <p class="mb-0">{{ $product->sort_description }}</p>
                                             <p class="text-primary font-weight-bold">{{ number_format($product->price, 2) }}
@@ -83,7 +83,7 @@
                                 @foreach($categories as $category)
                                     @if($category->parent_id == null)
                                         <li class="mb-1">
-                                            <a href="{{ route("page.products_with_category", ['id'=> $category->id, 'category'=>$category->slug_name]) }}"
+                                            <a href="{{ route("page.products_with_category", ['id'=> $category->id, 'category'=>$category->slug]) }}"
                                                class="d-flex">
                                                 <b><span>{{ $category->name }}</span></b>
                                                 <span
@@ -92,7 +92,7 @@
                                     @endif
                                     @foreach($category->sub_categories as $sub_category)
                                         <li class="mb-1 collapse" id="collapseSubCategory">
-                                            <a href="{{ route("page.products_with_category", ['id'=> $sub_category->id, 'category'=>$sub_category->slug_name]) }}"
+                                            <a href="{{ route("page.products_with_category", ['id'=> $sub_category->id, 'category'=>$sub_category->slug]) }}"
                                                class="d-flex">
                                                 <i><span>&nbsp;&nbsp;&nbsp;{!! $sub_category->name !!}</span></i>
                                                 <span
@@ -154,7 +154,7 @@
                                     <div class="col-sm-6 col-md-6 col-lg-4 mb-4 mb-lg-0" data-aos="fade"
                                          data-aos-delay="">
                                         <a class="block-2-item"
-                                           href="{{ route("page.products_with_category", ['id'=> $category->id, 'category'=>$category->slug_name]) }}">
+                                           href="{{ route("page.products_with_category", ['id'=> $category->id, 'category'=>$category->slug]) }}">
                                             <figure class="image">
                                                 <img src="{{ asset($category->image) }}" alt="{{ $category->name }}"
                                                      class="img-fluid">

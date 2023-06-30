@@ -76,7 +76,7 @@
                         <div class="col-sm-6 col-md-6 col-lg-4 mb-4 mb-lg-0 my-5" data-aos="fade"
                              data-aos-delay="">
                             <a class="block-2-item"
-                               href="{{ route("page.products_with_category", ['id'=> $category->id, 'category'=>$category->slug_name]) }}">
+                               href="{{ route("page.products_with_category", ['id'=> $category->id, 'category'=>$category->slug]) }}">
                                 <figure class="image">
                                     <img src="{{ asset($category->image) }}" alt="{{ $category->name }}"
                                          class="img-fluid">

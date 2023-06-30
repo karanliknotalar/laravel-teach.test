@@ -48,7 +48,7 @@ class CategoryController extends Controller
         $result = Category::query()->create([
             "parent_id" => $is_main_category ? null : $request["parent_id"],
             "name" => $request["name"],
-            "slug_name" => Str::slug($request["name"]),
+            "slug" => Str::slug($request["name"]),
             "description" => $request["description"] ?? null,
             "seo_description" => $request["seo_description"],
             "seo_keywords" => $request["seo_keywords"],
@@ -115,7 +115,7 @@ class CategoryController extends Controller
                 $result = $category->update([
                     "parent_id" => $is_main_category ? null : $request["parent_id"],
                     "name" => $request["name"],
-                    "slug_name" => Str::slug($request["name"]),
+                    "slug" => Str::slug($request["name"]),
                     "description" => $request["description"] ?? null,
                     "seo_description" => $request["seo_description"],
                     "seo_keywords" => $request["seo_keywords"],

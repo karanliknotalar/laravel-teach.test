@@ -21,7 +21,7 @@ class CategorySeeder extends Seeder
         $erkek = Category::create([
             "name" => "Erkek",
             "parent_id" => null,
-            "slug_name" => Str::slug("Erkek"),
+            "slug" => Str::slug("Erkek"),
             "description" => "Erkek Giyim",
             "seo_description" => "Erkek Giyim",
             "seo_keywords" => Str::slug("Erkek Giyim", ","),
@@ -32,7 +32,7 @@ class CategorySeeder extends Seeder
         Category::create([
             "name" => "Kazak",
             "parent_id" => $erkek->id,
-            "slug_name" => Str::slug("Erkek Kazak"),
+            "slug" => Str::slug("Erkek Kazak"),
             "description" => "Erkek Kazak",
             "seo_description" => "Erkek Kazak",
             "seo_keywords" => Str::slug("Erkek Kazak", ","),
@@ -43,7 +43,7 @@ class CategorySeeder extends Seeder
         Category::create([
             "name" => "Gömlek",
             "parent_id" => $erkek->id,
-            "slug_name" => Str::slug("Erkek Gömlek"),
+            "slug" => Str::slug("Erkek Gömlek"),
             "description" => "Erkek Gömlek",
             "seo_description" => "Erkek Gömlek",
             "seo_keywords" => Str::slug("Erkek Gömlek", ","),
@@ -55,7 +55,7 @@ class CategorySeeder extends Seeder
         $kadin = Category::create([
             "name" => "Kadın",
             "parent_id" => null,
-            "slug_name" => Str::slug("Kadın"),
+            "slug" => Str::slug("Kadın"),
             "description" => "Kadın Giyim",
             "seo_description" => "Kadın Giyim",
             "seo_keywords" => Str::slug("Kadın Giyim", ","),
@@ -66,7 +66,7 @@ class CategorySeeder extends Seeder
         Category::create([
             "name" => "Kazak",
             "parent_id" => $kadin->id,
-            "slug_name" => Str::slug("Kadın Kazak"),
+            "slug" => Str::slug("Kadın Kazak"),
             "description" => "Kadın Kazak",
             "seo_description" => "Kadın Kazak",
             "seo_keywords" => Str::slug("Kadın Kazak", ","),
@@ -77,7 +77,7 @@ class CategorySeeder extends Seeder
         Category::create([
             "name" => "Gömlek",
             "parent_id" => $kadin->id,
-            "slug_name" => Str::slug("Kadın Gömlek"),
+            "slug" => Str::slug("Kadın Gömlek"),
             "description" => "Kadın Gömlek",
             "seo_description" => "Kadın Gömlek",
             "seo_keywords" => Str::slug("Kadın Gömlek", ","),
@@ -88,7 +88,7 @@ class CategorySeeder extends Seeder
         $cocuk = Category::create([
             "name" => "Çocuk",
             "parent_id" => null,
-            "slug_name" => Str::slug("Çocuk"),
+            "slug" => Str::slug("Çocuk"),
             "description" => "Çocuk Giyim",
             "seo_description" => "Çocuk Giyim",
             "seo_keywords" => Str::slug("Çocuk Giyim", ","),
@@ -99,7 +99,7 @@ class CategorySeeder extends Seeder
         Category::create([
             "name" => "Oyuncak",
             "parent_id" => $cocuk->id,
-            "slug_name" => Str::slug("Çocuk Oyuncak"),
+            "slug" => Str::slug("Çocuk Oyuncak"),
             "description" => "Çocuk Oyuncak",
             "seo_description" => "Çocuk Oyuncak",
             "seo_keywords" => Str::slug("Çocuk Oyuncak", ","),
@@ -110,7 +110,7 @@ class CategorySeeder extends Seeder
         Category::create([
             "name" => "T-Shirt",
             "parent_id" => $cocuk->id,
-            "slug_name" => Str::slug("Çocuk T-Shirt"),
+            "slug" => Str::slug("Çocuk T-Shirt"),
             "description" => "Çocuk T-Shirt",
             "seo_description" => "Çocuk T-Shirt",
             "seo_keywords" => Str::slug("Çocuk T-Shirt", ","),

@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Support\Str;
 
 class Product extends Model
 {
@@ -14,7 +15,7 @@ class Product extends Model
     protected $fillable = [
         "category_id",
         "name",
-        "slug_name",
+        "slug",
         "image",
         "description",
         "sort_description",
@@ -36,5 +37,18 @@ class Product extends Model
     {
         return $this->hasOne(ProductQuantity::class, "product_id", "id")
             ->orderBy("product_quantities.price");
+    }
+    private function generateSlug($name): array|string|null
+    {
+        if (static::whereSlug($slug = Str::slug($name))->exists()) {
+            $max = static::whereName($name)->latest('id')->skip(1)->value('slug');
+            if (isset($max[-1]) && is_numeric($max[-1])) {
+                return preg_replace_callback('/(\d+)$/', function($mathces) {
+                    return $mathces[1] + 1;
+                }, $max);
+            }
+            return "{$slug}-2";
+        }
+        return $slug;
     }
 }

@@ -36,7 +36,7 @@ Route::get("/indirimdeki-urunler", [PageController::class, "products"])->name("p
 Route::get("/urunler", [ProductsController::class, "products"])->name("page.products");
 Route::get("/urunler/{category}/{id}", [ProductsController::class, "products"])->name("page.products_with_category");
 
-Route::get("/urun/{id}/{slug_name}", [ProductController::class, "product"])->name("page.product");
+Route::get("/urun/{slug}", [ProductController::class, "product"])->name("page.product");
 Route::post("/urun/size", [ProductController::class, "size"])->name("product.size");
 Route::post("/urun/color", [ProductController::class, "color"])->name("product.color");
 

@@ -5,6 +5,7 @@ namespace App\Providers;
 use App\Models\Category;
 use App\Models\SiteSetting;
 use Illuminate\Support\Facades\Blade;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -25,11 +26,16 @@ class AppServiceProvider extends ServiceProvider
         /**
          * Global Sayfa verilerini Db sen çekiyoruz.
          */
-        $categories = Category::where("status", "=", 1)->withCount("items")->with("sub_categories")->get();
+        $categories = null;
+        $site_contact_setting = null;
 
-        $site_contact_setting = SiteSetting::all()->pluck("content", "name")->toArray();
+        if (Schema::hasTable('categories'))
+            $categories = Category::where("status", "=", 1)->withCount("items")->with("sub_categories")->get();
 
-        view()->share(compact("categories","site_contact_setting"));
+        if (Schema::hasTable('site_settings'))
+            $site_contact_setting = SiteSetting::all()->pluck("content", "name")->toArray();
+
+        view()->share(compact("categories", "site_contact_setting"));
         /**
          *
          */

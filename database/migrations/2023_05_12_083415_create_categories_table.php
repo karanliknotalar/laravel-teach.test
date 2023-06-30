@@ -11,6 +11,7 @@ return new class extends Migration {
     public function up(): void
     {
         Schema::create('categories', function (Blueprint $table) {
+
             $table->id();
             $table->unsignedBigInteger("parent_id")->nullable();
             $table->string("name", 50);
@@ -20,12 +21,13 @@ return new class extends Migration {
             $table->string("seo_keywords")->nullable();
             $table->tinyInteger("status")->default(1);
             $table->string("image")->nullable();
+            $table->softDeletes();
             $table->timestamps();
 
             $table->foreign("parent_id")
                 ->references("id")
-                ->on("categories")
-                ->onDelete("cascade");
+                ->on("categories");
+
         });
     }
 

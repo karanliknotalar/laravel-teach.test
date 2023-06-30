@@ -20,7 +20,7 @@ class ProductSeeder extends Seeder
 
         foreach ($categories as $category) {
 
-            for ($i = 0; $i < random_int(4, 6); $i++) {
+            for ($i = 0; $i < random_int(3, 4); $i++) {
 
                 $base = $category->base_category->name ?? "";
                 $base = $base == "" ? "" : $base . " - ";

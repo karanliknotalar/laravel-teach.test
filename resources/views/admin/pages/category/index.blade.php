@@ -84,7 +84,7 @@
     <x-admin.sweet-alert2.sweet-alert2-js
         :use-delete-js="true"
         :select-btn-query="'.btnsil'"
-        :destroy-route='route("contact.destroy", ["contact" => ":id"])'
+        :destroy-route='route("category.destroy", ["category" => ":id"])'
         :reverse-btn="true">
         <x-slot name="id">
             $(this).closest("tr").attr("itemid")

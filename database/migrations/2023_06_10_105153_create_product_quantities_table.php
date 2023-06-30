@@ -18,6 +18,8 @@ return new class extends Migration {
             $table->string("color", 50);
             $table->integer("quantity")->default(0);
             $table->timestamps();
+
+            $table->foreign("product_id")->on("products")->references("id")->onDelete("cascade");
         });
     }
 

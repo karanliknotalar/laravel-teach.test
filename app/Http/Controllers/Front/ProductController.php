@@ -106,8 +106,6 @@ class ProductController extends Controller
             ->groupBy("product_quantities.size")
             ->get();
 
-//        return $sizes;
-
         $colors = ProductQuantity::join("products", "product_quantities.product_id", "products.id")
             ->where("products.status", "=", 1)
             ->select([

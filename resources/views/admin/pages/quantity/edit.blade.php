@@ -1,7 +1,6 @@
 @extends("admin.layout.layout")
 
 @section("css")
-    <x-admin.quill.quill-css/>
 @endsection
 
 @section("content")
@@ -61,7 +60,7 @@
 
                             <div class="px-1 py-1">
                                 <x-admin.helpers.button
-                                    :class="'btn btn-danger p-1 mx-1 btnRemove'"
+                                    :class="'btn btn-danger p-1 mx-1 btnRemove d-none'"
                                     :message="'Sil'"
                                     :over-text="true">
                                     <x-slot:text>
@@ -84,17 +83,14 @@
 @endsection
 
 @section("js")
-    <x-admin.quill.quill-js
-        :quill-hidden-id="'quilltext'"/>
     <script>
         $("#addProductDetail").on("click", function () {
             let product = $(".productDetail");
             product.last().clone().insertBefore(product.last());
+            product.last().find("button").removeClass("d-none")
         });
-    </script>
-    <script>
         $(document).on("click", ".btnRemove", function () {
-            if ($(".productDetail").length > 1)
+            if ($(".productDetail").length > {{ $quantities->count() }})
                 $(this).parent().parent().remove();
         });
     </script>

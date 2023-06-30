@@ -36,22 +36,31 @@ class ProductQuantityController extends Controller
     {
 
         $product_id = decrypt($request->product_id);
-        $check = Product::where("id", $product_id)->select("id");
+        $check = Product::where("id", $product_id)->select("id")->exists();
 
-        $productQuantity = ProductQuantity::query()->where("product_id", $product_id);
-        $result = $productQuantity->delete();
-
-        if ($check && $result) {
+        if ($check) {
 
             for ($i = 0; $i < count($request["size"]); $i++) {
 
-                ProductQuantity::create([
-                    "product_id" => $product_id,
-                    "price" => $request["price"][$i],
-                    "size" => $request["size"][$i],
-                    "color" => $request["color"][$i],
-                    "quantity" => $request["quantity"][$i],
-                ]);
+                if ($productQuantity = ProductQuantity::where([["product_id", "=", $product_id], ["size", "=", $request["size"][$i]], ["color", "=", $request["color"][$i]]])->first()) {
+
+                    $productQuantity->update([
+                        "price" => $request["price"][$i],
+                        "size" => $request["size"][$i],
+                        "color" => $request["color"][$i],
+                        "quantity" => $request["quantity"][$i],
+                    ]);
+
+                } else {
+
+                    ProductQuantity::create([
+                        "product_id" => $product_id,
+                        "price" => $request["price"][$i],
+                        "size" => $request["size"][$i],
+                        "color" => $request["color"][$i],
+                        "quantity" => $request["quantity"][$i],
+                    ]);
+                }
 
             }
         }

@@ -14,13 +14,24 @@ class CartController extends Controller
 
         $cartItems = session("cart", []);
         $totalPrice = 0;
+        $unsetting_product = [];
 
-        foreach ($cartItems as $cartItem) {
-            if (isset($cartItem["price"]) && isset($cartItem["quantity"]))
-                $totalPrice += $cartItem["price"] * $cartItem["quantity"];
+        foreach ($cartItems as $cartId => $cartItem) {
+
+            if (Product::where("id", $cartItem["product_id"])->exists() && ProductQuantity::where([["id", "=", $cartItem["product_quantity_id"]], ["quantity", ">=", $cartItem["quantity"]]])->exists()) {
+
+                if (isset($cartItem["price"]) && isset($cartItem["quantity"])) {
+                    $totalPrice += $cartItem["price"] * $cartItem["quantity"];
+                }
+            } else {
+                $unsetting_product[$cartId] = $cartItem;
+                unset($cartItems[$cartId]);
+            }
+
         }
 
-        return view("front.pages.cart", compact("cartItems", "totalPrice"));
+        session(["cart" => $cartItems]);
+        return view("front.pages.cart", compact("cartItems", "totalPrice", "unsetting_product"));
     }
 
     public function addCart(Request $request)
@@ -97,14 +108,14 @@ class CartController extends Controller
 //        return $request->all();
         $cartId = decrypt($request->cartId);
         $product_id = explode("_", $cartId)[0];
-        $productQuantity = explode("_", $cartId)[1];
+        $product_quantity_id = explode("_", $cartId)[1];
         $quantity = $request->quantity;
 
         $cartItems = session("cart", []);
 
         if (Product::where("id", $product_id)->exists()) {
 
-            if (ProductQuantity::where([["id", "=", $productQuantity], ["product_id", "=", $product_id], ["quantity", ">=", $quantity]])->exists()) {
+            if (ProductQuantity::where([["id", "=", $product_quantity_id], ["product_id", "=", $product_id], ["quantity", ">=", $quantity]])->exists()) {
 
                 if (array_key_exists($cartId, $cartItems)) {
 

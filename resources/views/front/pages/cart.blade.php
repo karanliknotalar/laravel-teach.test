@@ -13,6 +13,11 @@
 
     <div class="site-section">
         <div class="container">
+            @if(isset($unsetting_product) && count($unsetting_product) > 0)
+                <div class="alert alert-warning">
+                    {{ count($unsetting_product) }} ürün sepetinizden kaldırıldı.
+                </div>
+            @endif
             <div class="row mb-5">
                 <div class="col-md-12">
                     <div class="site-blocks-table">
@@ -84,7 +89,6 @@
                     </div>
                 </div>
             </div>
-
             <div class="row">
                 <div class="col-md-6">
                     <div class="row">

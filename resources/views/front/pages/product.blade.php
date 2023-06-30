@@ -19,7 +19,7 @@
                          alt="{{ $product->name }}" class="img-fluid">
                 </div>
                 <div class="col-md-6 col-lg-6 my-sm-3 my-md-0">
-                    <form action="" method="POST" id="cartForm">
+                    <form id="cartForm">
                         @csrf
                         <input type="hidden" name="product_id" value="{{ encrypt($product->id) }}">
                         <h2 class="text-black mb-3">{{ $product->name }}</h2>
@@ -47,8 +47,7 @@
                                 <div class="input-group-prepend">
                                     <button class="btn btn-outline-primary js-btn-minus" type="button">&minus;</button>
                                 </div>
-                                <input type="text" class="form-control text-center" value="1" placeholder=""
-                                       aria-label="Example text with button addon" aria-describedby="button-addon1"
+                                <input type="text" class="form-control text-center js-input-quantity" value="1"
                                        name="quantity">
                                 <div class="input-group-append">
                                     <button class="btn btn-outline-primary js-btn-plus" type="button">&plus;</button>
@@ -110,6 +109,24 @@
 @section("js")
     <script src="{{ asset('/') }}jquery-toast/jquery.toast.min.js"></script>
     <script>
+        $("#cartForm").bind("keyup keypress", function (e) {
+            const keyCode = e.keyCode || e.which;
+            if (keyCode === 13) {
+                e.preventDefault();
+                return false;
+            }
+        });
+
+        let quantity = $(".js-input-quantity");
+
+        $(".js-btn-plus").on("click", function () {
+            quantity.val(parseInt(quantity.val()) + 1);
+        })
+        $(".js-btn-minus").on("click", function () {
+            quantity.val(parseInt(quantity.val()) > 1 ? parseInt(quantity.val()) - 1 : quantity.val());
+        })
+    </script>
+    <script>
         function toastMsg(icon, title, message) {
             $.toast({
                 heading: title,
@@ -120,6 +137,7 @@
                 hideAfter: 1500,
             });
         }
+
         $(document).ready(function () {
             $("#addCart").click(function () {
                 $.ajax({

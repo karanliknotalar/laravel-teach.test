@@ -25,6 +25,8 @@ class CartController extends Controller
 
     public function add_cart(Request $request)
     {
+        return response($request->all());
+
         $product_id = $request->id;
         $quantity = $request->quantity;
         $size = $request->size;

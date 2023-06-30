@@ -22,21 +22,25 @@
                 <div class="col-md-6 col-lg-6 my-sm-3 my-md-0">
                     <form action="" method="POST" id="cardForm">
                         @csrf
-                        <input type="hidden" name="id" value="{{ $product->id }}">
-                        <h2 class="text-black">{{ $product->name }}</h2>
-                        {!! $product->description  ?? "" !!}
-                        <p><strong class="text-primary h4">{{ number_format($product->price, 2) }} TL</strong></p>
-                        <div class="d-flex">
-                            @foreach(explode(",", $product->size) as $size)
-                                <label for="option-{{ $size }}" class="d-flex mr-3 mb-3">
-                            <span class="d-inline-block mr-2" style="top:-2px; position: relative;">
-                                <input type="radio" id="option-{{ $size }}" name="size" value="{{ $size }}">
-                            </span>
-                                    <span class="d-inline-block text-black">{{ $size }}</span>
-                                </label>
-                            @endforeach
+                        <input type="hidden" name="product_id" value="{{ encrypt($product->id) }}">
+                        <h2 class="text-black mb-3">{{ $product->name }}</h2>
+                        <div class="mb-3">{!! $product->description  ?? "" !!}</div>
+
+                        <div class="form-group mb-3">
+                            <select class="form-control" id="size" name="size">
+                                @foreach($product->product_quantity as $product_quantity)
+                                    <option value="{{ $product_quantity->size }}">{{ $product_quantity->size }}</option>
+                                @endforeach
+                            </select>
                         </div>
-                        <div class="mb-5">
+
+                        <div class="form-group mb-4">
+                            <label for="color">Renk Seçin: </label>
+                            <select class="form-control" id="color" name="color" disabled>
+                            </select>
+                        </div>
+
+                        <div class="mb-4">
                             <div class="input-group mb-3" style="max-width: 120px;">
                                 <div class="input-group-prepend">
                                     <button class="btn btn-outline-primary js-btn-minus" type="button">&minus;</button>
@@ -49,6 +53,8 @@
                                 </div>
                             </div>
                         </div>
+
+                        <p><strong class="text-primary h4 mb-4 price"></strong></p>
                         <p><span id="addCard" class="buy-now btn btn-sm btn-primary">Sepete Ekle</span></p>
                     </form>
                 </div>
@@ -130,6 +136,63 @@
                         }
                     }
                 })
+            });
+        });
+    </script>
+    <script>
+        $(document).ready(function () {
+            function getColor() {
+                $.ajax({
+                    method: "POST",
+                    url: "{{ route("product.size") }}",
+                    data: {
+                        'size': $("#size").val(),
+                        '_token': '{{ csrf_token() }}',
+                        'id': '{{ encrypt($product->id) }}'
+                    },
+                    success: function (response) {
+                        if (!response.error) {
+                            const color = $("#color");
+                            color.prop("disabled", false);
+                            color.empty();
+                            response.forEach(function (p) {
+                                color.append($('<option>', {
+                                    value: p.color,
+                                    text: p.color
+                                }));
+                            });
+
+                            getPrice();
+                        }
+                    }
+                });
+            }
+
+            function getPrice() {
+                $.ajax({
+                    method: "POST",
+                    url: "{{ route("product.color") }}",
+                    data: {
+                        'size': $("#size").val(),
+                        'color': $("#color").val(),
+                        '_token': '{{ csrf_token() }}',
+                        'id': '{{ encrypt($product->id) }}'
+                    },
+                    success: function (response) {
+                        if (!response.error) {
+                            $(".price").text(response.price + " TL")
+                        }
+                    }
+                });
+            }
+
+            getColor();
+
+            $("#size").on("change", function () {
+                getColor();
+            });
+            $("#color").on("change", function () {
+                getPrice();
             });
         });
     </script>

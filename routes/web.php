@@ -11,6 +11,7 @@ use App\Http\Controllers\Front\CartController;
 use App\Http\Controllers\Front\HomeController;
 use App\Http\Controllers\Front\PageController;
 use App\Http\Controllers\Front\ProductController;
+use App\Http\Controllers\Front\ProductsController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -32,9 +33,13 @@ Route::get("/", [HomeController::class, "index"])->name("home.index");
 
 Route::get("/indirimdeki-urunler", [PageController::class, "products"])->name("page.indirimdeki-urunler");
 
-Route::get("/urunler", [ProductController::class, "products"])->name("page.products");
-Route::get("/urunler/{category}/{id}", [ProductController::class, "products"])->name("page.products_with_category");
+Route::get("/urunler", [ProductsController::class, "products"])->name("page.products");
+Route::get("/urunler/{category}/{id}", [ProductsController::class, "products"])->name("page.products_with_category");
+
 Route::get("/urun/{id}/{slug_name}", [ProductController::class, "product"])->name("page.product");
+Route::post("/urun/size", [ProductController::class, "size"])->name("product.size");
+Route::post("/urun/color", [ProductController::class, "color"])->name("product.color");
+
 
 Route::get("/hakkimizda", [PageController::class, "about"])->name("page.about");
 Route::get("/iletisim", [PageController::class, "contact"])->name("page.contact");

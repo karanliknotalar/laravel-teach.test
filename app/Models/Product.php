@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Product extends Model
@@ -23,6 +24,12 @@ class Product extends Model
     public function category(): HasOne
     {
         return $this->hasOne(Category::class, "id", "category_id")->where("status", "=", 1);
+    }
+
+    public function product_quantity(): HasMany
+    {
+        return $this->hasMany(ProductQuantity::class, "product_id", "id")
+            ->groupBy("product_quantities.size", "product_quantities.product_id");
     }
 
 }

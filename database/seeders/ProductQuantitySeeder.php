@@ -22,8 +22,8 @@ class ProductQuantitySeeder extends Seeder
                 ProductQuantity::create([
                     "product_id" => $product->id,
                     "price" => [random_int(100, 9999), random_int(100, 9999), random_int(100, 9999), random_int(100, 9999)][random_int(0, 3)],
-                    "size" => ["S", "M", "L", "X"][random_int(0, 3)],
-                    "color" => ["Kırmızı", "Mavi", "Yeşil", "Sarı"][random_int(0, 3)],
+                    "size" => ["S", "M", "L"][$i],
+                    "color" => ["Kırmızı", "Mavi", "Yeşil"][$i],
                     "quantity" => random_int(1, 99),
                 ]);
             }

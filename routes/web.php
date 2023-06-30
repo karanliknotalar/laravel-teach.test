@@ -66,6 +66,7 @@ Route::group(["prefix" => "admin", "middleware" => ["admin.dashboard.shared", "a
     Route::get("/logout", [AdminAuthController::class, "logout"])->name("admin-auth.logout");
 
     Route::resource("slider", "Admin\SliderController");
+    Route::resource("product", "Admin\ProductController");
 
 });
 

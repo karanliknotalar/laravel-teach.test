@@ -5,7 +5,7 @@
 
 @section("content")
 
-    <x-frontend.helpers.header-url
+    <x-front.helpers.header-url
         :main-url="route('home.index')"
         :main-url-name="'Anasayfa'"
         :child-url="route('page.contact')"

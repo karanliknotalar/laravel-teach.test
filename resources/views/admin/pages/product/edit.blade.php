@@ -10,7 +10,7 @@
     <div class="row">
         <div class="col-12">
             <div class="page-title-box">
-                <h4 class="page-title">{{ isset($slider) ? "Slider Düzenle" : "Slider Ekle" }}</h4>
+                <h4 class="page-title">{{ isset($product) ? "Ürün Düzenle" : "Ürün Ekle" }}</h4>
             </div>
         </div>
     </div>
@@ -43,28 +43,28 @@
                                         </div>
                                     @endif
                                     <form
-                                        action="{{ isset($slider) ? route("slider.update", ["slider" => encrypt($slider->id)]) : route("slider.store")  }}"
+                                        action="{{ isset($product) ? route("slider.update", ["slider" => encrypt($product->id)]) : route("slider.store")  }}"
                                         method="post" enctype="multipart/form-data">
                                         @csrf
-                                        @if(isset($slider))
+                                        @if(isset($product))
                                             @method('PUT')
                                         @endif
                                         <h5 class="mb-3">Slider</h5>
                                         <div class="form-floating mb-3">
                                             <input type="text" class="form-control" placeholder="Başlık" name="name"
-                                                   id="name" value="{{ $slider->name ?? "" }}">
+                                                   id="name" value="{{ $product->name ?? "" }}">
                                             <label for="name">Başlık</label>
                                         </div>
                                         <div class="mb-3">
                                             <input type="hidden" name="content" id="quilltext">
                                             <h6 class="mb-2">İçerik</h6>
                                             <div id="snow-editor" style="height: 300px;">
-                                                {!! $slider->content ?? "" !!}
+                                                {!! $product->content ?? "" !!}
                                             </div>
                                         </div>
                                         <div class="form-floating mb-3">
                                             <input type="text" class="form-control" placeholder="Başlık" name="shop_url"
-                                                   id="shop_url" value="{{ $slider->shop_url ?? "" }}">
+                                                   id="shop_url" value="{{ $product->shop_url ?? "" }}">
                                             <label for="shop_url">Url</label>
                                         </div>
                                         <div class="mb-3">
@@ -76,13 +76,13 @@
                                                 <label class="label-default me-2">Durum:</label>
                                                 <input type="checkbox" id="status"
                                                        data-switch="success"
-                                                       name="status" {{ isset($slider) && $slider->status == 1 ? "checked" : ""}}/>
+                                                       name="status" {{ isset($product) && $product->status == 1 ? "checked" : ""}}/>
                                                 <label for="status" data-on-label="On" data-off-label="Off"
                                                        class="mb-0 d-block"></label>
                                             </div>
                                         </div>
                                         <button type="submit" class="btn btn-success mx-auto form-control">
-                                            {{ isset($slider) ? "Güncelle" : "Kaydet" }}
+                                            {{ isset($product) ? "Güncelle" : "Kaydet" }}
                                         </button>
                                     </form>
                                 </div>
@@ -93,7 +93,7 @@
             </div> <!-- end card -->
         </div><!-- end col -->
 
-        @if(isset($slider))
+        @if(isset($product))
             <div class="col-lg-5">
                 <div class="card">
                     <div class="card-body">
@@ -104,7 +104,7 @@
                                         <div class="page-title-box">
                                             <h4 class="page-title">Resim Önizlemesi</h4>
                                             <img class="d-block img-fluid"
-                                                 src="{{ asset($slider->image ?? "") }}"
+                                                 src="{{ asset($product->image ?? "") }}"
                                                  alt="">
                                         </div>
                                     </div>

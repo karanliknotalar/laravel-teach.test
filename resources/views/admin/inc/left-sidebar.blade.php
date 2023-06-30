@@ -76,13 +76,27 @@
 
             <li class="side-nav-title">Apps</li>
 
-            <li class="side-nav-item">
-                <a href="{{ route("slider.index") }}" class="side-nav-link">
-                    <i class="uil-sliders-v-alt"></i>
-                    <span class="badge bg-primary float-end">{{ $sliderCount }}</span>
-                    <span> Sliders </span>
-                </a>
-            </li>
+            <x-admin.helpers.sidebar-single-menu-item
+                :url='route("slider.index")'
+                :name="'Sliders'"
+                :icon-name="'uil-sliders-v-alt'"
+                :count="$sliderCount"
+            />
+            <x-admin.helpers.sidebar-single-menu-item
+                :url='route("product.index")'
+                :name="'Ürünler'"
+                :icon-name="'ri-product-hunt-fill'"
+                :count="$productCount"
+            />
+
+{{--            <li class="side-nav-item">--}}
+{{--                <a href="" class="side-nav-link">--}}
+{{--                    <i class="ri-product-hunt-fill"></i>--}}
+{{--                    <span class="badge bg-primary float-end"></span>--}}
+{{--                    <span>Test</span>--}}
+{{--                </a>--}}
+{{--            </li>--}}
+
         </ul>
         <div class="clearfix"></div>
     </div>

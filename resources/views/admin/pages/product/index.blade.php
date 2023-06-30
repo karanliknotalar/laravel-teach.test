@@ -33,43 +33,51 @@
 @section("content")
 
     <x-admin.helpers.page-title-box
-        :title="'Sliders'"/>
+        :title="'Products'"/>
 
     <x-admin.datatable.layout.datatable-items
         :add-new-route='route("slider.create")'>
 
         <x-slot name="ths">
             <th>Resim</th>
-            <th>Başlık</th>
-            <th>İçerik</th>
-            <th>Url</th>
+            <th>Ürün</th>
+            <th>Kategori</th>
+            <th>Detay</th>
+            <th>Fiyat</th>
+            <th>Renk</th>
+            <th>Beden</th>
+            <th>Stok</th>
             <th>Durum</th>
             <th>Eylem</th>
-            <th>Oluşturulma</th>
+            <th>Eklenme T.</th>
         </x-slot>
         <x-slot name="tbody">
-            @foreach($sliders as $slider)
+            @foreach($products as $product)
                 @php
-                    $sliderId = encrypt($slider->id);
+                    $productId = encrypt($product->id);
                 @endphp
-                <tr itemid="{{ $sliderId }}">
+                <tr itemid="{{ $productId }}">
                     <td>
-                        <img src="{{ asset($slider->image) }}" alt="image"
+                        <img src="{{ asset($product->image ?? "images/cloth_1.jpg") }}" alt="image"
                              class="img-fluid avatar-lg">
                     </td>
-                    <td>{{ $slider->name }}</td>
-                    <td>{!! $slider->content ?? "" !!}</td>
-                    <td>{{ $slider->shop_url ?? "" }}</td>
+                    <td>{{ $product->name }}</td>
+                    <td>{{ $product->category_name }}</td>
+                    <td>{{ $product->sort_description ?? "" }}</td>
+                    <td>{{ $product->price ?? "" }}</td>
+                    <td>{{ $product->color ?? "" }}</td>
+                    <td>{{ $product->size ?? "" }}</td>
+                    <td>{{ $product->quantity ?? "" }}</td>
                     <td>
                         <x-admin.helpers.datatable-checkbox
-                            :id="$sliderId"
-                            :status="$slider->status"
-                            :select-class="'sliderStatus'"/>
+                            :id="$productId"
+                            :status="$product->status"
+                            :select-class="'productStatus'"/>
                     </td>
                     <td class="table-action">
                         <div class="d-flex">
                             <a class="mx-1"
-                               href="{{ route("slider.edit", ["slider" => $sliderId]) }}">
+                               href="{{ route("product.edit", ["product" => $productId]) }}">
                                 <button type="button" class="btn btn-primary p-1"><i
                                         class="mdi mdi-pencil"></i>
                                 </button>
@@ -79,12 +87,11 @@
                             </button>
                         </div>
                     </td>
-                    <td>{{ $slider->created_at }}</td>
+                    <td>{{ $product->created_at }}</td>
                 </tr>
             @endforeach
         </x-slot>
     </x-admin.datatable.layout.datatable-items>
-
 @endsection
 
 @section("js")
@@ -94,6 +101,7 @@
     <script src=" https://cdn.jsdelivr.net/npm/sweetalert2@11.7.9/dist/sweetalert2.all.min.js "></script>
     <!-- Jquery Toast js -->
     <script src="{{ $asset }}vendor/jquery-toast-plugin/jquery.toast.min.js"></script>
+
 
     <script>
         <!-- Switch Status on/off js -->
@@ -107,10 +115,10 @@
             });
         }
 
-        $(".sliderStatus").on("click", function (p) {
+        $(".productStatus").on("click", function (p) {
 
             const id = $(this).closest("tr").attr("itemid");
-            const url = "{{ route("slider.update", ["slider" => ":id"]) }}".replace(":id", id);
+            const url = "{{ route("product.update", ["product" => ":id"]) }}".replace(":id", id);
             const status = $(this).prop("checked") ? 1 : 0;
 
             $.ajax({
@@ -132,7 +140,9 @@
         <!-- Delete Slider js -->
         $(".btnsil").on("click", function (p) {
             const id = $(this).closest("tr").attr("itemid");
-            const url = "{{ route("slider.destroy", ["slider" => ":id"]) }}".replace(":id", id);
+            const url = "{{ route("product.destroy", ["product" => "9999"]) }}".replace("9999", id);
+            console.log(id);
+            console.log(url)
 
             const swal = Swal.mixin({
                 customClass: {

@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\Product;
 use App\Models\Slider;
 use Closure;
 use Illuminate\Http\Request;
@@ -17,8 +18,9 @@ class AdminDasboardMiddileware
     public function handle(Request $request, Closure $next): Response
     {
         $asset = asset("admin-assets")."/";
-        $sliderCount = Slider::query()->count("id");
-        view()->share(compact("asset", "sliderCount"));
+        $sliderCount = Slider::query()->select("id")->count("id");
+        $productCount = Product::query()->select("id")->count("id");
+        view()->share(compact("asset", "sliderCount", "productCount"));
         return $next($request);
     }
 }

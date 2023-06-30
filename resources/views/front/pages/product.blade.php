@@ -19,39 +19,22 @@
                     <img src="{{ $product->image != null ? asset($product->image) : asset("images/cloth_1.jpg") }}"
                          alt="{{ $product->name }}" class="img-fluid">
                 </div>
-
-                <form action="" method="POST" id="cardForm">
-                    @csrf
-                    <div class="col-md-6">
+                <div class="col-md-6 col-lg-6 my-sm-3 my-md-0">
+                    <form action="" method="POST" id="cardForm">
+                        @csrf
                         <input type="hidden" name="id" value="{{ $product->id }}">
                         <h2 class="text-black">{{ $product->name }}</h2>
                         {!! $product->description  ?? "" !!}
                         <p><strong class="text-primary h4">{{ number_format($product->price, 2) }} TL</strong></p>
-                        <div class="mb-1 d-flex">
-                            <label for="option-sm" class="d-flex mr-3 mb-3">
+                        <div class="d-flex">
+                            @foreach(explode(",", $product->size) as $size)
+                                <label for="option-{{ $size }}" class="d-flex mr-3 mb-3">
                             <span class="d-inline-block mr-2" style="top:-2px; position: relative;">
-                                <input type="radio" id="option-sm" name="size" value="sm">
+                                <input type="radio" id="option-{{ $size }}" name="size" value="{{ $size }}">
                             </span>
-                                <span class="d-inline-block text-black">Small</span>
-                            </label>
-                            <label for="option-md" class="d-flex mr-3 mb-3">
-                            <span class="d-inline-block mr-2" style="top:-2px; position: relative;">
-                                <input type="radio" id="option-md" name="size" value="md">
-                            </span>
-                                <span class="d-inline-block text-black">Medium</span>
-                            </label>
-                            <label for="option-lg" class="d-flex mr-3 mb-3">
-                            <span class="d-inline-block mr-2" style="top:-2px; position: relative;">
-                                <input type="radio" id="option-lg" name="size" value="lg">
-                            </span>
-                                <span class="d-inline-block text-black">Large</span>
-                            </label>
-                            <label for="option-xl" class="d-flex mr-3 mb-3">
-                            <span class="d-inline-block mr-2" style="top:-2px; position: relative;">
-                                <input type="radio" id="option-xl" name="size" value="xl">
-                            </span>
-                                <span class="d-inline-block text-black"> Extra Large</span>
-                            </label>
+                                    <span class="d-inline-block text-black">{{ $size }}</span>
+                                </label>
+                            @endforeach
                         </div>
                         <div class="mb-5">
                             <div class="input-group mb-3" style="max-width: 120px;">
@@ -67,9 +50,8 @@
                             </div>
                         </div>
                         <p><span id="addCard" class="buy-now btn btn-sm btn-primary">Sepete Ekle</span></p>
-                    </div>
-                </form>
-
+                    </form>
+                </div>
             </div>
         </div>
     </div>

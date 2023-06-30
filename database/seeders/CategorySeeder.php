@@ -27,8 +27,6 @@ class CategorySeeder extends Seeder
             "seo_keywords" => Str::slug("Erkek Giyim", ","),
             "status" => "1",
             "image" => "images/men.jpg",
-            "thumbnail" => null,
-            "order" => 1,
         ]);
 
         Category::create([
@@ -40,8 +38,6 @@ class CategorySeeder extends Seeder
             "seo_keywords" => Str::slug("Erkek Kazak", ","),
             "status" => "1",
             "image" => fake()->imageUrl,
-            "thumbnail" => null,
-            "order" => 1,
         ]);
 
         Category::create([
@@ -53,8 +49,6 @@ class CategorySeeder extends Seeder
             "seo_keywords" => Str::slug("Erkek Gömlek", ","),
             "status" => "1",
             "image" => fake()->imageUrl,
-            "thumbnail" => fake()->imageUrl,
-            "order" => 2,
         ]);
 
 
@@ -67,8 +61,6 @@ class CategorySeeder extends Seeder
             "seo_keywords" => Str::slug("Kadın Giyim", ","),
             "status" => 1,
             "image" => "images/women.jpg",
-            "thumbnail" => null,
-            "order" => 2,
         ]);
 
         Category::create([
@@ -80,8 +72,6 @@ class CategorySeeder extends Seeder
             "seo_keywords" => Str::slug("Kadın Kazak", ","),
             "status" => "1",
             "image" => fake()->imageUrl,
-            "thumbnail" => fake()->imageUrl,
-            "order" => 1,
         ]);
 
         Category::create([
@@ -93,8 +83,6 @@ class CategorySeeder extends Seeder
             "seo_keywords" => Str::slug("Kadın Gömlek", ","),
             "status" => "1",
             "image" => fake()->imageUrl,
-            "thumbnail" => fake()->imageUrl,
-            "order" => 2,
         ]);
 
         $cocuk = Category::create([
@@ -106,8 +94,6 @@ class CategorySeeder extends Seeder
             "seo_keywords" => Str::slug("Çocuk Giyim", ","),
             "status" => 1,
             "image" => "images/children.jpg",
-            "thumbnail" => null,
-            "order" => 3,
         ]);
 
         Category::create([
@@ -119,8 +105,6 @@ class CategorySeeder extends Seeder
             "seo_keywords" => Str::slug("Çocuk Oyuncak", ","),
             "status" => 1,
             "image" => fake()->imageUrl,
-            "thumbnail" => fake()->imageUrl,
-            "order" => 1,
         ]);
 
         Category::create([
@@ -132,8 +116,7 @@ class CategorySeeder extends Seeder
             "seo_keywords" => Str::slug("Çocuk T-Shirt", ","),
             "status" => 1,
             "image" => fake()->imageUrl,
-            "thumbnail" => fake()->imageUrl,
-            "order" => 2,
+
         ]);
     }
 }

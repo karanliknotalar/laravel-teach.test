@@ -36,13 +36,13 @@
         :title="'Products'"/>
 
     <x-admin.datatable.layout.datatable-items
-        :add-new-route='route("slider.create")'>
+        :add-new-route='route("product.create")'>
 
         <x-slot name="ths">
             <th>Resim</th>
             <th>Ürün</th>
             <th>Kategori</th>
-            <th>Detay</th>
+            <th>Kısa Açıklama</th>
             <th>Fiyat</th>
             <th>Renk</th>
             <th>Beden</th>

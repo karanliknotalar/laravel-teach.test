@@ -20,13 +20,13 @@
                     <div class="site-top-icons">
                         <ul>
                             <li class="dropdown">
-                                <a class="{{ Auth::check() ? "dropdown-toggle" : "" }}"
-                                   data-toggle="{{ Auth::check() ? "dropdown" : "" }}"
-                                   href="{{ Auth::check() ? "" : route("auth.user_login") }}">
+                                <a class="{{ Auth::check() && !Auth::user()->is_admin ? "dropdown-toggle" : "" }}"
+                                   data-toggle="{{ Auth::check() && !Auth::user()->is_admin ? "dropdown" : "" }}"
+                                   href="{{ Auth::check() && !Auth::user()->is_admin ? "" : route("auth.user_login") }}">
                                     <span class="icon icon-person"></span>
                                 </a>
                                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="profileDropdown">
-                                    @if(Auth::check())
+                                    @if(Auth::check() && !Auth::user()->is_admin)
                                         <a class="dropdown-item">
                                             <i class="ti-settings text-primary"></i>
                                             Profil

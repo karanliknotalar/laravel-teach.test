@@ -2,7 +2,6 @@
 
 @section("css")
     <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.0.7/css/swiper.min.css'>
-    <link href="https://fonts.googleapis.com/css?family=Rajdhani&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset("/") }}css/slider.css">
 @endsection
 

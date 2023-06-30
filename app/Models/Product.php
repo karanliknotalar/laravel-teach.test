@@ -16,6 +16,7 @@ class Product extends Model
         "image",
         "description",
         "sort_description",
+        "product_no",
         "price",
         "size",
         "color",
@@ -28,12 +29,14 @@ class Product extends Model
         return $this->hasOne(Category::class, "id", "category_id")->where("status", "=", 1);
     }
 
-    public function size(){
-        return $this->hasMany(Product::class,"size","size")->where("status", "=", 1);
+    public function size()
+    {
+        return $this->hasMany(Product::class, "size", "size")->where("status", "=", 1);
     }
 
-    public function color(){
-        return $this->hasMany(Product::class,"color","color")->where("status", "=", 1);
+    public function color()
+    {
+        return $this->hasMany(Product::class, "color", "color")->where("status", "=", 1);
     }
 
 }

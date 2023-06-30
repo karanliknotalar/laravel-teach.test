@@ -5,59 +5,134 @@
 @endsection
 
 @section("content")
-    <x-admin.helpers.layout.edit-page-layout
-        :model="$product ?? null"
-        :page-title="'Ürün'"
-        :image="$product->image ?? ''">
-        <x-slot name="contents">
+    <form
+        action="{{ isset($product) ? route("product.update", ["product" => encrypt($product->id)]) : route("product.store")  }}"
+        method="post" enctype="multipart/form-data">
+        @csrf
+        @if(isset($product))
+            @method('PUT')
+        @endif
 
-            <form
-                action="{{ isset($product) ? route("slider.update", ["slider" => encrypt($product->id)]) : route("slider.store")  }}"
-                method="post" enctype="multipart/form-data">
-                @csrf
-                @if(isset($product))
-                    @method('PUT')
-                @endif
+        <x-admin.helpers.layout.edit-page-layout
+            :model="$product ?? null"
+            :page-title="'Ürün'"
+            :image="$product->image ?? ''">
+            <x-slot name="contents">
+
                 <x-admin.helpers.input-text
                     :name="'name'"
                     :value="$product->name ?? ''"
                     :title="'Başlık'"/>
 
-                <div class="mb-3">
-                    <input type="hidden" name="content" id="quilltext">
-                    <h6 class="mb-2">İçerik</h6>
-                    <div id="snow-editor" style="height: 300px;">
-                        {!! $product->content ?? "" !!}
-                    </div>
-                </div>
+                <x-admin.helpers.quill-text-area
+                    :quill-style="'height: 250px;'"
+                    :hidden-id="'quilltext'"
+                    :content="$product->description ?? ''"
+                    :name="'description'"/>
+
+                <x-admin.helpers.input-text
+                    :name="'sort_description'"
+                    :value="$product->sort_description ?? ''"
+                    :title="'Kısa Açıklama'"/>
+
+                <x-admin.helpers.input-text
+                    :name="'price'"
+                    :value="$product->price ?? '0.00'"
+                    :title="'Fiyat'"
+                    :input-type="'numeric'"/>
+
+                <x-admin.helpers.input-text
+                    :name="'size'"
+                    :value="$product->size ?? ''"
+                    :title="'Beden (Virgüllerle Ayırarak)'"
+                    :input-type="'numeric'"/>
+
+                <x-admin.helpers.input-text
+                    :name="'color'"
+                    :value="$product->color ?? ''"
+                    :title="'Renk (Virgüllerle Ayırarak)'"/>
+
+                <x-admin.helpers.input-text
+                    :name="'quantity'"
+                    :value="$product->quantity ?? ''"
+                    :title="'Stok'"
+                    :input-type="'numeric'"/>
+
                 <div class="form-floating mb-3">
-                    <input type="text" class="form-control" placeholder="Başlık" name="shop_url"
-                           id="shop_url" value="{{ $product->shop_url ?? "" }}">
-                    <label for="shop_url">Url</label>
+                    <select class="form-select" aria-label="Kategori Seçin" name="category_id">
+                        <option>---Kategori Seçin---</option>
+                        @if(isset($categories))
+                            @foreach($categories as $category)
+                                <option
+                                    value="{{ $category->id }}"
+                                    {{ isset($product->category_id) && $product->category_id == $category->id ? "selected" : "" }}>
+                                    {!! $category->parent_id == null ? "$category->name" : "&nbsp;&nbsp;&nbsp;&nbsp;$category->name"  !!}
+                                </option>
+                            @endforeach
+                        @endif
+                    </select>
+                    <label for="mainCategorySelect">Kategoriler</label>
                 </div>
-                <div class="mb-3">
-                    <label for="image" class="mb-1">Resim Seç (1900x890)</label>
-                    <input type="file" id="image" class="form-control" name="image">
-                </div>
-                <div class="mb-4">
-                    <div class="d-flex">
-                        <label class="label-default me-2">Durum:</label>
-                        <input type="checkbox" id="status"
-                               data-switch="success"
-                               name="status" {{ isset($product) && $product->status == 1 ? "checked" : ""}}/>
-                        <label for="status" data-on-label="On" data-off-label="Off"
-                               class="mb-0 d-block"></label>
-                    </div>
-                </div>
+
+                <x-admin.helpers.input-file
+                    :name="'image'"
+                    :title="'Resim Seç (1900x890)'"/>
+
+                <x-admin.helpers.input-checkbox
+                    :label-title="'Durum:'"
+                    :name="'status'"
+                    :checked-status="isset($product) && $product->status == 1 ? 'checked' : ''"/>
+
                 <button type="submit" class="btn btn-success mx-auto form-control">
                     {{ isset($product) ? "Güncelle" : "Kaydet" }}
                 </button>
-            </form>
-        </x-slot>
-    </x-admin.helpers.layout.edit-page-layout>
+
+
+            </x-slot>
+            @if(!isset($product))
+                <x-slot name="productDetail">
+                    <div class="d-flex productDetail">
+                        <x-admin.helpers.input-text
+                            :main-class="'mx-1 mb-2'"
+                            :name="'size_d[]'"
+                            :value="$product->size ?? ''"
+                            :title="'Beden'"
+                            :input-type="'numeric'"/>
+                        <x-admin.helpers.input-text
+                            :main-class="'mx-1 mb-2'"
+                            :name="'color_d[]'"
+                            :value="$product->color ?? ''"
+                            :title="'Renk'"/>
+                        <x-admin.helpers.input-text
+                            :main-class="'mx-1 mb-2'"
+                            :name="'price_d[]'"
+                            :value="$product->price ?? '0.00'"
+                            :title="'Fiyat'"
+                            :input-type="'numeric'"/>
+                        <div class="px-1 py-1">
+                            <button type="button" class=" btn btn-danger btnRemove"><i class="mdi mdi-delete"></i>
+                            </button>
+                        </div>
+                    </div>
+                </x-slot>
+            @endif
+        </x-admin.helpers.layout.edit-page-layout>
+    </form>
 @endsection
 
 @section("js")
     <x-admin.quill.quill-js
-        :quill-element-id="'quilltext'"/>
+        :quill-hidden-id="'quilltext'"/>
+    <script>
+        $("#addProductDetail").on("click", function () {
+            let product = $(".productDetail");
+            product.parent().append(product.last().clone());
+        });
+    </script>
+    <script>
+        $(document).on("click", ".btnRemove", function () {
+            if ($(".productDetail").length > 1)
+                $(this).parent().parent().remove();
+        });
+    </script>
 @endsection

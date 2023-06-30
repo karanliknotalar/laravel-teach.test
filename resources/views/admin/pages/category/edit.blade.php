@@ -9,6 +9,7 @@
         :model="$category ?? null"
         :page-title="'Ürün'"
         :image="$category->image ?? ''">
+
         <x-slot name="contents">
             <form
                 action="{{ isset($category) ? route("category.update", ["category" => encrypt($category->id)]) : route("category.store")  }}"
@@ -21,13 +22,12 @@
                     :name="'name'"
                     :value="$category->name ?? ''"
                     :title="'Başlık'"/>
-                <div class="form-floating mb-3">
-                    <input type="hidden" name="description" id="quilltext">
-                    <h6 class="mb-2">Açıklama</h6>
-                    <div id="snow-editor" style="height: 100px;">
-                        {!! $category->description ?? "" !!}
-                    </div>
-                </div>
+
+                <x-admin.helpers.quill-text-area
+                    :quill-style="'height: 100px;'"
+                    :hidden-id="'quilltext'"
+                    :content="$category->description ?? ''"
+                    :name="'description'"/>
 
                 <x-admin.helpers.input-text
                     :name="'seo_description'"
@@ -72,20 +72,15 @@
                     <label for="mainCategorySelect">Ana Kategori Seçin</label>
                 </div>
 
-                <div class="mb-3">
-                    <label for="image" class="mb-1">Resim Seç (1900x890)</label>
-                    <input type="file" id="image" class="form-control" name="image">
-                </div>
-                <div class="mb-4">
-                    <div class="d-flex">
-                        <label class="label-default me-2">Durum:</label>
-                        <input type="checkbox" id="status"
-                               data-switch="success"
-                               name="status" {{ isset($category) && $category->status == 1 ? "checked" : ""}}/>
-                        <label for="status" data-on-label="On" data-off-label="Off"
-                               class="mb-0 d-block"></label>
-                    </div>
-                </div>
+                <x-admin.helpers.input-file
+                    :name="'image'"
+                    :title="'Resim Seç (1900x890)'"/>
+
+                <x-admin.helpers.input-checkbox
+                    :label-title="'Durum:'"
+                    :name="'status'"
+                    :checked-status="isset($category) && $category->status == 1 ? 'checked' : ''"/>
+
                 <button type="submit" class="btn btn-success mx-auto form-control">
                     {{ isset($category) ? "Güncelle" : "Kaydet" }}
                 </button>
@@ -97,7 +92,7 @@
 
 @section("js")
     <x-admin.quill.quill-js
-        :quill-element-id="'quilltext'"/>
+        :quill-hidden-id="'quilltext'"/>
     <script>
         jQuery(window).on("load", function () {
             const categoryTypeSelect = function () {

@@ -20,8 +20,6 @@ class Category extends Model
         "seo_keywords",
         "status",
         "image",
-        "thumbnail",
-        "order",
     ];
 
 

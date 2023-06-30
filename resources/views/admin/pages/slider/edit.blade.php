@@ -21,33 +21,27 @@
                     :name="'name'"
                     :value="$slider->name ?? ''"
                     :title="'Başlık'"/>
-                <div class="mb-3">
-                    <input type="hidden" name="content" id="quilltext">
-                    <h6 class="mb-2">İçerik</h6>
-                    <div id="snow-editor" style="height: 300px;">
-                        {!! $slider->content ?? "" !!}
-                    </div>
-                </div>
+
+                <x-admin.helpers.quill-text-area
+                    :quill-style="'height: 200px;'"
+                    :hidden-id="'quilltext'"
+                    :content="$slider->content ?? ''"
+                    :name="'content'"/>
 
                 <x-admin.helpers.input-text
                     :name="'shop_url'"
                     :value="$slider->shop_url ?? ''"
                     :title="'Url'"/>
 
-                <div class="mb-3">
-                    <label for="image" class="mb-1">Resim Seç (1900x890)</label>
-                    <input type="file" id="image" class="form-control" name="image">
-                </div>
-                <div class="mb-4">
-                    <div class="d-flex">
-                        <label class="label-default me-2">Durum:</label>
-                        <input type="checkbox" id="status"
-                               data-switch="success"
-                               name="status" {{ isset($slider) && $slider->status == 1 ? "checked" : ""}}/>
-                        <label for="status" data-on-label="On" data-off-label="Off"
-                               class="mb-0 d-block"></label>
-                    </div>
-                </div>
+                <x-admin.helpers.input-file
+                    :name="'image'"
+                    :title="'Resim Seç (1900x890)'"/>
+
+                <x-admin.helpers.input-checkbox
+                    :label-title="'Durum:'"
+                    :name="'status'"
+                    :checked-status="isset($slider) && $slider->status == 1 ? 'checked' : ''"/>
+
                 <button type="submit" class="btn btn-success mx-auto form-control">
                     {{ isset($slider) ? "Güncelle" : "Kaydet" }}
                 </button>
@@ -58,5 +52,5 @@
 
 @section("js")
     <x-admin.quill.quill-js
-        :quill-element-id="'quilltext'"/>
+        :quill-hidden-id="'quilltext'"/>
 @endsection

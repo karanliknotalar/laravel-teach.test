@@ -9,7 +9,7 @@
         });
 
         const loadquil = function () {
-            document.getElementById("{{ $quillElementId }}").value = quill.root.innerHTML
+            document.getElementById("{{ $quillHiddenId ?? "quilltext" }}").value = quill.root.innerHTML
         };
         loadquil();
         quill.on('text-change', function (delta, oldDelta, source) {

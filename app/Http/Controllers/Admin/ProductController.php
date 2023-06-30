@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Helper\Helper;
+use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Str;
 
 class ProductController extends Controller
 {
@@ -36,6 +38,42 @@ class ProductController extends Controller
     public function store(Request $request)
     {
         return $request->all();
+
+        $request->validate([
+            "name" => "required|min:5",
+            "image" => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:1024',
+            "description" => 'required|min:25',
+            "sort_description" => 'required|min:15',
+            "price" => 'required|min:1|decimal:2',
+            "size" => 'required|min:1',
+            "color" => 'required|min:1',
+            "quantity" => 'required|min:0|numeric',
+            "category_id" => 'required|numeric'
+        ]);
+
+        $imageName = isset($request->image) ? $this->getImgName($request) : null;
+
+        $result = Product::create([
+            "category_id" => $request["category_id"],
+            "name" => $request["name"],
+            "slug_name" => Str::slug($request["name"]),
+            "description" => $request["description"],
+            "sort_description" => $request["sort_description"],
+            "price" => $request["price"],
+            "size" => $request["size"],
+            "color" => $request["color"],
+            "quantity" => $request["quantity"],
+            "image" => $imageName,
+            "status" => $request["status"] == "on",
+        ]);
+
+        if (!empty($imageName) && $result) {
+            Helper::fileSave($request->image, $imageName);
+        }
+
+        return $result ?
+            back()->with("status", "Ekleme işlemi başarılı.") :
+            back()->withErrors(["store", "Ekleme işlemi sırasında hata oluştu."]);
     }
 
     /**
@@ -52,8 +90,10 @@ class ProductController extends Controller
     public function edit(string $id)
     {
         $id = decrypt($id);
-        $product = Product::where("id", $id)->get()->firstOrFail();
-        return view("admin.pages.product.edit", compact("product"));
+        $product = Product::query()->where("id", $id)->with("category:id,name")->firstOrFail();
+        $categories = Category::select(["id", "name", "parent_id"])->get();
+
+        return view("admin.pages.product.edit", compact("product", "categories"));
     }
 
     /**
@@ -66,6 +106,7 @@ class ProductController extends Controller
 
         if ($product) {
 
+//            return $request->all();
             if (count($request->all()) == 2) {
 
                 $product->status = $request->only("status")["status"];
@@ -75,19 +116,32 @@ class ProductController extends Controller
             } else {
 
                 $request->validate([
-                    "name" => "required",
+                    "name" => "required|min:5",
                     "image" => 'image|mimes:jpeg,png,jpg,gif,svg|max:1024',
+                    "description" => 'required|min:25',
+                    "sort_description" => 'required|min:15',
+                    "price" => 'required|min:1|decimal:2',
+                    "size" => 'required|min:1',
+                    "color" => 'required|min:1',
+                    "quantity" => 'required|min:0|numeric',
+                    "category_id" => 'required|numeric'
                 ]);
 
                 $imageName = isset($request->image) ? $this->getImgName($request) : null;
                 $tempImg = $product->image;
 
                 $result = $product->update([
+                    "category_id" => $request["category_id"],
                     "name" => $request["name"],
-                    "content" => $request["content"] ?? "",
+                    "slug_name" => Str::slug($request["name"]),
+                    "description" => $request["description"],
+                    "sort_description" => $request["sort_description"],
+                    "price" => $request["price"],
+                    "size" => $request["size"],
+                    "color" => $request["color"],
+                    "quantity" => $request["quantity"],
                     "image" => $imageName ?? $product->image,
                     "status" => $request["status"] == "on",
-                    "shop_url" => $request["shop_url"] ?? "",
                 ]);
 
                 if (!empty($imageName) && $result) {
@@ -118,5 +172,10 @@ class ProductController extends Controller
         if ($result) Helper::fileDelete($product->image ?? null);
 
         return response(["result" => (bool)$result]);
+    }
+
+    public function getImgName($request): string
+    {
+        return Helper::getFileFullPath("images/products/", $request->name, $request->image);
     }
 }

@@ -87,17 +87,17 @@
                 <div class="col-md-5 ml-auto">
                     @if(isset($site_contact_setting))
                         @if(isset($site_contact_setting['address']))
-                            <x-frontend.helpers.contact-detail
+                            <x-front.helpers.contact-detail
                                 :name="'Adres'"
                                 :content="$site_contact_setting['address']"/>
                         @endif
                         @if(isset($site_contact_setting['email']))
-                            <x-frontend.helpers.contact-detail
+                            <x-front.helpers.contact-detail
                                 :name="'Email'"
                                 :content="$site_contact_setting['email']"/>
                         @endif
                         @if(isset($site_contact_setting['phone']))
-                            <x-frontend.helpers.contact-detail
+                            <x-front.helpers.contact-detail
                                 :name="'Telefon'"
                                 :content="$site_contact_setting['phone']"/>
                         @endif

@@ -7,18 +7,18 @@
 
 @section("content")
 
-    <!-- start of hero -->
-    <section class="hero-slider hero-style">
-        <div class="swiper-container">
-            <div class="swiper-wrapper">
-                @if(isset($sliders) && $sliders->count() > 0)
+    @if(isset($sliders) && $sliders->count() > 0)
+        <!-- start of hero -->
+        <section class="hero-slider hero-style">
+            <div class="swiper-container">
+                <div class="swiper-wrapper">
                     @foreach($sliders as $slider)
                         <div class="swiper-slide">
                             <div class="slide-inner slide-bg-image"
                                  data-background="{{ asset($slider->image ?? "images/hero_1.jpg") }}">
                                 <div class="container">
                                     <div class="row align-items-start align-items-md-center justify-content-end">
-                                        <div class="col-5">
+                                        <div class="col-md-5 col-lg-5 col-sm-5">
                                             <div data-swiper-parallax="300" class="slide-title">
                                                 <h2>{{ $slider->name ?? "" }}</h2>
                                             </div>
@@ -37,60 +37,43 @@
                             </div>
                         </div>
                     @endforeach
-                @endif
+                </div>
+                <!-- end swiper-wrapper -->
+                {{--            <!-- swipper controls -->--}}
+                {{--            <div class="swiper-button-next"></div>--}}
+                {{--            <div class="swiper-button-prev"></div>--}}
             </div>
-            <!-- end swiper-wrapper -->
+        </section>
+        <!-- end of hero slider -->
+    @endif
 
-            {{--            <!-- swipper controls -->--}}
-            {{--            <div class="swiper-button-next"></div>--}}
-            {{--            <div class="swiper-button-prev"></div>--}}
-        </div>
-    </section>
-    <!-- end of hero slider -->
-
-    <div class="site-section site-section-sm site-blocks-1">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-6 col-lg-4 d-lg-flex mb-4 mb-lg-0 pl-4" data-aos="fade-up" data-aos-delay="">
-                    <div class="icon mr-4 align-self-start">
-                        <span class="icon-truck"></span>
-                    </div>
-                    <div class="text">
-                        <h2 class="text-uppercase">Free Shipping</h2>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus at iaculis quam. Integer
-                            accumsan tincidunt fringilla.</p>
-                    </div>
-                </div>
-                <div class="col-md-6 col-lg-4 d-lg-flex mb-4 mb-lg-0 pl-4" data-aos="fade-up" data-aos-delay="100">
-                    <div class="icon mr-4 align-self-start">
-                        <span class="icon-refresh2"></span>
-                    </div>
-                    <div class="text">
-                        <h2 class="text-uppercase">Free Returns</h2>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus at iaculis quam. Integer
-                            accumsan tincidunt fringilla.</p>
-                    </div>
-                </div>
-                <div class="col-md-6 col-lg-4 d-lg-flex mb-4 mb-lg-0 pl-4" data-aos="fade-up" data-aos-delay="200">
-                    <div class="icon mr-4 align-self-start">
-                        <span class="icon-help"></span>
-                    </div>
-                    <div class="text">
-                        <h2 class="text-uppercase">Customer Support</h2>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus at iaculis quam. Integer
-                            accumsan tincidunt fringilla.</p>
-                    </div>
+    @if(isset($services) && $services->count() > 0)
+        <div class="site-section site-section-sm site-blocks-1">
+            <div class="container">
+                <div class="row">
+                    @foreach($services as $service)
+                        <div class="col-md-6 col-lg-4 d-lg-flex mb-4 mb-lg-0 pl-4 my-4" data-aos="fade-up"
+                             data-aos-delay="">
+                            <div class="icon mr-4 align-self-start">
+                                <span class="{{ $service->icon ?? "" }}"></span>
+                            </div>
+                            <div class="text">
+                                <h2 class="text-uppercase">{{ $service->title ?? "" }}</h2>
+                                {!! $service->content ?? "" !!}
+                            </div>
+                        </div>
+                    @endforeach
                 </div>
             </div>
         </div>
-    </div>
+    @endif
 
     <div class="site-section site-blocks-2">
         <div class="container">
             <div class="row">
                 @if(isset($categories))
                     @foreach($categories->where("parent_id", null) as $category)
-                        <div class="col-sm-6 col-md-6 col-lg-4 mb-4 mb-lg-0" data-aos="fade"
+                        <div class="col-sm-6 col-md-6 col-lg-4 mb-4 mb-lg-0 my-5" data-aos="fade"
                              data-aos-delay="">
                             <a class="block-2-item"
                                href="{{ route("page.products_with_category", ['id'=> $category->id, 'category'=>$category->slug_name]) }}">

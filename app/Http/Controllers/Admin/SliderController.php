@@ -32,8 +32,7 @@ class SliderController extends Controller
      */
     public function store(SliderFormRequest $request)
     {
-
-        $imageName = isset($request->image) ? $this->getImgName($request) : null;
+        $imageName = Helper::getFileName($request->name, $request->image, "images/sliders/");
 
         $request["status"] = $request->status == "on";
 
@@ -90,7 +89,7 @@ class SliderController extends Controller
 
             } else {
 
-                $imageName = isset($request->image) ? $this->getImgName($request) : null;
+                $imageName = Helper::getFileName($request->name, $request->image, "images/sliders/");
                 $tempImg = $slider->image;
 
                 $result = $slider->update([
@@ -130,9 +129,4 @@ class SliderController extends Controller
         return response(["result" => (bool)$result]);
     }
 
-
-    public function getImgName($request): string
-    {
-        return Helper::getFileFullPath("images/sliders/", $request->name, $request->image);
-    }
 }

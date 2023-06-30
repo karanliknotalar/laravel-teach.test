@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Admin;
 use App\Helper\Helper;
 use App\Http\Requests\Admin\CategoryFormRequest;
 use App\Models\Category;
-use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Str;
 
@@ -35,7 +34,7 @@ class CategoryController extends Controller
     public function store(CategoryFormRequest $request)
     {
 
-        $imageName = isset($request->image) ? $this->getImgName($request) : null;
+        $imageName = Helper::getFileName($request->name, $request->image, "images/categories/");
 
 //        $is_main_category = $request->categoryType == "main";
 
@@ -106,8 +105,10 @@ class CategoryController extends Controller
 
             } else {
 
-                $imageName = isset($request->image) ? $this->getImgName($request) : null;
+//                $imageName = isset($request->image) ? $this->getImgName($request) : null;
+                $imageName = Helper::getFileName($request->name, $request->image, "images/categories/");
                 $tempImg = $category->image;
+
                 $is_main_category = $request->categoryType == "main";
 
                 if (!$is_main_category) {
@@ -151,10 +152,5 @@ class CategoryController extends Controller
         if ($result) Helper::fileDelete($category->image ?? null);
 
         return response(["result" => (bool)$result]);
-    }
-
-    public function getImgName($request): string
-    {
-        return Helper::getFileFullPath("images/categories/", $request->name, $request->image);
     }
 }

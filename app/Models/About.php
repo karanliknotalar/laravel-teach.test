@@ -12,6 +12,7 @@ class About extends Model
     protected $fillable = [
         "title",
         "content",
-        "image"
+        "image",
+        "channel",
     ];
 }

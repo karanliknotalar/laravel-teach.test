@@ -40,7 +40,7 @@ class ProductController extends Controller
     public function store(ProductFormRequest $request)
     {
 
-        $imageName = isset($request->image) ? $this->getImgName($request) : null;
+        $imageName = Helper::getFileName($request->name, $request->image, "images/products/");
 
         $result = Product::create([
             "category_id" => $request["category_id"],
@@ -115,7 +115,7 @@ class ProductController extends Controller
 
             } else {
 
-                $imageName = isset($request->image) ? $this->getImgName($request) : null;
+                $imageName = Helper::getFileName($request->name, $request->image, "images/products/");
                 $tempImg = $product->image;
 
                 $result = $product->update([
@@ -158,8 +158,4 @@ class ProductController extends Controller
         return response(["result" => (bool)$result]);
     }
 
-    public function getImgName($request): string
-    {
-        return Helper::getFileFullPath("images/products/", $request->name, $request->image);
-    }
 }

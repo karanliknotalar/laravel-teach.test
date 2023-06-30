@@ -78,13 +78,19 @@
                 :count="$serviceCount"
             />
 
-            {{--            <li class="side-nav-item">--}}
-            {{--                <a href="" class="side-nav-link">--}}
-            {{--                    <i class="mdi mdi-room-service"></i>--}}
-            {{--                    <span class="badge bg-primary float-end"></span>--}}
-            {{--                    <span>Test</span>--}}
-            {{--                </a>--}}
-            {{--            </li>--}}
+            <x-admin.helpers.sidebar-single-menu-item
+                :url='route("about.edit")'
+                :name="'Hakkında'"
+                :icon-name="'ri-team-fill'"
+            />
+
+{{--            <li class="side-nav-item">--}}
+{{--                <a href="" class="side-nav-link">--}}
+{{--                    <i class="ri-team-fill"></i>--}}
+{{--                    <span class="badge bg-primary float-end"></span>--}}
+{{--                    <span>Test</span>--}}
+{{--                </a>--}}
+{{--            </li>--}}
 
         </ul>
         <div class="clearfix"></div>

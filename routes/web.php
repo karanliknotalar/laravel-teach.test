@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\AboutController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\ProductQuantityController;
 use App\Http\Controllers\Admin\SliderController;
@@ -71,6 +72,9 @@ Route::group(["prefix" => "admin", "middleware" => ["admin.dashboard.shared", "a
     Route::resource("category", "Admin\CategoryController")->except("show");
     Route::resource("product-quantity", "Admin\ProductQuantityController")->except("update", "index");
     Route::resource("service", "Admin\ServiceController");
+
+    Route::get("about", [AboutController::class, "edit"])->name("about.edit");
+    Route::post("about", [AboutController::class, "update"])->name("about.update");
 
 });
 

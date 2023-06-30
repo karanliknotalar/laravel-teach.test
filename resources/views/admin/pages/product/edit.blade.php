@@ -35,29 +35,6 @@
                     :value="$product->sort_description ?? ''"
                     :title="'Kısa Açıklama'"/>
 
-                {{--                <x-admin.helpers.input-text--}}
-                {{--                    :name="'price'"--}}
-                {{--                    :value="$product->price ?? '0.00'"--}}
-                {{--                    :title="'Fiyat'"--}}
-                {{--                    :input-type="'numeric'"/>--}}
-
-                {{--                <x-admin.helpers.input-text--}}
-                {{--                    :name="'size'"--}}
-                {{--                    :value="$product->size ?? ''"--}}
-                {{--                    :title="'Beden (Virgüllerle Ayırarak)'"--}}
-                {{--                    :input-type="'numeric'"/>--}}
-
-                {{--                <x-admin.helpers.input-text--}}
-                {{--                    :name="'color'"--}}
-                {{--                    :value="$product->color ?? ''"--}}
-                {{--                    :title="'Renk (Virgüllerle Ayırarak)'"/>--}}
-
-                {{--                <x-admin.helpers.input-text--}}
-                {{--                    :name="'quantity'"--}}
-                {{--                    :value="$product->quantity ?? ''"--}}
-                {{--                    :title="'Stok'"--}}
-                {{--                    :input-type="'numeric'"/>--}}
-
                 <div class="form-floating mb-3">
                     <select class="form-select" aria-label="Kategori Seçin" name="category_id">
                         <option>---Kategori Seçin---</option>

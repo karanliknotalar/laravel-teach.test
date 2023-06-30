@@ -29,4 +29,9 @@ class Helper
     {
         return $dirname . Str::slug($name) . "_" . time() . "." . $file->extension();
     }
+
+    public static function getFileName($name, $file, $path = "images/"): ?string
+    {
+        return isset($file) ? Helper::getFileFullPath($path, $name, $file) : null;
+    }
 }

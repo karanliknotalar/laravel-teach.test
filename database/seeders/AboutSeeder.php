@@ -20,7 +20,8 @@ class AboutSeeder extends Seeder
             hiç kimse mimarı eğitemez. ondan daha şiddetli olanlar takip etmekten kaçsın. Ve uçuşta,
             bozuk vücudun hatası alınacak bazılarımız kim Suçlayanın acısı affedeninkinden daha mı büyük?
             O en değerlidir, ama hiçbiri yok bazıları tarafından reddedilmek ve en küçük övgücüler tarafından itilmek.",
-            "image" => null
+            "image" => null,
+            "channel" => "https://"
         ]);
     }
 }

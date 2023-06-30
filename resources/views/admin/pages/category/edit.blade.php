@@ -10,26 +10,6 @@
         :page-title="'Ürün'"
         :image="$category->image ?? ''">
         <x-slot name="contents">
-            @if(count($errors) > 0)
-                @foreach($errors->all() as $error)
-                    <div
-                        class="alert alert-danger alert-dismissible bg-danger text-white border-0 fade show"
-                        role="alert">
-                        <button type="button" class="btn-close btn-close-white"
-                                data-bs-dismiss="alert" aria-label="Close"></button>
-                        {{ $error }}
-                    </div>
-                @endforeach
-            @endif
-            @if(session()->has("status"))
-                <div
-                    class="alert alert-success alert-dismissible bg-success text-white border-0 fade show"
-                    role="alert">
-                    <button type="button" class="btn-close btn-close-white"
-                            data-bs-dismiss="alert" aria-label="Close"></button>
-                    {{ session("status") }}
-                </div>
-            @endif
             <form
                 action="{{ isset($category) ? route("category.update", ["category" => encrypt($category->id)]) : route("category.store")  }}"
                 method="post" enctype="multipart/form-data">
@@ -37,30 +17,27 @@
                 @if(isset($category))
                     @method('PUT')
                 @endif
+                <x-admin.helpers.input-text
+                    :name="'name'"
+                    :value="$category->name ?? ''"
+                    :title="'Başlık'"/>
                 <div class="form-floating mb-3">
-                    <input type="text" class="form-control" placeholder="Başlık" name="name"
-                           id="name" value="{{ $category->name ?? "" }}">
-                    <label for="name">Başlık</label>
-                </div>
-                <div class="mb-3">
                     <input type="hidden" name="description" id="quilltext">
                     <h6 class="mb-2">Açıklama</h6>
                     <div id="snow-editor" style="height: 100px;">
                         {!! $category->description ?? "" !!}
                     </div>
                 </div>
-                <div class="form-floating mb-3">
-                    <input type="text" class="form-control" placeholder="Seo Açıklaması"
-                           name="seo_description"
-                           id="seo_description" value="{{ $category->seo_description ?? "" }}">
-                    <label for="seo_description">Seo Açıklaması</label>
-                </div>
-                <div class="form-floating mb-3">
-                    <input type="text" class="form-control" placeholder="Seo Meta Etiketleri"
-                           name="seo_keywords"
-                           id="seo_keywords" value="{{ $category->seo_description ?? "" }}">
-                    <label for="seo_keywords">Seo Meta Etiketleri</label>
-                </div>
+
+                <x-admin.helpers.input-text
+                    :name="'seo_description'"
+                    :value="$category->seo_description ?? ''"
+                    :title="'Seo Açıklaması'"/>
+                <x-admin.helpers.input-text
+                    :name="'seo_keywords'"
+                    :value="$category->seo_keywords ?? ''"
+                    :title="'Seo Meta Etiketleri'"/>
+
                 <div class="form-floating mb-3">
                     @php
                         $parent_id = $category->parent_id ?? null;

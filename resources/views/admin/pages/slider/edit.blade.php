@@ -10,26 +10,6 @@
         :page-title="'Slider'"
         :image="$slider->image ?? ''">
         <x-slot name="contents">
-            @if(count($errors) > 0)
-                @foreach($errors->all() as $error)
-                    <div
-                        class="alert alert-danger alert-dismissible bg-danger text-white border-0 fade show"
-                        role="alert">
-                        <button type="button" class="btn-close btn-close-white"
-                                data-bs-dismiss="alert" aria-label="Close"></button>
-                        {{ $error }}
-                    </div>
-                @endforeach
-            @endif
-            @if(session()->has("status"))
-                <div
-                    class="alert alert-success alert-dismissible bg-success text-white border-0 fade show"
-                    role="alert">
-                    <button type="button" class="btn-close btn-close-white"
-                            data-bs-dismiss="alert" aria-label="Close"></button>
-                    {{ session("status") }}
-                </div>
-            @endif
             <form
                 action="{{ isset($slider) ? route("slider.update", ["slider" => encrypt($slider->id)]) : route("slider.store")  }}"
                 method="post" enctype="multipart/form-data">
@@ -37,11 +17,10 @@
                 @if(isset($slider))
                     @method('PUT')
                 @endif
-                <div class="form-floating mb-3">
-                    <input type="text" class="form-control" placeholder="Başlık" name="name"
-                           id="name" value="{{ $slider->name ?? "" }}">
-                    <label for="name">Başlık</label>
-                </div>
+                <x-admin.helpers.input-text
+                    :name="'name'"
+                    :value="$slider->name ?? ''"
+                    :title="'Başlık'"/>
                 <div class="mb-3">
                     <input type="hidden" name="content" id="quilltext">
                     <h6 class="mb-2">İçerik</h6>
@@ -49,11 +28,12 @@
                         {!! $slider->content ?? "" !!}
                     </div>
                 </div>
-                <div class="form-floating mb-3">
-                    <input type="text" class="form-control" placeholder="Başlık" name="shop_url"
-                           id="shop_url" value="{{ $slider->shop_url ?? "" }}">
-                    <label for="shop_url">Url</label>
-                </div>
+
+                <x-admin.helpers.input-text
+                    :name="'shop_url'"
+                    :value="$slider->shop_url ?? ''"
+                    :title="'Url'"/>
+
                 <div class="mb-3">
                     <label for="image" class="mb-1">Resim Seç (1900x890)</label>
                     <input type="file" id="image" class="form-control" name="image">

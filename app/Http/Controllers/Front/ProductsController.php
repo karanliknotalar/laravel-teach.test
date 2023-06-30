@@ -61,7 +61,7 @@ class ProductsController extends Controller
                 "product_quantities.id as product_quantities_id",
                 "product_quantities.price",
             ])
-            ->where('product_quantities.price', '=', function ($query) {
+            ->where('product_quantities.price', function ($query) {
                 $query->select('price')
                     ->from('product_quantities')
                     ->whereColumn('product_id', 'products.id')
@@ -69,7 +69,6 @@ class ProductsController extends Controller
                     ->limit(1);
             })
             ->where(function ($query) use ($request) {
-
                 if (isset($request->start_price) && isset($request->end_price)) {
                     $query->whereBetween("price", [$request->start_price, $request->end_price]);
                 }
@@ -86,33 +85,14 @@ class ProductsController extends Controller
             ->paginate(12)
             ->appends($this->filterQuery($request->query(), true, true));
 
-        $min_price = $this->getMinMax(true);
+//        return $products;
 
-        $max_price = $this->getMinMax(false);
 
         $sizes = $this->getSizesOrColors("size", $category_id);
 
         $colors = $this->getSizesOrColors("color", $category_id);
 
-        return view("front.pages.products", compact("products", "min_price", "max_price", "sizes", "colors"));
-    }
-
-    public function getMinMax($min = true)
-    {
-        $result = Product::where("status", "=", 1)
-            ->join("product_quantities", "products.id", "product_quantities.product_id")
-            ->select("product_quantities.price")
-            ->where('product_quantities.price', '=', function ($query) {
-                $query->select('price')
-                    ->from('product_quantities')
-                    ->whereColumn('product_id', 'products.id')
-                    ->orderBy('price')
-                    ->limit(1);
-            });
-        if ($min)
-            return $result->min("product_quantities.price");
-        else
-            return $result->max("product_quantities.price");
+        return view("front.pages.products", compact("products",  "sizes", "colors"));
     }
 
     public function getSizesOrColors($column, $category_id = null)

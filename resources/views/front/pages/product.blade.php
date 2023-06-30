@@ -5,7 +5,6 @@
 @endsection
 
 @section("content")
-
     <x-front.helpers.header-url
         :main-url="route('home.index')"
         :main-url-name="'Anasayfa'"

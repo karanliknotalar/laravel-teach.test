@@ -109,8 +109,7 @@
                             <h3 class="mb-3 h6 text-uppercase text-black d-block">Fiyata Göre Filtrele</h3>
                             <div id="slider-range" class="border-primary"></div>
                             <label for="amount">
-                                <input type="text" name="text" id="amount" class="form-control border-0 pl-0 bg-white"
-                                       disabled=""/>
+                                <input type="text" name="text" id="amount" class="form-control border-0 pl-0 bg-white"/>
                             </label>
                         </div>
 
@@ -125,20 +124,18 @@
                                 @endforeach
                             @endif
                         </div>
-
                         <div class="mb-4">
                             <h3 class="mb-3 h6 text-uppercase text-black d-block">Renk</h3>
                             @if(isset($colors))
                                 @foreach($colors as $color)
                                     <a href="#" class="d-flex color-item align-items-center">
-{{--                                        <span class="{{ $temp_color ?? "" }} color d-inline-block rounded-circle mr-2"></span>--}}
+                                        {{--                                        <span class="{{ $temp_color ?? "" }} color d-inline-block rounded-circle mr-2"></span>--}}
                                         <span
                                             class="text-black">{{ $color->color }} ({{ $color->color_count }})</span>
                                     </a>
                                 @endforeach
                             @endif
                         </div>
-
                     </div>
                 </div>
             </div>
@@ -182,8 +179,8 @@
 
 @section("js")
     <script>
-        const min_price = {{ $min_price }};
-        const max_price = {{ $max_price }};
+        const min_price = {{ $products->min("price") }};
+        const max_price = {{ $products->max("price") }};
 
         (function () {
             const range = $("#slider-range");
@@ -194,15 +191,24 @@
                 values: [min_price ?? 0, max_price ?? 0],
                 slide: function (event, ui) {
                     $("#amount").val(ui.values[0] + " ₺ - " + ui.values[1] + " ₺");
+
+                    $("#amount").on("mouseleave", function () {
+                        priceBetween(ui.values[0], ui.values[1])
+                    })
+
                 }
             });
             $("#amount").val(range.slider("values", 0) +
                 " ₺ - " + range.slider("values", 1) + " ₺");
         })();
 
+
+        function priceBetween(start_price, end_price) {
+            location.href = "{{ route('page.products') }}" + "?start_price=" + start_price + "&end_price=" + end_price;
+        }
+
         $('a[aria-controls="collapseSubCategory"]').on('click', function (e) {
             e.currentTarget.children[0].className = $("#collapseSubCategory").is(":visible") ? "icon-plus" : "icon-minus"
         });
-
     </script>
 @endsection

@@ -6,6 +6,7 @@
         data-bs-trigger="{{ $trigger ?? "hover" }}"
         data-bs-content="{{ $message ?? "Mesajınız..." }}"
     @endif
+    id="{{ $id ?? "" }}"
 >
     {{ $text ?? "Button" }}
 </button>

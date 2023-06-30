@@ -91,7 +91,7 @@
                                href="{{ route("product-quantity.show", ["product_quantity" => $productId]) }}">
                                 <x-admin.helpers.button
                                     :over-text="true"
-                                    :message="'Ürün detaylarını düzenle'"
+                                    :message="'Ürün stoklarını düzenle'"
                                     :class="'btn btn-warning p-1'">
                                     <x-slot:text>
                                         <i class="mdi mdi-stocking"></i>

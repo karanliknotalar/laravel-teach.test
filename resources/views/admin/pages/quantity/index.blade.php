@@ -36,7 +36,7 @@
         :title="'Products'"/>
 
     <x-admin.datatable.layout.datatable-items
-        :add-new-route='route("product-quantity.create", ["id" => encrypt($quantities[0]->product_id)])'>
+        :edit-all-route='route("product-quantity.edit", ["product_quantity" => encrypt($quantities[0]->product_id)])'>
 
         <x-slot name="ths">
             <th>Ürün Adı</th>
@@ -54,7 +54,7 @@
                     <td>{{ $quantity->product->name ?? ""}}</td>
                     <td>{{ $quantity->size ?? ""}}</td>
                     <td>{{ $quantity->color ?? "" }}</td>
-                    <td>{{ $quantity->price ?? "" }}</td>
+                    <td>{{ number_format($quantity->price ?? 0, 2)}} TL</td>
                     <td class="table-action">
                         <div class="d-flex">
                             <x-admin.helpers.button

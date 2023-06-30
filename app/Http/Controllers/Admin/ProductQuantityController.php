@@ -24,7 +24,7 @@ class ProductQuantityController extends Controller
     {
         $product_id = $request->id ?? null;
 
-        return view("admin.pages.quantity.create", compact("product_id"));
+        return view("admin.pages.quantity.edit", compact("product_id"));
     }
 
     /**
@@ -32,10 +32,9 @@ class ProductQuantityController extends Controller
      */
     public function store(Request $request)
     {
-//        return decrypt();
 
         $request->validate([
-            "price.*" => 'required|min:1|decimal:2',
+            "price.*" => 'required|min:1',
             "size.*" => 'required|min:1',
             "color.*" => 'required|min:1',
             "quantity.*" => 'required|min:1',
@@ -45,28 +44,27 @@ class ProductQuantityController extends Controller
         $product_id = decrypt($request->product_id);
         $check = Product::where("id", $product_id)->select("id");
 
-        if ($check) {
+        $ProductQuantity = ProductQuantity::query()->where("product_id", $product_id);
+        $result = $ProductQuantity->delete();
+
+        if ($check && $result) {
+
             for ($i = 0; $i < count($request["size"]); $i++) {
 
-                $checkQuantity = ProductQuantity::where("size", $request["size"][$i])->where("color", $request["color"][$i])->first("id");
+                ProductQuantity::create([
+                    "product_id" => $product_id,
+                    "price" => $request["price"][$i],
+                    "size" => $request["size"][$i],
+                    "color" => $request["color"][$i],
+                    "quantity" => $request["quantity"][$i],
+                ]);
 
-                if (!$checkQuantity) {
-                    ProductQuantity::create([
-                        "product_id" => $product_id,
-                        "price" => $request["price"][$i],
-                        "size" => $request["size"][$i],
-                        "color" => $request["color"][$i],
-                        "quantity" => $request["quantity"][$i],
-                    ]);
-                } else {
-                    return back()->withErrors(["Bu renk: " . $request["color"][$i] . " ve beden: " . $request["size"][$i] . " mevcut"]);
-                }
             }
         }
 
         return $check ?
-            back()->with("status", "Ekleme işlemi başarılı.") :
-            back()->withErrors(["Ekleme işlemi sırasında hata oluştu."]);
+            back()->with("status", "Kaydetme işlemi başarılı.") :
+            back()->withErrors(["Kaydetme işlemi sırasında hata oluştu."]);
 
     }
 
@@ -84,7 +82,8 @@ class ProductQuantityController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $quantities = ProductQuantity::query()->where("product_id", decrypt($id))->with("product:id,name")->get();
+        return view("admin.pages.quantity.edit", compact("quantities"));
     }
 
     /**

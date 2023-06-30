@@ -20,8 +20,6 @@ return new class extends Migration {
             $table->string("seo_keywords")->nullable();
             $table->tinyInteger("status")->default(1);
             $table->string("image")->nullable();
-            $table->string("thumbnail")->nullable();
-            $table->integer("order")->default(1);
             $table->timestamps();
 
             $table->foreign("parent_id")

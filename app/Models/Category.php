@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Category extends Model
 {
@@ -26,12 +27,17 @@ class Category extends Model
 
     public function items(): HasMany
     {
-        return $this->hasMany(Product::class, "category_id", "id");
+        return $this->hasMany(Product::class, "category_id", "id")->where("status", "=", 1);
     }
 
     public function sub_categories(): HasMany
     {
-        return $this->hasMany(Category::class, "parent_id", "id")->withCount("items");
+        return $this->hasMany(Category::class, "parent_id", "id")->withCount("items")->where("status", "=", 1);
+    }
+
+    public function base_category(): HasOne
+    {
+        return $this->hasOne(Category::class, "id", "parent_id")->where("status", "=", 1);
     }
 
     public function mainCategoryCounts()

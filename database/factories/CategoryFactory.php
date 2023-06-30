@@ -29,8 +29,6 @@ class CategoryFactory extends Factory
             "seo_keywords" => Str::slug(Str::substr(fake()->paragraph, 0, 100), ","),
             "status" => fake()->boolean,
             "image" => fake()->imageUrl,
-            "thumbnail" => fake()->imageUrl,
-            "order" => random_int(1, 10),
         ];
     }
 }

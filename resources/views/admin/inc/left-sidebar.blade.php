@@ -77,6 +77,13 @@
             <li class="side-nav-title">Apps</li>
 
             <x-admin.helpers.sidebar-single-menu-item
+                :url='route("category.index")'
+                :name="'Kategoriler'"
+                :icon-name="'mdi mdi-box-shadow'"
+{{--                :count="$productCount"--}}
+            />
+
+            <x-admin.helpers.sidebar-single-menu-item
                 :url='route("slider.index")'
                 :name="'Sliders'"
                 :icon-name="'uil-sliders-v-alt'"
@@ -91,7 +98,7 @@
 
 {{--            <li class="side-nav-item">--}}
 {{--                <a href="" class="side-nav-link">--}}
-{{--                    <i class="ri-product-hunt-fill"></i>--}}
+{{--                    <i class="mdi mdi-box-shadow"></i>--}}
 {{--                    <span class="badge bg-primary float-end"></span>--}}
 {{--                    <span>Test</span>--}}
 {{--                </a>--}}

@@ -49,7 +49,6 @@
                                         @if(isset($slider))
                                             @method('PUT')
                                         @endif
-                                        <h5 class="mb-3">Slider</h5>
                                         <div class="form-floating mb-3">
                                             <input type="text" class="form-control" placeholder="Başlık" name="name"
                                                    id="name" value="{{ $slider->name ?? "" }}">

@@ -33,51 +33,44 @@
 @section("content")
 
     <x-admin.helpers.page-title-box
-        :title="'Products'"/>
+        :title="'Categoriler'"/>
 
     <x-admin.datatable.layout.datatable-items
-        :add-new-route='route("slider.create")'>
+        :add-new-route='route("category.create")'>
 
         <x-slot name="ths">
             <th>Resim</th>
-            <th>Ürün</th>
-            <th>Kategori</th>
-            <th>Detay</th>
-            <th>Fiyat</th>
-            <th>Renk</th>
-            <th>Beden</th>
-            <th>Stok</th>
+            <th>Başlık</th>
+            <th>Açıklama</th>
+            <th>Kategori Türü</th>
             <th>Durum</th>
             <th>Eylem</th>
-            <th>Eklenme T.</th>
+            <th>Oluşturulma</th>
         </x-slot>
         <x-slot name="tbody">
-            @foreach($products as $product)
+            @foreach($categories as $category)
                 @php
-                    $productId = encrypt($product->id);
+                    $categoryId = encrypt($category->id);
+                    $base_categry = $category->base_category == null
                 @endphp
-                <tr itemid="{{ $productId }}">
+                <tr itemid="{{ $categoryId }}" class="{{ $base_categry ? "alert alert-success" : "" }}">
                     <td>
-                        <img src="{{ asset($product->image ?? "images/cloth_1.jpg") }}" alt="image"
+                        <img src="{{ asset($category->image) }}" alt="image"
                              class="img-fluid avatar-lg">
                     </td>
-                    <td>{{ $product->name }}</td>
-                    <td>{{ $product->category_name }}</td>
-                    <td>{{ $product->sort_description ?? "" }}</td>
-                    <td>{{ number_format($product->price ?? 0, 2) }} TL</td>
-                    <td>{{ $product->color ?? "" }}</td>
-                    <td>{{ $product->size ?? "" }}</td>
-                    <td>{{ $product->quantity ?? "" }}</td>
-                    <td>
+                    <td>{{ $category->name }}</td>
+                    <td>{!! $category->description ?? "" !!}</td>
+                    <td>{{ $base_categry ? "Ana Kategori" : "Alt Kategori" }}</td>
+                    <td class="">
                         <x-admin.helpers.datatable-checkbox
-                            :id="$productId"
-                            :status="$product->status"
-                            :select-class="'productStatus'"/>
+                            :id="$categoryId"
+                            :status="$category->status"
+                            :select-class="'categoryStatus'"/>
                     </td>
                     <td class="table-action">
                         <div class="d-flex">
                             <a class="mx-1"
-                               href="{{ route("product.edit", ["product" => $productId]) }}">
+                               href="{{ route("category.edit", ["category" => $categoryId]) }}">
                                 <button type="button" class="btn btn-primary p-1"><i
                                         class="mdi mdi-pencil"></i>
                                 </button>
@@ -87,24 +80,24 @@
                             </button>
                         </div>
                     </td>
-                    <td>{{ $product->created_at }}</td>
+                    <td>{{ $category->created_at }}</td>
                 </tr>
             @endforeach
         </x-slot>
     </x-admin.datatable.layout.datatable-items>
+
 @endsection
 
 @section("js")
     <x-admin.datatable.datatable-js
-        :column-defs-targets="'[0,8,9]'"
-        :order-index="'10'"
+        :column-defs-targets="'[0,4,5]'"
+        :order-index="'3'"
         :director="'desc'"/>
 
     <!-- sweetalert2 Init js -->
     <script src=" https://cdn.jsdelivr.net/npm/sweetalert2@11.7.9/dist/sweetalert2.all.min.js "></script>
     <!-- Jquery Toast js -->
     <script src="{{ $asset }}vendor/jquery-toast-plugin/jquery.toast.min.js"></script>
-
 
     <script>
         <!-- Switch Status on/off js -->
@@ -118,10 +111,10 @@
             });
         }
 
-        $(".productStatus").on("click", function (p) {
+        $(".categoryStatus").on("click", function (p) {
 
             const id = $(this).closest("tr").attr("itemid");
-            const url = "{{ route("product.update", ["product" => ":id"]) }}".replace(":id", id);
+            const url = "{{ route("category.update", ["category" => ":id"]) }}".replace(":id", id);
             const status = $(this).prop("checked") ? 1 : 0;
 
             $.ajax({
@@ -143,9 +136,7 @@
         <!-- Delete Slider js -->
         $(".btnsil").on("click", function (p) {
             const id = $(this).closest("tr").attr("itemid");
-            const url = "{{ route("product.destroy", ["product" => "9999"]) }}".replace("9999", id);
-            console.log(id);
-            console.log(url)
+            const url = "{{ route("category.destroy", ["category" => ":id"]) }}".replace(":id", id);
 
             const swal = Swal.mixin({
                 customClass: {

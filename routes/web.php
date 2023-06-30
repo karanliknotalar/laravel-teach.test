@@ -67,6 +67,7 @@ Route::group(["prefix" => "admin", "middleware" => ["admin.dashboard.shared", "a
 
     Route::resource("slider", "Admin\SliderController");
     Route::resource("product", "Admin\ProductController");
+    Route::resource("category", "Admin\CategoryController");
 
 });
 

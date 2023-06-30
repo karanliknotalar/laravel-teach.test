@@ -22,10 +22,11 @@
                     <form id="cartForm">
                         @csrf
                         <input type="hidden" name="product_id" value="{{ encrypt($product->id) }}">
-                        <h2 class="text-black mb-3">{{ $product->name }}</h2>
-                        <div class="mb-3">{!! $product->description  ?? "" !!}</div>
+                        <h2 class="text-black">{{ $product->name }}</h2>
+                        <div class="mb-5"><span class="text-success small">Ürün Kodu: {{ $product->product_code }}</span></div>
+                        <div>{!! $product->description  ?? "" !!}</div>
 
-                        <div class="form-group mb-3">
+                        <div class="form-group my-3">
                             <select class="form-control" id="size" name="size">
                                 @foreach($product->product_size as $product_size)
                                     <option {{ $product_size->size == $product->low_price->size ? "selected" : "" }}

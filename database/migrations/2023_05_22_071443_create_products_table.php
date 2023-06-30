@@ -15,6 +15,7 @@ return new class extends Migration {
             $table->unsignedBigInteger("category_id");
             $table->string("name");
             $table->string("slug_name");
+            $table->string("product_code")->unique();
             $table->string("image")->nullable();
             $table->longText("description")->nullable();
             $table->text("sort_description")->nullable();

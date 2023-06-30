@@ -29,6 +29,7 @@ class ProductFormRequest extends FormRequest
 
                 return [
                     "name" => "required|min:5",
+                    "product_code" => "required",
                     "image" => 'image|mimes:jpeg,png,jpg,gif,svg|max:1024',
                     "description" => 'required|min:25',
                     "sort_description" => 'required|min:15',
@@ -41,6 +42,7 @@ class ProductFormRequest extends FormRequest
         }
 
         return [
+            "product_code" => "required",
             "name" => "required|min:5",
             "image" => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:1024',
             "description" => 'required|min:25',

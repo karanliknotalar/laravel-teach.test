@@ -24,6 +24,11 @@
                     :value="$product->name ?? ''"
                     :title="'Başlık'"/>
 
+                <x-admin.helpers.input-text
+                    :name="'product_code'"
+                    :value="$product->product_code ?? ''"
+                    :title="'Ürün Kodu'"/>
+
                 <x-admin.helpers.quill-text-area
                     :quill-style="'height: 250px;'"
                     :hidden-id="'quilltext'"

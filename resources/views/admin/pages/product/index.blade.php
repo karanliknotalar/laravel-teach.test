@@ -33,7 +33,7 @@
                         <img src="{{ asset($product->image ?? "images/cloth_1.jpg") }}" alt="image"
                              class="img-fluid avatar-lg">
                     </td>
-                    <td>{{ $product->name }}</td>
+                    <td>{{ $product->name }} <br><span class="small text-success">Ürün Kodu: {{ $product->product_code }}</span></td>
                     <td>{{ $product->category_name }}</td>
                     <td>{{ $product->sort_description ?? "" }}</td>
 

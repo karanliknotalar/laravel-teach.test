@@ -30,6 +30,7 @@ class ProductSeeder extends Seeder
                     "category_id" => $category->id,
                     "name" => $name,
                     "slug_name" => Str::slug($name),
+                    "product_code" => "ABC".random_int(1000,9999),
                     "image" => null,
                     "description" => "Uzun Açıklama",
                     "sort_description" => "Kısa Açıklama",

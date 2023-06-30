@@ -38,18 +38,18 @@ class ProductController extends Controller
      */
     public function store(ProductFormRequest $request)
     {
+        if (Product::where("product_code", $request["product_code"])->exists())
+            return back()->withErrors(["Bu ürün kodu zaten tanımlıdır"]);
 
         $imageName = Helper::getFileName($request->name, $request->image, "images/products/");
 
         $result = Product::create([
             "category_id" => $request["category_id"],
+            "product_code" => $request["product_code"],
             "name" => $request["name"],
             "slug_name" => Helper::renameExistSlug(new Product(), "slug_name", $request["name"]),
             "description" => $request["description"],
             "sort_description" => $request["sort_description"],
-            "size" => $request["size"][0],
-            "color" => $request["color"][0],
-            "quantity" => $request["quantity"][0],
             "image" => $imageName,
             "status" => $request["status"] == "on",
         ]);
@@ -104,6 +104,9 @@ class ProductController extends Controller
         $id = decrypt($id);
         $product = Product::query()->where("id", "=", $id)->firstOrFail();
 
+        if (Product::where("product_code", $request["product_code"])->exists())
+            return back()->withErrors(["Bu ürün kodu zaten tanımlıdır"])->withInput($request->all());
+
         if ($product) {
 
             if (count($request->all()) == 2) {
@@ -119,6 +122,7 @@ class ProductController extends Controller
 
                 $result = $product->update([
                     "category_id" => $request["category_id"],
+                    "product_code" => $request["product_code"],
                     "name" => $request["name"],
                     "slug_name" => Helper::renameExistSlug(new Product(), "slug_name", $request["name"]),
                     "description" => $request["description"],

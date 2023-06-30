@@ -35,28 +35,28 @@
                     :value="$product->sort_description ?? ''"
                     :title="'Kısa Açıklama'"/>
 
-                <x-admin.helpers.input-text
-                    :name="'price'"
-                    :value="$product->price ?? '0.00'"
-                    :title="'Fiyat'"
-                    :input-type="'numeric'"/>
+{{--                <x-admin.helpers.input-text--}}
+{{--                    :name="'price'"--}}
+{{--                    :value="$product->price ?? '0.00'"--}}
+{{--                    :title="'Fiyat'"--}}
+{{--                    :input-type="'numeric'"/>--}}
 
-                <x-admin.helpers.input-text
-                    :name="'size'"
-                    :value="$product->size ?? ''"
-                    :title="'Beden (Virgüllerle Ayırarak)'"
-                    :input-type="'numeric'"/>
+{{--                <x-admin.helpers.input-text--}}
+{{--                    :name="'size'"--}}
+{{--                    :value="$product->size ?? ''"--}}
+{{--                    :title="'Beden (Virgüllerle Ayırarak)'"--}}
+{{--                    :input-type="'numeric'"/>--}}
 
-                <x-admin.helpers.input-text
-                    :name="'color'"
-                    :value="$product->color ?? ''"
-                    :title="'Renk (Virgüllerle Ayırarak)'"/>
+{{--                <x-admin.helpers.input-text--}}
+{{--                    :name="'color'"--}}
+{{--                    :value="$product->color ?? ''"--}}
+{{--                    :title="'Renk (Virgüllerle Ayırarak)'"/>--}}
 
-                <x-admin.helpers.input-text
-                    :name="'quantity'"
-                    :value="$product->quantity ?? ''"
-                    :title="'Stok'"
-                    :input-type="'numeric'"/>
+{{--                <x-admin.helpers.input-text--}}
+{{--                    :name="'quantity'"--}}
+{{--                    :value="$product->quantity ?? ''"--}}
+{{--                    :title="'Stok'"--}}
+{{--                    :input-type="'numeric'"/>--}}
 
                 <div class="form-floating mb-3">
                     <select class="form-select" aria-label="Kategori Seçin" name="category_id">
@@ -86,31 +86,41 @@
                 <button type="submit" class="btn btn-success mx-auto form-control">
                     {{ isset($product) ? "Güncelle" : "Kaydet" }}
                 </button>
-
-
             </x-slot>
             @if(!isset($product))
                 <x-slot name="productDetail">
                     <div class="d-flex productDetail">
                         <x-admin.helpers.input-text
                             :main-class="'mx-1 mb-2'"
-                            :name="'size_d[]'"
+                            :name="'size[]'"
                             :value="$product->size ?? ''"
                             :title="'Beden'"
                             :input-type="'numeric'"/>
                         <x-admin.helpers.input-text
                             :main-class="'mx-1 mb-2'"
-                            :name="'color_d[]'"
+                            :name="'color[]'"
                             :value="$product->color ?? ''"
                             :title="'Renk'"/>
                         <x-admin.helpers.input-text
                             :main-class="'mx-1 mb-2'"
-                            :name="'price_d[]'"
+                            :name="'price[]'"
                             :value="$product->price ?? '0.00'"
                             :title="'Fiyat'"
                             :input-type="'numeric'"/>
+                        <x-admin.helpers.input-text
+                            :main-class="'mx-1 mb-2'"
+                            :name="'quantity[]'"
+                            :value="$product->quantity ?? '0'"
+                            :title="'Stok'"
+                            :input-type="'numeric'"/>
                         <div class="px-1 py-1">
-                            <button type="button" class=" btn btn-danger btnRemove"><i class="mdi mdi-delete"></i>
+                            <button type="button" class="btn btn-danger p-1 btnsil mx-1 btnRemove"
+                                    tabindex="0"
+                                    data-bs-placement="top"
+                                    data-bs-toggle="popover"
+                                    data-bs-trigger="hover"
+                                    data-bs-content="Sil">
+                                <i class="mdi mdi-delete"></i>
                             </button>
                         </div>
                     </div>

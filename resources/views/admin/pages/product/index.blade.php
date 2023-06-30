@@ -43,10 +43,10 @@
             <th>Ürün</th>
             <th>Kategori</th>
             <th>Kısa Açıklama</th>
-            <th>Fiyat</th>
-            <th>Renk</th>
-            <th>Beden</th>
-            <th>Stok</th>
+            {{--            <th>Fiyat</th>--}}
+            {{--            <th>Renk</th>--}}
+            {{--            <th>Beden</th>--}}
+            {{--            <th>Stok</th>--}}
             <th>Durum</th>
             <th>Eylem</th>
             <th>Eklenme T.</th>
@@ -64,10 +64,10 @@
                     <td>{{ $product->name }}</td>
                     <td>{{ $product->category_name }}</td>
                     <td>{{ $product->sort_description ?? "" }}</td>
-                    <td>{{ number_format($product->price ?? 0, 2) }} TL</td>
-                    <td>{{ $product->color ?? "" }}</td>
-                    <td>{{ $product->size ?? "" }}</td>
-                    <td>{{ $product->quantity ?? "" }}</td>
+                    {{--                    <td>{{ number_format($product->price ?? 0, 2) }} TL</td>--}}
+                    {{--                    <td>{{ $product->color ?? "" }}</td>--}}
+                    {{--                    <td>{{ $product->size ?? "" }}</td>--}}
+                    {{--                    <td>{{ $product->quantity ?? "" }}</td>--}}
                     <td>
                         <x-admin.helpers.datatable-checkbox
                             :id="$productId"
@@ -78,11 +78,32 @@
                         <div class="d-flex">
                             <a class="mx-1"
                                href="{{ route("product.edit", ["product" => $productId]) }}">
-                                <button type="button" class="btn btn-primary p-1"><i
-                                        class="mdi mdi-pencil"></i>
+                                <button type="button" class="btn btn-primary p-1"
+                                        tabindex="0"
+                                        data-bs-placement="top"
+                                        data-bs-toggle="popover"
+                                        data-bs-trigger="hover"
+                                        data-bs-content="Ürünü düzenle">
+                                    <i class="mdi mdi-pencil"></i>
                                 </button>
                             </a>
-                            <button type="button" class="btn btn-danger p-1 btnsil">
+                            <a class="mx-1"
+                               href="{{ route("product.edit", ["product" => $productId]) }}">
+                                <button type="button" class="btn btn-warning p-1"
+                                        tabindex="0"
+                                        data-bs-placement="top"
+                                        data-bs-toggle="popover"
+                                        data-bs-trigger="hover"
+                                        data-bs-content="Ürün detaylarını düzenle">
+                                    <i class="mdi mdi-stocking"></i>
+                                </button>
+                            </a>
+                            <button type="button" class="btn btn-danger p-1 btnsil mx-1"
+                                    tabindex="0"
+                                    data-bs-placement="top"
+                                    data-bs-toggle="popover"
+                                    data-bs-trigger="hover"
+                                    data-bs-content="Ürünü Sil">
                                 <i class="mdi mdi-delete"></i>
                             </button>
                         </div>
@@ -96,8 +117,8 @@
 
 @section("js")
     <x-admin.datatable.datatable-js
-        :column-defs-targets="'[0,8,9]'"
-        :order-index="'10'"
+        :column-defs-targets="'[0,4,5]'"
+        :order-index="'6'"
         :director="'desc'"/>
 
     <!-- sweetalert2 Init js -->

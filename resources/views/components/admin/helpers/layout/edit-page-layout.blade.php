@@ -52,7 +52,13 @@
                                     <div class="{{ $imageElementClass ?? "col-12"}}">
                                         <div class="page-title-box">
                                             <h4 class="page-title">{{ $imageElementTitle ?? "Ürün Detayları"}}
-                                                <button type="button" class="mx-2 px-1 py-1 btn btn-success" id="addProductDetail">
+                                                <button type="button" class="mx-2 px-1 py-1 btn btn-success"
+                                                        id="addProductDetail"
+                                                        tabindex="0"
+                                                        data-bs-placement="top"
+                                                        data-bs-toggle="popover"
+                                                        data-bs-trigger="hover"
+                                                        data-bs-content="Alan Ekle">
                                                     <i class="mdi mdi-plus"></i>
                                                 </button>
                                             </h4>

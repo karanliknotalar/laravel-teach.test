@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Helper\Helper;
 use App\Models\Category;
 use App\Models\Product;
+use App\Models\ProductQuantity;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Str;
@@ -37,20 +38,20 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        return $request->all();
+
 
         $request->validate([
             "name" => "required|min:5",
             "image" => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:1024',
             "description" => 'required|min:25',
             "sort_description" => 'required|min:15',
-            "price" => 'required|min:1|decimal:2',
-            "size" => 'required|min:1',
-            "color" => 'required|min:1',
-            "quantity" => 'required|min:0|numeric',
-            "category_id" => 'required|numeric'
+            "price.*" => 'required|min:1|decimal:2',
+            "size.*" => 'required|min:1',
+            "color.*" => 'required|min:1',
+            "quantity.*" => 'required|min:1',
+            "category_id" => 'required|numeric',
         ]);
-
+//        return $request->all();
         $imageName = isset($request->image) ? $this->getImgName($request) : null;
 
         $result = Product::create([
@@ -59,13 +60,26 @@ class ProductController extends Controller
             "slug_name" => Str::slug($request["name"]),
             "description" => $request["description"],
             "sort_description" => $request["sort_description"],
-            "price" => $request["price"],
-            "size" => $request["size"],
-            "color" => $request["color"],
-            "quantity" => $request["quantity"],
+            "price" => $request["price"][0],
+            "size" => $request["size"][0],
+            "color" => $request["color"][0],
+            "quantity" => $request["quantity"][0],
             "image" => $imageName,
             "status" => $request["status"] == "on",
         ]);
+
+        if ($result) {
+
+            for ($i = 0; $i < count($request["size"]); $i++) {
+                ProductQuantity::create([
+                    "product_id" => $result->id,
+                    "price" => $request["price"][$i],
+                    "size" => $request["size"][$i],
+                    "color" => $request["color"][$i],
+                    "quantity" => $request["quantity"][$i],
+                ]);
+            }
+        }
 
         if (!empty($imageName) && $result) {
             Helper::fileSave($request->image, $imageName);

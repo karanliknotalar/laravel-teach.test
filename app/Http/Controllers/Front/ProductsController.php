@@ -10,51 +10,18 @@ use Illuminate\Routing\Controller;
 
 class ProductsController extends Controller
 {
-    private function filterQuery($input_array, $include_between = false, $include_orderby = false)
-    {
-        $tmp = [];
-        foreach ($input_array as $key => $value) {
-
-            if ($key == "size" && !empty($value))
-                $tmp["size"] = explode(",", $value);
-            if ($key == "color" && !empty($value))
-                $tmp["color"] = explode(",", $value);
-
-            if ($include_between) {
-
-                if ($key == "min" && !empty($value))
-                    $tmp["min"] = $value;
-                if ($key == "max" && !empty($value))
-                    $tmp["max"] = $value;
-            }
-
-            if ($include_orderby) {
-
-                if ($key == "order" && !empty($value))
-                    $tmp["order"] = $value;
-                if ($key == "director" && !empty($value))
-                    $tmp["director"] = $value;
-            }
-
-        }
-
-        if (!array_key_exists("min", $tmp) || !array_key_exists("max", $tmp)) {
-            unset($tmp["min"]);
-            unset($tmp["max"]);
-        }
-        if (!array_key_exists("order", $tmp) || !array_key_exists("director", $tmp)) {
-            unset($tmp["order"]);
-            unset($tmp["director"]);
-        }
-        return $tmp;
-    }
+//    private function filterQuery($input_array, $include_between = false, $include_orderby = false)
+//    {
+//        if (!array_key_exists("order", $tmp) || !array_key_exists("director", $tmp)) {
+//            unset($tmp["order"]);
+//            unset($tmp["director"]);
+//        }
+//        return $tmp;
+//    }
 
 
     public function products(Request $request, $category_slug = null, $category_id = null, $sub_category = null)
     {
-        $order_column = $request->query("order") ?? "id";
-        $order_director = $request->query("director") ?? "asc";
-
         $products = Product::where("status", "=", 1)
             ->join("product_quantities", "products.id", "product_quantities.product_id")
             ->orderBy("products.created_at", "desc")
@@ -66,12 +33,12 @@ class ProductsController extends Controller
                 "product_quantities.color",
             ])
             ->where(function ($query) use ($request) {
-                if (isset($request->min) && isset($request->max))
-                    $query->whereBetween("price", [$request->min ?? 0, $request->max ?? $this->getMinMax(false)]);
                 if (isset($request->size))
                     $query->whereIn("size", explode(",", $request->size));
                 if (isset($request->color))
                     $query->whereIn("color", explode(",", $request->color));
+                if (isset($request->min) && isset($request->max))
+                    $query->whereBetween("price", [$request->min ?? 0, $request->max ?? $this->getMinMax(false)]);
                 return $query;
             })
             ->where('product_quantities.price', function ($query) {
@@ -82,18 +49,14 @@ class ProductsController extends Controller
                     ->limit(1);
             })
             ->with("category:id,name,slug_name")
-            ->orderBy($order_column, $order_director)
+            ->orderBy($request->order ?? "name", $request->director?? "asc")
             ->whereHas("category", function ($query) use ($category_id) {
                 if (isset($category_id))
                     $query->where("category_id", $category_id)->orWhere("parent_id", $category_id);
                 return $query;
             })
             ->paginate(12)
-            ->appends($this->filterQuery($request->query(), true, true));
-
-//        return $products;
-//        return $request->all();
-
+            ->appends($request->query());
 
         $sizes = $this->getSizesOrColors("size", $category_id);
 

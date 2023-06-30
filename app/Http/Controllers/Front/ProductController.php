@@ -3,8 +3,11 @@
 namespace App\Http\Controllers\Front;
 
 use App\Models\Product;
+use App\Models\ProductQuantity;
+use Illuminate\Database\Query\JoinClause;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\DB;
 
 class ProductController extends Controller
 {
@@ -53,8 +56,25 @@ class ProductController extends Controller
         $order_director = $request->query("director") ?? "asc";
 
         $products = Product::where("status", "=", 1)
-            ->orderBy("created_at", "desc")
-            ->select(["id", "category_id", "size", "color", "name", "slug_name", "image", "sort_description", "price"])
+            ->join("product_quantities", "products.id", "product_quantities.product_id")
+            ->orderBy("products.created_at", "desc")
+            ->select([
+                "products.id",
+                "products.category_id",
+                "products.name",
+                "products.slug_name",
+                "products.image",
+                "products.sort_description",
+                "product_quantities.id as product_quantities_id",
+                "product_quantities.price",
+            ])
+            ->where('product_quantities.price', '=', function ($query) {
+                $query->select('price')
+                    ->from('product_quantities')
+                    ->whereColumn('product_id', 'products.id')
+                    ->orderBy('price')
+                    ->limit(1);
+            })
             ->where(function ($query) use ($request) {
 
                 if (isset($request->start_price) && isset($request->end_price)) {
@@ -65,7 +85,7 @@ class ProductController extends Controller
             ->with("category:id,name,slug_name")
             ->orderBy($order_column, $order_director)
             ->whereHas("category", function ($query) use ($category_id) {
-                if (isset($category_id)){
+                if (isset($category_id)) {
                     $query->where("category_id", $category_id)->orWhere("parent_id", $category_id);
                 }
                 return $query;
@@ -73,12 +93,12 @@ class ProductController extends Controller
             ->paginate(12)
             ->appends($this->filterQuery($request->query(), true, true));
 
-        $min_price = Product::where("status", 1)
-            ->select("price")
-            ->min("price");
-        $max_price = Product::where("status", 1)
-            ->select("price")
-            ->max("price");
+//        return $products;
+
+        $min_price = $this->getMinMax(true);
+
+        $max_price = $this->getMinMax(false);
+
         $size_list = Product::where("status", 1)
             ->select("size")
             ->groupBy("size")
@@ -108,5 +128,23 @@ class ProductController extends Controller
             ->get();
 
         return view("front.pages.product", compact("product", "f_products"));
+    }
+
+    public function getMinMax($min = true)
+    {
+        $result = Product::where("status", "=", 1)
+            ->join("product_quantities", "products.id", "product_quantities.product_id")
+            ->select("product_quantities.price")
+            ->where('product_quantities.price', '=', function ($query) {
+                $query->select('price')
+                    ->from('product_quantities')
+                    ->whereColumn('product_id', 'products.id')
+                    ->orderBy('price')
+                    ->limit(1);
+            });
+        if ($min)
+            return $result->min("product_quantities.price");
+        else
+            return $result->max("product_quantities.price");
     }
 }

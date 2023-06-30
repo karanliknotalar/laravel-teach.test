@@ -12,7 +12,7 @@ return new class extends Migration {
     {
         Schema::create('product_quantities', function (Blueprint $table) {
             $table->id();
-            $table->string("product_id");
+            $table->unsignedBigInteger("product_id");
             $table->double("price", 10, 2);
             $table->string("size", 50);
             $table->string("color", 50);

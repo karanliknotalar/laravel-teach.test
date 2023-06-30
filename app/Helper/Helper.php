@@ -7,12 +7,10 @@ use Illuminate\Support\Str;
 
 class Helper
 {
-    public static function fileDelete($result, $fileFullPath): void
+    public static function fileDelete($fileFullPath): void
     {
-        if ($result) {
-            if (!empty($fileFullPath) && File::isFile($fileFullPath))
-                File::delete($fileFullPath);
-        }
+        if (!empty($fileFullPath) && File::isFile($fileFullPath))
+            File::delete($fileFullPath);
     }
 
     public static function fileSave($file, $fileFullPath): void
@@ -23,7 +21,7 @@ class Helper
 
             if (!File::exists($dirName)) File::makeDirectory($dirName);
 
-            $file->move($dirName, $fileFullPath);
+            $file->move($dirName, File::basename($fileFullPath));
         }
     }
 

@@ -66,7 +66,9 @@ class SliderController extends Controller
      */
     public function edit(string $id)
     {
-        $slider = Slider::query()->where("id", $id)->first();
+        $id = decrypt($id);
+
+        $slider = Slider::query()->where("id", $id)->firstOrFail();
 
         return view("admin.pages.slider.edit", compact("slider"));
     }
@@ -76,22 +78,18 @@ class SliderController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $slider = Slider::query()->where("id", "=", $id)->first();
+        $id = decrypt($id);
+        $slider = Slider::query()->where("id", "=", $id)->firstOrFail();
 
-        if (count($request->all()) == 2) {
+        if ($slider) {
 
-            if ($slider) {
+            if (count($request->all()) == 2) {
+
                 $slider->status = $request->only("status")["status"];
                 $result = $slider->save();
+                return response(["result" => (bool)$result]);
 
-                return $result ? "success" : "error";
             } else {
-                return "error";
-            }
-
-        } else {
-
-            if ($slider) {
 
                 $request->validate([
                     "name" => "required",
@@ -109,19 +107,19 @@ class SliderController extends Controller
                     "shop_url" => $request["shop_url"] ?? "",
                 ]);
 
-                if (isset($request->image)) Helper::fileDelete($slider, $tempImg ?? null);
-                if (!empty($imageName) && $result) Helper::fileSave($request->image, $imageName);
+                if (!empty($imageName) && $result) {
+                    Helper::fileDelete($tempImg ?? null);
+                    Helper::fileSave($request->image, $imageName);
+                }
 
                 return $result ?
                     back()->with("status", "Güncelleme işlemi başarılı.") :
                     back()->withErrors(["store", "Güncelleme işlemi sırasında hata oluştu."]);
-
             }
 
-            return back()->withErrors([
-                "unknown" => "Bilinmeyen bir hata",
-            ]);
-        }
+        } else
+            return back()->withErrors(["db", "Veritabanında böyle bir kayıt yok veya getirilemedi."]);
+
     }
 
     /**
@@ -129,10 +127,11 @@ class SliderController extends Controller
      */
     public function destroy(string $id)
     {
-        $slider = Slider::query()->where("id", $id)->first();
+        $id = decrypt($id);
+        $slider = Slider::query()->where("id", $id)->firstOrFail();
         $result = $slider->delete();
 
-        if ($result) Helper::fileDelete($result, $slider->image ?? null);
+        if ($result) Helper::fileDelete($slider->image ?? null);
 
         return response(["result" => (bool)$result]);
     }

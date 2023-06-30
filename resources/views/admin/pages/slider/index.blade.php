@@ -70,7 +70,10 @@
                         </thead>
                         <tbody>
                         @foreach($sliders as $slider)
-                            <tr itemid="{{ $slider->id }}">
+                            @php
+                                $sliderId = encrypt($slider->id);
+                            @endphp
+                            <tr itemid="{{ $sliderId }}">
                                 <td>
                                     <img src="{{ asset($slider->image) }}" alt="image"
                                          class="img-fluid avatar-lg">
@@ -80,15 +83,17 @@
                                 <td>{{ $slider->shop_url ?? "" }}</td>
                                 <td>
                                     <div>
-                                        <input type="checkbox" id="status_id_{{ $slider->id }}"
-                                               data-switch="success" {{ $slider->status ? 'checked' : '' }}/>
-                                        <label for="status_id_{{ $slider->id }}" data-on-label="On" data-off-label="Off"
+                                        <input type="checkbox" id="{{ $sliderId }}"
+                                               data-switch="success"
+                                               {{ $slider->status ? 'checked' : '' }} class="sliderStatus"/>
+                                        <label for="{{ $sliderId }}" data-on-label="On" data-off-label="Off"
                                                class="mb-0 d-block"></label>
                                     </div>
                                 </td>
                                 <td class="table-action">
                                     <div class="d-flex">
-                                        <a class="mx-1" href="{{ route("slider.edit", ["slider" => $slider->id]) }}">
+                                        <a class="mx-1"
+                                           href="{{ route("slider.edit", ["slider" => $sliderId]) }}">
                                             <button type="button" class="btn btn-primary p-1"><i
                                                     class="mdi mdi-pencil"></i>
                                             </button>
@@ -150,7 +155,7 @@
             });
         }
 
-        $("input:checkbox").on("click", function (p) {
+        $(".sliderStatus").on("click", function (p) {
 
             const id = $(this).closest("tr").attr("itemid");
             const url = "{{ route("slider.update", ["slider" => ":id"]) }}".replace(":id", id);
@@ -163,12 +168,10 @@
                     "_token": "{{ csrf_token() }}",
                     "status": status
                 },
-                success: function (result) {
-                    if (result === "success") {
-                        showToast("İşlem başarılı", "success", 1200);
-                    } else {
-                        showToast("İşlem başarılı", "error", 1200);
-                    }
+                success: function (response) {
+                    response.result
+                        ? showToast("İşlem başarılı", "success", 1200)
+                        : showToast("İşlem başarısız", "error", 1200);
                 }
             });
         });
@@ -203,12 +206,12 @@
                         data: {"_token": "{{ csrf_token() }}",},
                         success: function (response) {
                             if (response.result === true) {
-                                swal.fire('Silindi!', '', 'success')
+                                swal.fire('Silindi!', '', 'success');
                                 setTimeout(function () {
                                     location.reload();
                                 }, 1000);
                             } else {
-                                swal.fire('İşlem sırasında hata oluştu', '', 'error')
+                                swal.fire('İşlem sırasında hata oluştu', '', 'error');
                             }
                         }
                     })

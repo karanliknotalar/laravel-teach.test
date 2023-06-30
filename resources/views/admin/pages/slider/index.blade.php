@@ -88,7 +88,10 @@
 @endsection
 
 @section("js")
-    <x-admin.datatable.datatable-js/>
+    <x-admin.datatable.datatable-js
+        :column-defs-targets="'[0,4,5]'"
+        :order-index="'6'"
+        :director="'desc'"/>
 
     <!-- sweetalert2 Init js -->
     <script src=" https://cdn.jsdelivr.net/npm/sweetalert2@11.7.9/dist/sweetalert2.all.min.js "></script>

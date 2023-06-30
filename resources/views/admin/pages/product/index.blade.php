@@ -64,7 +64,7 @@
                     <td>{{ $product->name }}</td>
                     <td>{{ $product->category_name }}</td>
                     <td>{{ $product->sort_description ?? "" }}</td>
-                    <td>{{ $product->price ?? "" }}</td>
+                    <td>{{ number_format($product->price, 2) ?? "" }} TL</td>
                     <td>{{ $product->color ?? "" }}</td>
                     <td>{{ $product->size ?? "" }}</td>
                     <td>{{ $product->quantity ?? "" }}</td>
@@ -95,7 +95,10 @@
 @endsection
 
 @section("js")
-    <x-admin.datatable.datatable-js/>
+    <x-admin.datatable.datatable-js
+        :column-defs-targets="'[0,8,9]'"
+        :order-index="'10'"
+        :director="'desc'"/>
 
     <!-- sweetalert2 Init js -->
     <script src=" https://cdn.jsdelivr.net/npm/sweetalert2@11.7.9/dist/sweetalert2.all.min.js "></script>

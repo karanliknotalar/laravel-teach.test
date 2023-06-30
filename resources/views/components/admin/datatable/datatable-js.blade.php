@@ -17,7 +17,11 @@
             },
             drawCallback: function () {
                 $(".dataTables_paginate > .pagination").addClass("pagination-rounded")
-            }
+            },
+            columnDefs: [
+                {orderable: false, targets: {{ $columnDefsTargets ?? ""}}}
+            ],
+            order: [[{{ $orderIndex ?? 1 }}, '{{ $director ?? "asc" }}']]
         });
     });
 </script>

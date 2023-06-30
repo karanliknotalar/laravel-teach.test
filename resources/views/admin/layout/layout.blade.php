@@ -7,7 +7,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta content="A fully featured admin theme which can be used to build CRM, CMS, etc." name="description"/>
     <meta content="Coderthemes" name="author"/>
-
+    <!-- No Cache -->
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
     <!-- App favicon -->
     <link rel="shortcut icon" href="{{ $asset }}images/favicon.ico">
     <!-- Theme Config Js -->
@@ -18,6 +21,7 @@
     <link href="{{ $asset }}css/icons.min.css" rel="stylesheet" type="text/css"/>
     <!-- Custom css -->
     @yield("css")
+
 </head>
 
 <body>

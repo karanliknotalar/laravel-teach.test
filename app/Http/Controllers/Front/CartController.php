@@ -54,7 +54,8 @@ class CartController extends Controller
 
                 if (array_key_exists($cartId, $cartItems)) {
 
-                    if ($productQuantity->quantity <= $cartItems[$cartId]["quantity"])
+                    $tempStok = $cartItems[$cartId]["quantity"];
+                    if ($productQuantity->quantity < $tempStok || $productQuantity->quantity < ($tempStok + $quantity))
                         return response(["success" => false, "error" => "stok", "message" => "stok yetersiz"]);
 
                     $cartItems[$cartId]["quantity"] += $quantity;

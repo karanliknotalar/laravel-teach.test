@@ -6,8 +6,6 @@ use App\Http\Requests\SliderFormRequest;
 use App\Models\Slider;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
-use Illuminate\Support\Facades\File;
-use Str;
 use \App\Helper\Helper;
 
 class SliderController extends Controller
@@ -48,8 +46,7 @@ class SliderController extends Controller
             "status" => $request["status"],
         ]);
 
-//        if (!empty($imageName) && $result) $this->imgSave($imageName, $request);
-        if (!empty($imageName) && $result) Helper::fileSave($request, $imageName);
+        if (!empty($imageName) && $result) Helper::fileSave($request->image, $imageName);
 
         return $result ?
             back()->with("status", "Kayıt işlemi başarılı.") :
@@ -113,7 +110,7 @@ class SliderController extends Controller
                 ]);
 
                 if (isset($request->image)) Helper::fileDelete($slider, $tempImg ?? null);
-                if (!empty($imageName) && $result) Helper::fileSave($request, $imageName);
+                if (!empty($imageName) && $result) Helper::fileSave($request->image, $imageName);
 
                 return $result ?
                     back()->with("status", "Güncelleme işlemi başarılı.") :

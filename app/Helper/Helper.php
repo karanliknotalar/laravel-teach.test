@@ -15,7 +15,7 @@ class Helper
         }
     }
 
-    public static function fileSave($request, $fileFullPath): void
+    public static function fileSave($file, $fileFullPath): void
     {
         if (!empty($fileFullPath)) {
 
@@ -23,7 +23,7 @@ class Helper
 
             if (!File::exists($dirName)) File::makeDirectory($dirName);
 
-            $request->image->move($dirName, $fileFullPath);
+            $file->move($dirName, $fileFullPath);
         }
     }
 

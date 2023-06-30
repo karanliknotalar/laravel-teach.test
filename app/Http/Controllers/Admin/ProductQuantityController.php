@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Http\Requests\Admin\ProductQuantityFormRequest;
 use App\Models\Product;
 use App\Models\ProductQuantity;
 use Illuminate\Http\Request;
@@ -30,16 +31,8 @@ class ProductQuantityController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(ProductQuantityFormRequest $request)
     {
-
-        $request->validate([
-            "price.*" => 'required|min:1',
-            "size.*" => 'required|min:1',
-            "color.*" => 'required|min:1',
-            "quantity.*" => 'required|min:1',
-            "product_id" => "required",
-        ]);
 
         $product_id = decrypt($request->product_id);
         $check = Product::where("id", $product_id)->select("id");

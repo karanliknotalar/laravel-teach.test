@@ -32,7 +32,6 @@
     @include("admin.inc.left-sidebar")
     <!-- ========== Left Sidebar End ========== -->
 
-
     <!-- ============================================================== -->
     <!-- Start Page Content here -->
     <!-- ============================================================== -->
@@ -64,8 +63,10 @@
 
 <!-- Vendor js -->
 <script src="{{ $asset }}js/vendor.min.js"></script>
+
 <!-- App js -->
 <script src="{{ $asset }}js/app.min.js"></script>
+
 <!-- Custom Js -->
 @yield("js")
 

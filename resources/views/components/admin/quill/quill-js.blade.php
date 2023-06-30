@@ -5,7 +5,8 @@
     jQuery(window).on("load", function () {
         const quill = new Quill("#snow-editor", {
             theme: "snow",
-            modules: {toolbar: [[{font: []}, {size: []}], ["bold", "italic", "underline", "strike"], [{color: []}, {background: []}], [{header: [!1, 1, 2, 3, 4, 5, 6]}], ["direction", {align: []}], ["clean"]]}
+            modules: {toolbar: [[{font: []}, {size: []}], ["bold", "italic", "underline", "strike"], [{color: []}, {background: []}], [{header: [!1, 1, 2, 3, 4, 5, 6]}], ["direction", {align: []}], ["clean"]]},
+            value: null
         });
 
         const loadquil = function () {

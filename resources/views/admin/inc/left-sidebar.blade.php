@@ -80,7 +80,7 @@
                 :url='route("category.index")'
                 :name="'Kategoriler'"
                 :icon-name="'mdi mdi-box-shadow'"
-{{--                :count="$productCount"--}}
+                {{--                :count="$productCount"--}}
             />
 
             <x-admin.helpers.sidebar-single-menu-item
@@ -95,10 +95,16 @@
                 :icon-name="'ri-product-hunt-fill'"
                 :count="$productCount"
             />
+            <x-admin.helpers.sidebar-single-menu-item
+                :url='route("service.index")'
+                :name="'Hizmetler'"
+                :icon-name="'mdi mdi-truck-minus'"
+{{--                :count="$productCount"--}}
+            />
 
 {{--            <li class="side-nav-item">--}}
 {{--                <a href="" class="side-nav-link">--}}
-{{--                    <i class="mdi mdi-box-shadow"></i>--}}
+{{--                    <i class="mdi mdi-room-service"></i>--}}
 {{--                    <span class="badge bg-primary float-end"></span>--}}
 {{--                    <span>Test</span>--}}
 {{--                </a>--}}

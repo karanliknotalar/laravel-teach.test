@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Helper\Helper;
+use App\Http\Requests\Admin\ProductFormRequest;
 use App\Models\Category;
 use App\Models\Product;
 use App\Models\ProductQuantity;
@@ -36,22 +37,9 @@ class ProductController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(ProductFormRequest $request)
     {
 
-
-        $request->validate([
-            "name" => "required|min:5",
-            "image" => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:1024',
-            "description" => 'required|min:25',
-            "sort_description" => 'required|min:15',
-            "price.*" => 'required|min:1|decimal:2',
-            "size.*" => 'required|min:1',
-            "color.*" => 'required|min:1',
-            "quantity.*" => 'required|min:1',
-            "category_id" => 'required|numeric',
-        ]);
-//        return $request->all();
         $imageName = isset($request->image) ? $this->getImgName($request) : null;
 
         $result = Product::create([
@@ -60,7 +48,6 @@ class ProductController extends Controller
             "slug_name" => Str::slug($request["name"]),
             "description" => $request["description"],
             "sort_description" => $request["sort_description"],
-            "price" => $request["price"][0],
             "size" => $request["size"][0],
             "color" => $request["color"][0],
             "quantity" => $request["quantity"][0],
@@ -113,14 +100,13 @@ class ProductController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(ProductFormRequest $request, string $id)
     {
         $id = decrypt($id);
         $product = Product::query()->where("id", "=", $id)->firstOrFail();
 
         if ($product) {
 
-//            return $request->all();
             if (count($request->all()) == 2) {
 
                 $product->status = $request->only("status")["status"];
@@ -128,18 +114,6 @@ class ProductController extends Controller
                 return response(["result" => (bool)$result]);
 
             } else {
-
-                $request->validate([
-                    "name" => "required|min:5",
-                    "image" => 'image|mimes:jpeg,png,jpg,gif,svg|max:1024',
-                    "description" => 'required|min:25',
-                    "sort_description" => 'required|min:15',
-                    "price" => 'required|min:1|decimal:2',
-                    "size" => 'required|min:1',
-                    "color" => 'required|min:1',
-                    "quantity" => 'required|min:0|numeric',
-                    "category_id" => 'required|numeric'
-                ]);
 
                 $imageName = isset($request->image) ? $this->getImgName($request) : null;
                 $tempImg = $product->image;
@@ -150,10 +124,6 @@ class ProductController extends Controller
                     "slug_name" => Str::slug($request["name"]),
                     "description" => $request["description"],
                     "sort_description" => $request["sort_description"],
-                    "price" => $request["price"],
-                    "size" => $request["size"],
-                    "color" => $request["color"],
-                    "quantity" => $request["quantity"],
                     "image" => $imageName ?? $product->image,
                     "status" => $request["status"] == "on",
                 ]);

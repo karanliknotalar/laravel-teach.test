@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Admin;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class SliderFormRequest extends FormRequest
+class ServiceRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -21,9 +21,15 @@ class SliderFormRequest extends FormRequest
      */
     public function rules(): array
     {
+
+        if (count($this->all()) == 2) {
+            return [];
+        }
+
         return [
-            "name" => "required",
-            "image" => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:1024',
+            "title" => "required|min:10|max:100",
+            "content" => 'required|max:255|min:25',
+            "icon" => "required|min:5|max:25",
         ];
     }
 }

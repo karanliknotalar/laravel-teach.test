@@ -20,11 +20,11 @@ class ProductSeeder extends Seeder
 
         foreach ($categories as $category) {
 
-            for ($i = 0; $i < 4; $i++) {
+            for ($i = 0; $i < random_int(4, 6); $i++) {
 
                 $base = $category->base_category->name ?? "";
                 $base = $base == "" ? "" : $base . " - ";
-                $name = $base . $category->name . "- Ürün " . random_int(100, 999);
+                $name = $base . $category->name . " - Ürün " . random_int(100, 999);
 
                 Product::create([
                     "category_id" => $category->id,

@@ -2,11 +2,10 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Requests\SliderFormRequest;
+use App\Helper\Helper;
+use App\Http\Requests\Admin\SliderFormRequest;
 use App\Models\Slider;
-use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
-use \App\Helper\Helper;
 
 class SliderController extends Controller
 {
@@ -76,7 +75,7 @@ class SliderController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(SliderFormRequest $request, string $id)
     {
         $id = decrypt($id);
         $slider = Slider::query()->where("id", "=", $id)->firstOrFail();
@@ -90,11 +89,6 @@ class SliderController extends Controller
                 return response(["result" => (bool)$result]);
 
             } else {
-
-                $request->validate([
-                    "name" => "required",
-                    "image" => 'image|mimes:jpeg,png,jpg,gif,svg|max:1024',
-                ]);
 
                 $imageName = isset($request->image) ? $this->getImgName($request) : null;
                 $tempImg = $slider->image;

@@ -2,25 +2,34 @@
 
 namespace App\Models;
 
+use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
-use Illuminate\Support\Str;
 
 class Product extends Model
 {
-    use HasFactory;
+    use HasFactory, Sluggable;
 
     protected $fillable = [
         "category_id",
         "name",
-        "slug",
+        "slug_name",
         "image",
         "description",
         "sort_description",
         "status"
     ];
+
+
+    public static function creating($callback)
+    {
+        static::created(function ($request) {
+            $request->slug_name = $request->generateSlug($request->name);
+            $request->save();
+        });
+    }
 
     public function category(): HasOne
     {
@@ -38,17 +47,14 @@ class Product extends Model
         return $this->hasOne(ProductQuantity::class, "product_id", "id")
             ->orderBy("product_quantities.price");
     }
-    private function generateSlug($name): array|string|null
+
+
+    public function sluggable(): array
     {
-        if (static::whereSlug($slug = Str::slug($name))->exists()) {
-            $max = static::whereName($name)->latest('id')->skip(1)->value('slug');
-            if (isset($max[-1]) && is_numeric($max[-1])) {
-                return preg_replace_callback('/(\d+)$/', function($mathces) {
-                    return $mathces[1] + 1;
-                }, $max);
-            }
-            return "{$slug}-2";
-        }
-        return $slug;
+        return [
+            'slug_name' => [
+                'source' => 'name'
+            ]
+        ];
     }
 }

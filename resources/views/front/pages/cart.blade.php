@@ -36,7 +36,7 @@
                                                  alt="{{ $cartItem["name"] }}" class="img-fluid">
                                         </td>
                                         <td class="product-name">
-                                            <a href="{{ route("page.product", [$id ?? "", $cartItem["slug"] ?? ""]) }}">
+                                            <a href="{{ route("page.product", [$id ?? "", $cartItem["slug_name"] ?? ""]) }}">
                                                 <h2 class="h5 text-black">{{ $cartItem["name"] }}</h2></a>
                                         </td>
                                         <td>{{ number_format($cartItem["price"], 2) }} TL</td>

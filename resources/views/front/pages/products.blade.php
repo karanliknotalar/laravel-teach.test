@@ -47,7 +47,7 @@
                                 <div class="col-sm-6 col-lg-4 mb-4" data-aos="fade-up">
                                     <div class="block-4 text-center border">
                                         <figure class="block-4-image">
-                                            <a href="{{ route("page.product", ["slug" => $product->slug]) }}">
+                                            <a href="{{ route("page.product", ["slug_name" => $product->slug_name]) }}">
                                                 <img
                                                     src="{{ $product->image != null ? asset($product->image) : asset("images/cloth_1.jpg") }}"
                                                     alt="{{ $product->name }}" class="img-fluid">
@@ -55,7 +55,7 @@
                                         </figure>
                                         <div class="block-4-text p-4">
                                             <h3>
-                                                <a href="{{ route("page.product", ["slug" => $product->slug]) }}">{{ $product->name }}</a>
+                                                <a href="{{ route("page.product", ["slug_name" => $product->slug_name]) }}">{{ $product->name }}</a>
                                             </h3>
                                             <p class="mb-0">{{ $product->sort_description }}</p>
                                             <p class="text-primary font-weight-bold">{{ number_format($product->price, 2) }}
@@ -83,7 +83,7 @@
                                 @foreach($categories as $category)
                                     @if($category->parent_id == null)
                                         <li class="mb-1">
-                                            <a href="{{ route("page.products_with_category", ['id'=> $category->id, 'category'=>$category->slug]) }}"
+                                            <a href="{{ route("page.products", ['id'=> $category->id, 'category'=>$category->slug_name]) }}"
                                                class="d-flex">
                                                 <b><span>{{ $category->name }}</span></b>
                                                 <span
@@ -92,7 +92,7 @@
                                     @endif
                                     @foreach($category->sub_categories as $sub_category)
                                         <li class="mb-1 collapse" id="collapseSubCategory">
-                                            <a href="{{ route("page.products_with_category", ['id'=> $sub_category->id, 'category'=>$sub_category->slug]) }}"
+                                            <a href="{{ route("page.products", ['id'=> $sub_category->id, 'category'=>$sub_category->slug_name]) }}"
                                                class="d-flex">
                                                 <i><span>&nbsp;&nbsp;&nbsp;{!! $sub_category->name !!}</span></i>
                                                 <span
@@ -112,13 +112,14 @@
                                 <input type="text" name="text" id="amount" class="form-control border-0 pl-0 bg-white"/>
                             </label>
                         </div>
-
                         <div class="mb-4">
                             <h3 class="mb-3 h6 text-uppercase text-black d-block">Beden</h3>
                             @if(isset($sizes))
                                 @foreach($sizes as $size)
                                     <label for="{{ $size->size }}" class="d-flex">
-                                        <input type="checkbox" id="{{ $size->size }}" class="mr-2 mt-1">
+                                        <input type="checkbox" id="{{ $size->size }}" class="mr-2 mt-1 sizeList"
+                                               name="size[{{ $size->size }}]" value="{{ $size->size }}"
+                                            {{ isset(request()->size) && in_array($size->size, explode(",", request()->size)) ? "checked" : "" }}>
                                         <span class="text-black">{{ $size->size }} ({{ $size->size_count }})</span>
                                     </label>
                                 @endforeach
@@ -128,14 +129,17 @@
                             <h3 class="mb-3 h6 text-uppercase text-black d-block">Renk</h3>
                             @if(isset($colors))
                                 @foreach($colors as $color)
-                                    <a href="{{ request()->fullUrlWithQuery(["color" => $color->color]) }}"
-                                       class="d-flex color-item align-items-center">
+                                    <label for="{{ $color->color }}" class="d-flex">
+                                        <input type="checkbox" id="{{ $color->color }}" class="mr-2 mt-1 colorList"
+                                               name="color[{{ $color->color }}]" value="{{ $color->color }}"
+                                            {{ isset(request()->color) && in_array($color->color, explode(",", request()->color)) ? "checked" : "" }}>
                                         <span
                                             class="text-black">{{ $color->color }} ({{ $color->color_count }})</span>
-                                    </a>
+                                    </label>
                                 @endforeach
                             @endif
                         </div>
+                        <button class="btn btn-primary btnFilter">Filtrele</button>
                     </div>
                 </div>
             </div>
@@ -154,7 +158,7 @@
                                     <div class="col-sm-6 col-md-6 col-lg-4 mb-4 mb-lg-0" data-aos="fade"
                                          data-aos-delay="">
                                         <a class="block-2-item"
-                                           href="{{ route("page.products_with_category", ['id'=> $category->id, 'category'=>$category->slug]) }}">
+                                           href="{{ route("page.products", ['id'=> $category->id, 'category'=>$category->slug_name]) }}">
                                             <figure class="image">
                                                 <img src="{{ asset($category->image) }}" alt="{{ $category->name }}"
                                                      class="img-fluid">
@@ -172,22 +176,21 @@
                     </div>
                 </div>
             </div>
-
         </div>
     </div>
 @endsection
 
 @section("js")
     <script>
-        const min_price = {{ $products->min("price") }};
-        const max_price = {{ $products->max("price") }};
+        const min_price = {{ $products->min("price") ?? 0 }};
+        const max_price = {{ $products->max("price") ?? $max_price}};
 
         (function () {
             const range = $("#slider-range");
             range.slider({
                 range: true,
                 min: 0,
-                max: max_price ?? 0,
+                max: {{ $max_price ?? 0 }},
                 values: [min_price ?? 0, max_price ?? 0],
                 slide: function (event, ui) {
                     $("#amount").val(ui.values[0] + " ₺ - " + ui.values[1] + " ₺");
@@ -202,13 +205,41 @@
                 " ₺ - " + range.slider("values", 1) + " ₺");
         })();
 
+        function addQueryParamsToURL(url, params) {
+            let queryString = $.param(params);
+            let separator = url.includes('?') && !url.endsWith("&") ? '&' : '?';
+            return decodeURIComponent(url + separator + queryString);
+        }
 
-        function priceBetween(start_price, end_price) {
-            location.href = "{{ route('page.products') }}" + "?start_price=" + start_price + "&end_price=" + end_price;
+        function priceBetween(min, max) {
+            let params = {
+                min: min,
+                max: max
+            };
+            location.href = addQueryParamsToURL("{!! request()->fullUrlWithoutQuery(["min", "max"]) !!}", params);
         }
 
         $('a[aria-controls="collapseSubCategory"]').on('click', function (e) {
             e.currentTarget.children[0].className = $("#collapseSubCategory").is(":visible") ? "icon-plus" : "icon-minus"
         });
+
+        $(".btnFilter").on("click", function () {
+            let sizeList = [];
+            let colorList = [];
+
+            $(".sizeList:checked").each(function () {
+                sizeList.push(this.value);
+            });
+            $(".colorList:checked").each(function () {
+                colorList.push(this.value);
+            });
+            let params = {};
+            if (sizeList.length > 0)
+                params["size"] = sizeList.join(",");
+            if (colorList.length > 0)
+                params["color"] = colorList.join(",");
+            location.href = addQueryParamsToURL("{!! request()->fullUrlWithoutQuery(["size","color"]) !!}", params)
+        });
     </script>
+
 @endsection

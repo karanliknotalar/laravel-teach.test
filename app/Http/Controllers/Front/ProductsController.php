@@ -16,16 +16,16 @@ class ProductsController extends Controller
         foreach ($input_array as $key => $value) {
 
             if ($key == "size" && !empty($value))
-                $tmp["size"] = $value;
+                $tmp["size"] = explode(",", $value);
             if ($key == "color" && !empty($value))
-                $tmp["color"] = $value;
+                $tmp["color"] = explode(",", $value);
 
             if ($include_between) {
 
-                if ($key == "start_price" && !empty($value))
-                    $tmp["start_price"] = $value;
-                if ($key == "end_price" && !empty($value))
-                    $tmp["end_price"] = $value;
+                if ($key == "min" && !empty($value))
+                    $tmp["min"] = $value;
+                if ($key == "max" && !empty($value))
+                    $tmp["max"] = $value;
             }
 
             if ($include_orderby) {
@@ -38,9 +38,9 @@ class ProductsController extends Controller
 
         }
 
-        if (!array_key_exists("start_price", $tmp) || !array_key_exists("end_price", $tmp)) {
-            unset($tmp["start_price"]);
-            unset($tmp["end_price"]);
+        if (!array_key_exists("min", $tmp) || !array_key_exists("max", $tmp)) {
+            unset($tmp["min"]);
+            unset($tmp["max"]);
         }
         if (!array_key_exists("order", $tmp) || !array_key_exists("director", $tmp)) {
             unset($tmp["order"]);
@@ -50,7 +50,7 @@ class ProductsController extends Controller
     }
 
 
-    public function products(Request $request, $category_slug = null, $category_id = null)
+    public function products(Request $request, $category_slug = null, $category_id = null, $sub_category = null)
     {
         $order_column = $request->query("order") ?? "id";
         $order_director = $request->query("director") ?? "asc";
@@ -66,9 +66,13 @@ class ProductsController extends Controller
                 "product_quantities.color",
             ])
             ->where(function ($query) use ($request) {
-                if (isset($request->start_price) && isset($request->end_price))
-                    $query->whereBetween("price", [$request->start_price, $request->end_price]);
-                return $query->where($this->filterQuery($request->query()));
+                if (isset($request->min) && isset($request->max))
+                    $query->whereBetween("price", [$request->min ?? 0, $request->max ?? $this->getMinMax(false)]);
+                if (isset($request->size))
+                    $query->whereIn("size", explode(",", $request->size));
+                if (isset($request->color))
+                    $query->whereIn("color", explode(",", $request->color));
+                return $query;
             })
             ->where('product_quantities.price', function ($query) {
                 $query->select('price')
@@ -77,7 +81,7 @@ class ProductsController extends Controller
                     ->orderBy('price')
                     ->limit(1);
             })
-            ->with("category:id,name,slug")
+            ->with("category:id,name,slug_name")
             ->orderBy($order_column, $order_director)
             ->whereHas("category", function ($query) use ($category_id) {
                 if (isset($category_id))
@@ -88,13 +92,16 @@ class ProductsController extends Controller
             ->appends($this->filterQuery($request->query(), true, true));
 
 //        return $products;
+//        return $request->all();
 
 
         $sizes = $this->getSizesOrColors("size", $category_id);
 
+        $max_price = $this->getMinMax(false);
+
         $colors = $this->getSizesOrColors("color", $category_id);
 
-        return view("front.pages.products", compact("products", "sizes", "colors"));
+        return view("front.pages.products", compact("products", "sizes", "colors", "max_price"));
     }
 
     public function getSizesOrColors($column, $category_id = null)
@@ -118,5 +125,23 @@ class ProductsController extends Controller
             ])
             ->groupBy("product_quantities.{$column}")
             ->get();
+    }
+
+    public function getMinMax($min = true)
+    {
+        $result = Product::where("status", "=", 1)
+            ->join("product_quantities", "products.id", "product_quantities.product_id")
+            ->select("product_quantities.price")
+            ->where('product_quantities.price', '=', function ($query) {
+                $query->select('price')
+                    ->from('product_quantities')
+                    ->whereColumn('product_id', 'products.id')
+                    ->orderBy('price')
+                    ->limit(1);
+            });
+        if ($min)
+            return $result->min("product_quantities.price");
+        else
+            return $result->max("product_quantities.price");
     }
 }

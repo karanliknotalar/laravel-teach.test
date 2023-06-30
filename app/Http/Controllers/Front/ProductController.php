@@ -13,13 +13,13 @@ class ProductController extends Controller
 {
 
 
-    public function product(Request $request, $slug = null)
+    public function product(Request $request, $slug_name = null)
     {
 
         $product = Product::with("product_size:product_id,size")
             ->with("low_price:product_id,size,color,price")
             ->where("status", "=", 1)
-            ->where("slug", "=", $slug)
+            ->where("slug_name", "=", $slug_name)
             ->firstOrFail();
 
         $f_products = Product::query()->with("low_price:product_id,price")

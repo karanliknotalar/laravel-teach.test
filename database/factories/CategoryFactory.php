@@ -23,7 +23,7 @@ class CategoryFactory extends Factory
         return [
             "name" => $name,
             "parent_id" => null,
-            "slug" => Str::slug($name),
+            "slug_name" => Str::slug($name),
             "description" => Str::substr(fake()->paragraph, 0, 255),
             "seo_description" => Str::substr(fake()->paragraph, 0, 255),
             "seo_keywords" => Str::slug(Str::substr(fake()->paragraph, 0, 100), ","),

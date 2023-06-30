@@ -8,7 +8,7 @@
     <x-front.helpers.header-url
         :main-url="route('home.index')"
         :main-url-name="'Anasayfa'"
-        :child-url="route('page.product', [$product->id, $product->slug])"
+        :child-url="route('page.product', [$product->id, $product->slug_name])"
         :child-url-name="$product->name"/>
 
     <div class="site-section">
@@ -81,7 +81,7 @@
                                 <div class="item">
                                     <div class="block-4 text-center">
                                         <figure class="block-4-image">
-                                            <a href="{{ route("page.product", [$product->id, $product->slug]) }}">
+                                            <a href="{{ route("page.product", [$product->id, $product->slug_name]) }}">
                                                 <img
                                                     src="{{ $f_product->image != null ? asset($f_product->image) : asset("images/cloth_1.jpg") }}"
                                                     alt="{{ $f_product->name }}" class="img-fluid">
@@ -89,7 +89,7 @@
                                         </figure>
                                         <div class="block-4-text p-4">
                                             <h3>
-                                                <a href="{{ route("page.product", [$f_product->id, $f_product->slug]) }}">{{ $f_product->name }}</a>
+                                                <a href="{{ route("page.product", [$f_product->id, $f_product->slug_name]) }}">{{ $f_product->name }}</a>
                                             </h3>
                                             <p class="mb-0">{{ $f_product->sort_description ?? "" }}</p>
                                             <p class="text-primary font-weight-bold">{{ number_format($f_product->low_price->price, 2) }}

@@ -45,7 +45,7 @@ class ProductController extends Controller
         $result = Product::create([
             "category_id" => $request["category_id"],
             "name" => $request["name"],
-            "slug" => Str::slug($request["name"]),
+            "slug_name" => Str::slug($request["name"]),
             "description" => $request["description"],
             "sort_description" => $request["sort_description"],
             "size" => $request["size"][0],
@@ -121,7 +121,7 @@ class ProductController extends Controller
                 $result = $product->update([
                     "category_id" => $request["category_id"],
                     "name" => $request["name"],
-                    "slug" => Str::slug($request["name"]),
+                    "slug_name" => Str::slug($request["name"]),
                     "description" => $request["description"],
                     "sort_description" => $request["sort_description"],
                     "image" => $imageName ?? $product->image,

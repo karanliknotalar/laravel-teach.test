@@ -1,5 +1,5 @@
 <!-- sweetalert2 Init js -->
-<script src=" https://cdn.jsdelivr.net/npm/sweetalert2@11.7.9/dist/sweetalert2.all.min.js "></script>
+<script src=" {{ asset("sweetalert2/sweetalert2.min.js") }} "></script>
 
 @if(isset($useDeleteJs))
     <script>

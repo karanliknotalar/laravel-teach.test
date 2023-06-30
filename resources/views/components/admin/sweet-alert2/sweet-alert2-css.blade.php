@@ -1,5 +1,5 @@
 <!-- sweetalert2 css -->
-<link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.9/dist/sweetalert2.min.css" rel="stylesheet">
+<link href="{{ asset("sweetalert2/sweetalert2.min.css") }}" rel="stylesheet">
 <style>
     .swal2-popup {
         font-size: small;

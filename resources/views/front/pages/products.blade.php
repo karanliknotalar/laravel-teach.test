@@ -116,8 +116,8 @@
 
                         <div class="mb-4">
                             <h3 class="mb-3 h6 text-uppercase text-black d-block">Beden</h3>
-                            @if(isset($size_list))
-                                @foreach($size_list as $size)
+                            @if(isset($sizes))
+                                @foreach($sizes as $size)
                                     <label for="{{ $size->size }}" class="d-flex">
                                         <input type="checkbox" id="{{ $size->size }}" class="mr-2 mt-1">
                                         <span class="text-black">{{ $size->size }} ({{ $size->size_count }})</span>
@@ -128,27 +128,10 @@
 
                         <div class="mb-4">
                             <h3 class="mb-3 h6 text-uppercase text-black d-block">Renk</h3>
-                            @if(isset($color_list))
-                                @foreach($color_list as $color)
-                                    @php
-                                        $temp_color = "";
-                                        switch ($color->color){
-                                            case "Red":
-                                                $temp_color = "bg-danger";
-                                                break;
-                                            case "Green":
-                                                $temp_color = "bg-success";
-                                                break;
-                                            case "Blue":
-                                                $temp_color = "bg-info";
-                                                break;
-                                            case "Purple":
-                                                $temp_color = "bg-primary";
-                                                break;
-                                        }
-                                    @endphp
+                            @if(isset($colors))
+                                @foreach($colors as $color)
                                     <a href="#" class="d-flex color-item align-items-center">
-                                        <span class="{{ $temp_color }} color d-inline-block rounded-circle mr-2"></span>
+{{--                                        <span class="{{ $temp_color ?? "" }} color d-inline-block rounded-circle mr-2"></span>--}}
                                         <span
                                             class="text-black">{{ $color->color }} ({{ $color->color_count }})</span>
                                     </a>

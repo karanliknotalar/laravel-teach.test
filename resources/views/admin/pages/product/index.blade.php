@@ -3,9 +3,7 @@
 @section("css")
     <x-admin.datatable.datatable-css/>
     <x-admin.sweet-alert2.sweet-alert2-css/>
-    <!-- Jquery Toast css -->
-    <link href="{{ $asset }}vendor/jquery-toast-plugin/jquery.toast.min.css" rel="stylesheet">
-
+    <x-admin.jquery-toast.jquery-toast-css/>
 @endsection
 
 @section("content")
@@ -102,41 +100,13 @@
         </x-slot>
     </x-admin.sweet-alert2.sweet-alert2-js>
 
-    <!-- Jquery Toast js -->
-    <script src="{{ $asset }}vendor/jquery-toast-plugin/jquery.toast.min.js"></script>
-
-    <script>
-        <!-- Switch Status on/off js -->
-        function showToast(message, icon, timeout) {
-            $.toast({
-                text: message,
-                icon: icon,
-                allowToastClose: false,
-                hideAfter: timeout,
-                position: 'top-right',
-            });
-        }
-
-        $(".productStatus").on("click", function (p) {
-
-            const id = $(this).closest("tr").attr("itemid");
-            const url = "{{ route("product.update", ["product" => ":id"]) }}".replace(":id", id);
-            const status = $(this).prop("checked") ? 1 : 0;
-
-            $.ajax({
-                method: "PUT",
-                url: url,
-                data: {
-                    "_token": "{{ csrf_token() }}",
-                    "status": status
-                },
-                success: function (response) {
-                    response.result
-                        ? showToast("İşlem başarılı", "success", 1200)
-                        : showToast("İşlem başarısız", "error", 1200);
-                }
-            });
-        });
-    </script>
+    <x-admin.jquery-toast.jquery-toast-js
+        :use-toast-status="true"
+        :select-checkbox-query="'.productStatus'"
+        :update-route='route("product.update", ["product" => ":id"])'>
+        <x-slot name="id">
+            $(this).closest("tr").attr("itemid")
+        </x-slot>
+    </x-admin.jquery-toast.jquery-toast-js>
 
 @endsection

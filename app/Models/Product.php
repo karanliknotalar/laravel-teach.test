@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Product extends Model
 {
@@ -16,27 +17,12 @@ class Product extends Model
         "image",
         "description",
         "sort_description",
-        "product_no",
-        "price",
-        "size",
-        "color",
-        "quantity",
         "status"
     ];
 
-    public function category()
+    public function category(): HasOne
     {
         return $this->hasOne(Category::class, "id", "category_id")->where("status", "=", 1);
-    }
-
-    public function size()
-    {
-        return $this->hasMany(Product::class, "size", "size")->where("status", "=", 1);
-    }
-
-    public function color()
-    {
-        return $this->hasMany(Product::class, "color", "color")->where("status", "=", 1);
     }
 
 }

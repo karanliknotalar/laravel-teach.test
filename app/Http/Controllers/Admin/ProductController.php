@@ -8,7 +8,6 @@ use App\Models\Category;
 use App\Models\Product;
 use App\Models\ProductQuantity;
 use Exception;
-use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Str;
 

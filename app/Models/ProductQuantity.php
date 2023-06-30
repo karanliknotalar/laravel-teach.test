@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class ProductQuantity extends Model
 {
@@ -17,8 +18,9 @@ class ProductQuantity extends Model
         "quantity",
     ];
 
-    public function product()
+    public function product(): HasOne
     {
         return $this->hasOne(Product::class, "id", "product_id");
     }
+
 }

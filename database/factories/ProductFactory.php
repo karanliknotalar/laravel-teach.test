@@ -26,10 +26,6 @@ class ProductFactory extends Factory
             "image" => null,
             "description" => "Uzun Açıklama",
             "sort_description" => "Kısa Açıklama",
-//            "price" => random_int(50, 9999) . "." . random_int(1, 99),
-            "size" => ["Small", "Large", "Medium"][random_int(0, 2)],
-            "color" => ["Red", "Green", "Blue", "Purple"][random_int(0, 3)],
-            "quantity" => rand(1, 99),
             "status" => 1
         ];
     }

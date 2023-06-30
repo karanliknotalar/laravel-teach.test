@@ -33,9 +33,6 @@ class ProductSeeder extends Seeder
                     "image" => null,
                     "description" => "Uzun Açıklama",
                     "sort_description" => "Kısa Açıklama",
-                    "size" => ["Small", "Large", "Medium"][random_int(0, 2)],
-                    "color" => ["Red", "Green", "Blue", "Purple"][random_int(0, 3)],
-                    "quantity" => rand(1, 99),
                     "status" => 1
                 ]);
             }

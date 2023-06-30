@@ -93,24 +93,31 @@ class ProductController extends Controller
             ->paginate(12)
             ->appends($this->filterQuery($request->query(), true, true));
 
-//        return $products;
-
         $min_price = $this->getMinMax(true);
 
         $max_price = $this->getMinMax(false);
 
-        $size_list = Product::where("status", 1)
-            ->select("size")
-            ->groupBy("size")
-            ->withCount("size")
-            ->get();
-        $color_list = Product::where("status", 1)
-            ->select("color")
-            ->groupBy("color")
-            ->withCount("color")
+        $sizes = ProductQuantity::join("products", "product_quantities.product_id", "products.id")
+            ->where("products.status", "=", 1)
+            ->select([
+                "product_quantities.size",
+                \DB::raw("COUNT(product_quantities.size) as size_count")
+            ])
+            ->groupBy("product_quantities.size")
             ->get();
 
-        return view("front.pages.products", compact("products", "min_price", "max_price", "size_list", "color_list"));
+//        return $sizes;
+
+        $colors = ProductQuantity::join("products", "product_quantities.product_id", "products.id")
+            ->where("products.status", "=", 1)
+            ->select([
+                "product_quantities.color",
+                \DB::raw("COUNT(product_quantities.color) as color_count")
+            ])
+            ->groupBy("product_quantities.color")
+            ->get();
+
+        return view("front.pages.products", compact("products", "min_price", "max_price", "sizes", "colors"));
     }
 
 

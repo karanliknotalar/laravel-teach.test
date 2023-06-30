@@ -18,10 +18,6 @@ return new class extends Migration {
             $table->string("image")->nullable();
             $table->longText("description")->nullable();
             $table->text("sort_description")->nullable();
-//            $table->double("price", 10, 2);
-            $table->string("size", 50);
-            $table->string("color", 50);
-            $table->integer("quantity")->default(0);
             $table->tinyInteger("status")->default(0);
             $table->timestamps();
 

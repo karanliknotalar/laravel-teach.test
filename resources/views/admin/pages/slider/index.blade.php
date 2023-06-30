@@ -58,7 +58,7 @@
                             <x-admin.helpers.button
                                 :over-text="true"
                                 :message="'Slider sil'"
-                                :class="'btn btn-danger p-1 btnsil mx-1'">
+                                :class="'btn btn-danger p-1 btnDelete mx-1'">
                                 <x-slot:text>
                                     <i class="mdi mdi-delete"></i>
                                 </x-slot:text>
@@ -90,7 +90,7 @@
 
     <x-admin.sweet-alert2.sweet-alert2-js
         :use-delete-js="true"
-        :select-btn-query="'.btnsil'"
+        :select-btn-query="'.btnDelete'"
         :destroy-route='route("slider.destroy", ["slider" => ":id"])'
         :reverse-btn="true">
         <x-slot name="id">

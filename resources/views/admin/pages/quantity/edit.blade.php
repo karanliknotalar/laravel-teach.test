@@ -59,7 +59,7 @@
 
                             <div class="px-1 py-1">
                                 <x-admin.helpers.button
-                                    :class="'btn btn-danger p-1 btnsil mx-1 btnRemove'"
+                                    :class="'btn btn-danger p-1 mx-1 btnRemove'"
                                     :message="'Sil'"
                                     :over-text="true">
                                     <x-slot:text>

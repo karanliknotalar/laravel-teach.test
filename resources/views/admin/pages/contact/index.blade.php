@@ -47,7 +47,7 @@
                                         <div class="email-action-icons">
                                             <ul class="list-inline">
                                                 <li class="list-inline-item">
-                                                    <a class="btnsil" itemid="{{ encrypt($contact->id) }}">
+                                                    <a class="btnDelete" itemid="{{ encrypt($contact->id) }}">
                                                         <i class="mdi mdi-delete email-action-icons-item"></i>
                                                     </a>
                                                 </li>
@@ -79,7 +79,7 @@
         :quill-hidden-id="'quilltext'"/>
     <x-admin.sweet-alert2.sweet-alert2-js
         :use-delete-js="true"
-        :select-btn-query="'.btnsil'"
+        :select-btn-query="'.btnDelete'"
         :destroy-route='route("contact.destroy", ["contact" => ":id"])'
         :reverse-btn="true">
         <x-slot name="id">

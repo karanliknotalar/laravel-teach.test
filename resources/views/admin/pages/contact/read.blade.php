@@ -39,7 +39,7 @@
                         <hr/>
                         <div class="mt-3">
                             <a href="{{ route("contact.index") }}" class="btn btn-secondary me-2"><i class="mdi mdi-arrow-left-drop-circle me-1"></i> Geri Dön</a>
-                            <a itemid="{{ encrypt($contact->id) }}" class="btn btn-danger me-2 btnsil"><i class="mdi mdi-delete me-1"></i> Sil</a>
+                            <a itemid="{{ encrypt($contact->id) }}" class="btn btn-danger me-2 btnDelete"><i class="mdi mdi-delete me-1"></i> Sil</a>
                         </div>
                     </div>
                 </div>
@@ -53,7 +53,7 @@
 @section("js")
     <x-admin.sweet-alert2.sweet-alert2-js
         :use-delete-js="true"
-        :select-btn-query="'.btnsil'"
+        :select-btn-query="'.btnDelete'"
         :destroy-route='route("contact.destroy", ["contact" => ":id"])'
         :reverse-btn="true">
         <x-slot name="id">

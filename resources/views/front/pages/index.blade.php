@@ -45,7 +45,6 @@
             {{--            <!-- swipper controls -->--}}
             {{--            <div class="swiper-button-next"></div>--}}
             {{--            <div class="swiper-button-prev"></div>--}}
-{{--            ss--}}
         </div>
     </section>
     <!-- end of hero slider -->

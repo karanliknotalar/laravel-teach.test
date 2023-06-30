@@ -13,6 +13,6 @@ class SliderSeeder extends Seeder
      */
     public function run(): void
     {
-        Slider::factory(30)->create();
+        Slider::factory(10)->create();
     }
 }

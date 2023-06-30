@@ -16,4 +16,9 @@ class ProductQuantity extends Model
         "color",
         "quantity",
     ];
+
+    public function product()
+    {
+        return $this->hasOne(Product::class, "id", "product_id");
+    }
 }

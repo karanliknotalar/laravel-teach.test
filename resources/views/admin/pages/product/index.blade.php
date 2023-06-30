@@ -78,34 +78,34 @@
                         <div class="d-flex">
                             <a class="mx-1"
                                href="{{ route("product.edit", ["product" => $productId]) }}">
-                                <button type="button" class="btn btn-primary p-1"
-                                        tabindex="0"
-                                        data-bs-placement="top"
-                                        data-bs-toggle="popover"
-                                        data-bs-trigger="hover"
-                                        data-bs-content="Ürünü düzenle">
-                                    <i class="mdi mdi-pencil"></i>
-                                </button>
+                                <x-admin.helpers.button
+                                    :over-text="true"
+                                    :message="'Ürünü düzenle'"
+                                    :class="'btn btn-primary p-1'">
+                                    <x-slot:text>
+                                        <i class="mdi mdi-pencil"></i>
+                                    </x-slot:text>
+                                </x-admin.helpers.button>
                             </a>
                             <a class="mx-1"
-                               href="{{ route("product.edit", ["product" => $productId]) }}">
-                                <button type="button" class="btn btn-warning p-1"
-                                        tabindex="0"
-                                        data-bs-placement="top"
-                                        data-bs-toggle="popover"
-                                        data-bs-trigger="hover"
-                                        data-bs-content="Ürün detaylarını düzenle">
-                                    <i class="mdi mdi-stocking"></i>
-                                </button>
+                               href="{{ route("product-quantity.show", ["product_quantity" => $productId]) }}">
+                                <x-admin.helpers.button
+                                    :over-text="true"
+                                    :message="'Ürün detaylarını düzenle'"
+                                    :class="'btn btn-warning p-1'">
+                                    <x-slot:text>
+                                        <i class="mdi mdi-stocking"></i>
+                                    </x-slot:text>
+                                </x-admin.helpers.button>
                             </a>
-                            <button type="button" class="btn btn-danger p-1 btnsil mx-1"
-                                    tabindex="0"
-                                    data-bs-placement="top"
-                                    data-bs-toggle="popover"
-                                    data-bs-trigger="hover"
-                                    data-bs-content="Ürünü Sil">
-                                <i class="mdi mdi-delete"></i>
-                            </button>
+                            <x-admin.helpers.button
+                                :over-text="true"
+                                :message="'Ürünü sil'"
+                                :class="'btn btn-danger p-1 btnsil mx-1'">
+                                <x-slot:text>
+                                    <i class="mdi mdi-delete"></i>
+                                </x-slot:text>
+                            </x-admin.helpers.button>
                         </div>
                     </td>
                     <td>{{ $product->created_at }}</td>
@@ -165,8 +165,6 @@
         $(".btnsil").on("click", function (p) {
             const id = $(this).closest("tr").attr("itemid");
             const url = "{{ route("product.destroy", ["product" => "9999"]) }}".replace("9999", id);
-            console.log(id);
-            console.log(url)
 
             const swal = Swal.mixin({
                 customClass: {

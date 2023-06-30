@@ -59,7 +59,7 @@ class CategoryController extends Controller
 
         return $result ?
             back()->with("status", "Kayıt işlemi başarılı.") :
-            back()->withErrors(["store", "Kayıt işlemi sırasında hata oluştu."]);
+            back()->withErrors(["Kayıt işlemi sırasında hata oluştu."]);
     }
 
 
@@ -137,11 +137,11 @@ class CategoryController extends Controller
 
                 return $result ?
                     back()->with("status", "Güncelleme işlemi başarılı.") :
-                    back()->withErrors(["store", "Güncelleme işlemi sırasında hata oluştu."]);
+                    back()->withErrors(["Güncelleme işlemi sırasında hata oluştu."]);
             }
 
         } else
-            return back()->withErrors(["db", "Veritabanında böyle bir kayıt yok veya getirilemedi."]);
+            return back()->withErrors(["Veritabanında böyle bir kayıt yok veya getirilemedi."]);
     }
 
     /**

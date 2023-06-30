@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\ProductQuantityController;
 use App\Http\Controllers\Admin\SliderController;
 use App\Http\Controllers\AjaxController;
 use App\Http\Controllers\Auth\AdminAuthController;
@@ -68,6 +69,8 @@ Route::group(["prefix" => "admin", "middleware" => ["admin.dashboard.shared", "a
     Route::resource("slider", "Admin\SliderController");
     Route::resource("product", "Admin\ProductController");
     Route::resource("category", "Admin\CategoryController");
+    Route::resource("product-quantity","Admin\ProductQuantityController");
+
 
 });
 

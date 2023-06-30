@@ -1,4 +1,4 @@
-<button
+<button {{ $attributes }}
     type="{{ $type ?? "button" }}"
     class="{{ $class ?? "btn btn-primary" }}"
     @if($overText ?? false)

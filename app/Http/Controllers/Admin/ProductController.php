@@ -7,6 +7,7 @@ use App\Http\Requests\Admin\ProductFormRequest;
 use App\Models\Category;
 use App\Models\Product;
 use App\Models\ProductQuantity;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Str;
@@ -147,15 +148,23 @@ class ProductController extends Controller
      */
     public function destroy(string $id)
     {
+        $error = null;
+        $result = false;
 
-        $id = decrypt($id);
+        try {
+            $id = decrypt($id);
+            $product = Product::where("id", $id)->firstOrFail();
+            $result = $product->delete();
 
-        $product = Product::query()->where("id", $id)->firstOrFail();
-        $result = $product->delete();
+            if ($result) Helper::fileDelete($product->image ?? null);
 
-        if ($result) Helper::fileDelete($product->image ?? null);
+        } catch (Exception $e) {
 
-        return response(["result" => (bool)$result]);
+            $error = $e->getMessage();
+        } finally {
+
+            return response(["result" => (bool)$result, "error" => $error]);
+        }
     }
 
 }

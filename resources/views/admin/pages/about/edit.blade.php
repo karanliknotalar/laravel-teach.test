@@ -25,7 +25,8 @@
                     :quill-style="'height: 200px;'"
                     :hidden-id="'quilltext'"
                     :content="$about->content ?? ''"
-                    :name="'content'"/>
+                    :name="'content'"
+                    :title="'İçerik'"/>
 
                 <x-admin.helpers.input-text
                     :name="'channel'"

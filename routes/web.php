@@ -71,10 +71,12 @@ Route::group(["prefix" => "admin", "middleware" => ["admin.dashboard.shared", "a
     Route::resource("product", "Admin\ProductController")->except("show");
     Route::resource("category", "Admin\CategoryController")->except("show");
     Route::resource("product-quantity", "Admin\ProductQuantityController")->except("update", "index");
-    Route::resource("service", "Admin\ServiceController");
+    Route::resource("service", "Admin\ServiceController")->except("show");
 
     Route::get("about", [AboutController::class, "edit"])->name("about.edit");
     Route::post("about", [AboutController::class, "update"])->name("about.update");
+
+    Route::resource("contact", "Admin\ContactController")->only("index", "show", "destroy");
 
 });
 

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Helper\Helper;
 use App\Http\Requests\Admin\CategoryFormRequest;
 use App\Models\Category;
+use Exception;
 use Illuminate\Routing\Controller;
 use Str;
 
@@ -141,12 +142,22 @@ class CategoryController extends Controller
      */
     public function destroy(string $id)
     {
-        $id = decrypt($id);
-        $category = Category::query()->where("id", $id)->firstOrFail();
-        $result = $category->delete();
+        $error = null;
+        $result = false;
 
-        if ($result) Helper::fileDelete($category->image ?? null);
+        try {
+            $id = decrypt($id);
+            $category = Category::where("id", $id)->firstOrFail();
+            $result = $category->delete();
 
-        return response(["result" => (bool)$result]);
+            if ($result) Helper::fileDelete($category->image ?? null);
+
+        } catch (Exception $e) {
+
+            $error = $e->getMessage();
+        } finally {
+
+            return response(["result" => (bool)$result, "error" => $error]);
+        }
     }
 }

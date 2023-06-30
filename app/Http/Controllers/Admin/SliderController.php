@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Helper\Helper;
 use App\Http\Requests\Admin\SliderFormRequest;
 use App\Models\Slider;
+use Exception;
 use Illuminate\Routing\Controller;
 
 class SliderController extends Controller
@@ -120,13 +121,23 @@ class SliderController extends Controller
      */
     public function destroy(string $id)
     {
-        $id = decrypt($id);
-        $slider = Slider::query()->where("id", $id)->firstOrFail();
-        $result = $slider->delete();
+        $error = null;
+        $result = false;
 
-        if ($result) Helper::fileDelete($slider->image ?? null);
+        try {
+            $id = decrypt($id);
+            $slider = Slider::where("id", $id)->firstOrFail();
+            $result = $slider->delete();
 
-        return response(["result" => (bool)$result]);
+            if ($result) Helper::fileDelete($slider->image ?? null);
+
+        } catch (Exception $e) {
+
+            $error = $e->getMessage();
+        } finally {
+
+            return response(["result" => (bool)$result, "error" => $error]);
+        }
     }
 
 }

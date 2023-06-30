@@ -20,8 +20,8 @@ class ContactFactory extends Factory
             "firstname" => fake()->firstName,
             "lastname" => fake()->lastName,
             "email" => fake()->email,
-            "subject" => fake()->title,
-            "message" => fake()->text,
+            "subject" => "Acil Bir Durum var! " . random_int(11111,99999),
+            "message" => fake()->text . fake()->text . fake()->text . fake()->text,
             "ip" => fake()->ipv4,
             "status" => 0
         ];

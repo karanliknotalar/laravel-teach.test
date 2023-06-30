@@ -27,7 +27,8 @@
                     :quill-style="'height: 100px;'"
                     :hidden-id="'quilltext'"
                     :content="$category->description ?? ''"
-                    :name="'description'"/>
+                    :name="'description'"
+                    :title="'İçerik'"/>
 
                 <x-admin.helpers.input-text
                     :name="'seo_description'"

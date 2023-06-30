@@ -28,7 +28,8 @@
                     :quill-style="'height: 250px;'"
                     :hidden-id="'quilltext'"
                     :content="$product->description ?? ''"
-                    :name="'description'"/>
+                    :name="'description'"
+                    :title="'İçerik'"/>
 
                 <x-admin.helpers.input-text
                     :name="'sort_description'"

@@ -26,7 +26,7 @@ class ContactFormRequest extends FormRequest
             "lastname" => "required|string|min:2",
             "email" => "required|email",
             "subject" => "required|string|min:5",
-            "message" => "required|string|min:25"
+            "message" => "required|min:25"
         ];
     }
     public function messages(): array

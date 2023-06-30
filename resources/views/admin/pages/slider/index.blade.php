@@ -2,32 +2,11 @@
 
 @section("css")
     <x-admin.datatable.datatable-css/>
-    <!-- sweetalert2 css -->
-    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.9/dist/sweetalert2.min.css" rel="stylesheet">
+    <x-admin.sweet-alert2.sweet-alert2-css/>
+
     <!-- Jquery Toast css -->
     <link href="{{ $asset }}vendor/jquery-toast-plugin/jquery.toast.min.css" rel="stylesheet">
 
-    <style>
-        .swal2-popup {
-            font-size: small;
-            padding-bottom: 2rem;
-
-        }
-
-        .swal2-icon {
-            width: 4rem;
-            height: 4rem;
-            margin-bottom: -1rem;
-        }
-
-        .swal2-cancel {
-            margin-right: 1rem;
-        }
-
-        .swal-title {
-            font-size: 25px;
-        }
-    </style>
 @endsection
 
 @section("content")
@@ -103,8 +82,6 @@
         :order-index="'6'"
         :director="'desc'"/>
 
-    <!-- sweetalert2 Init js -->
-    <script src=" https://cdn.jsdelivr.net/npm/sweetalert2@11.7.9/dist/sweetalert2.all.min.js "></script>
     <!-- Jquery Toast js -->
     <script src="{{ $asset }}vendor/jquery-toast-plugin/jquery.toast.min.js"></script>
 
@@ -141,49 +118,15 @@
             });
         });
     </script>
-    <script>
-        <!-- Delete Slider js -->
-        $(".btnsil").on("click", function (p) {
-            const id = $(this).closest("tr").attr("itemid");
-            const url = "{{ route("slider.destroy", ["slider" => ":id"]) }}".replace(":id", id);
 
-            const swal = Swal.mixin({
-                customClass: {
-                    confirmButton: 'btn btn-success',
-                    cancelButton: 'btn btn-danger'
-                },
-                buttonsStyling: false
-            });
-            swal.fire({
-                title: 'Silinsin mi??',
-                // text: "Bunu geri alamazsınız!",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonText: 'Ever, Sil',
-                cancelButtonText: 'Hayır, Silme',
-                reverseButtons: true
-            }).then((result) => {
-                if (result.isConfirmed) {
+    <x-admin.sweet-alert2.sweet-alert2-js
+        :use-delete-js="true"
+        :select-btn-query="'.btnsil'"
+        :destroy-route='route("slider.destroy", ["slider" => ":id"])'
+        :reverse-btn="true">
+        <x-slot name="id">
+            $(this).closest('tr').attr('itemid')
+        </x-slot>
+    </x-admin.sweet-alert2.sweet-alert2-js>
 
-                    $.ajax({
-                        method: "DELETE",
-                        url: url,
-                        data: {"_token": "{{ csrf_token() }}",},
-                        success: function (response) {
-                            if (response.result === true) {
-                                swal.fire('Silindi!', '', 'success');
-                                setTimeout(function () {
-                                    location.reload();
-                                }, 1000);
-                            } else {
-                                swal.fire('İşlem sırasında hata oluştu', '', 'error');
-                            }
-                        }
-                    })
-                } else if (result.dismiss === Swal.DismissReason.cancel) {
-                    swal.fire('Silme işlemi iptal edildi', '', 'error')
-                }
-            })
-        })
-    </script>
 @endsection

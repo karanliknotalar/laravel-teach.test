@@ -29,7 +29,8 @@
                     :quill-style="'height: 200px;'"
                     :hidden-id="'quilltext'"
                     :content="$service->content ?? ''"
-                    :name="'content'"/>
+                    :name="'content'"
+                    :title="'İçerik'"/>
 
                 <div class="mb-4">
                     <select class="form-control select2" data-toggle="select2" name="icon">

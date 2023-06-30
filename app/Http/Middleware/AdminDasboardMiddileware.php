@@ -3,6 +3,7 @@
 namespace App\Http\Middleware;
 
 use App\Models\Category;
+use App\Models\Contact;
 use App\Models\Product;
 use App\Models\Service;
 use App\Models\Slider;
@@ -20,12 +21,13 @@ class AdminDasboardMiddileware
     public function handle(Request $request, Closure $next): Response
     {
         $asset = asset("admin-assets") . "/";
-        $sliderCount = Slider::query()->select("id")->count("id");
-        $productCount = Product::query()->select("id")->count("id");
-        $serviceCount = Service::query()->select("id")->count("id");
-        $categoryCount = Category::query()->select("id")->count("id");
+        $sliderCount = Slider::select("id")->count("id");
+        $productCount = Product::select("id")->count("id");
+        $serviceCount = Service::select("id")->count("id");
+        $categoryCount = Category::select("id")->count("id");
+        $contactCount = Contact::where("status", "=", 0)->select("id")->count("id");
 
-        view()->share(compact("asset", "sliderCount", "productCount", "serviceCount", "categoryCount"));
+        view()->share(compact("asset", "sliderCount", "productCount", "serviceCount", "categoryCount", "contactCount"));
         return $next($request);
     }
 }

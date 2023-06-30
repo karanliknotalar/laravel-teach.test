@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string("lastname", 80);
             $table->string("email", 100);
             $table->string("subject");
-            $table->text("message");
+            $table->longText("message");
             $table->string("ip", 20)->nullable();
             $table->tinyInteger("status")->default(0);
             $table->timestamps();

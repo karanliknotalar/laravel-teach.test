@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Requests\Admin\ServiceRequest;
 use App\Models\Service;
+use Exception;
 use Illuminate\Routing\Controller;
 
 class ServiceController extends Controller
@@ -102,11 +103,20 @@ class ServiceController extends Controller
      */
     public function destroy(string $id)
     {
-        $id = decrypt($id);
+        $error = null;
+        $result = false;
 
-        $slider = Service::query()->where("id", $id)->firstOrFail();
-        $result = $slider->delete();
+        try {
+            $id = decrypt($id);
 
-        return response(["result" => (bool)$result]);
+            $result = Service::where("id", $id)->firstOrFail()->delete();
+
+        } catch (Exception $e) {
+
+            $error = $e->getMessage();
+        } finally {
+
+            return response(["result" => (bool)$result, "error" => $error]);
+        }
     }
 }

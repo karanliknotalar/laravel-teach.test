@@ -79,18 +79,18 @@
             />
 
             <x-admin.helpers.sidebar-single-menu-item
+                :url='route("contact.index")'
+                :name="'İletişim'"
+                :icon-name="'uil-envelope'"
+                :count="$contactCount"
+                :counter-color="'bg-danger'"
+            />
+
+            <x-admin.helpers.sidebar-single-menu-item
                 :url='route("about.edit")'
                 :name="'Hakkında'"
                 :icon-name="'ri-team-fill'"
             />
-
-{{--            <li class="side-nav-item">--}}
-{{--                <a href="" class="side-nav-link">--}}
-{{--                    <i class="ri-team-fill"></i>--}}
-{{--                    <span class="badge bg-primary float-end"></span>--}}
-{{--                    <span>Test</span>--}}
-{{--                </a>--}}
-{{--            </li>--}}
 
         </ul>
         <div class="clearfix"></div>

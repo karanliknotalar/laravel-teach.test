@@ -26,7 +26,8 @@
                     :quill-style="'height: 200px;'"
                     :hidden-id="'quilltext'"
                     :content="$slider->content ?? ''"
-                    :name="'content'"/>
+                    :name="'content'"
+                    :title="'İçerik'"/>
 
                 <x-admin.helpers.input-text
                     :name="'shop_url'"

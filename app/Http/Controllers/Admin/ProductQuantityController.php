@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Requests\Admin\ProductQuantityFormRequest;
 use App\Models\Product;
 use App\Models\ProductQuantity;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 
@@ -92,11 +93,19 @@ class ProductQuantityController extends Controller
      */
     public function destroy(string $id)
     {
-        $id = decrypt($id);
+        $error = null;
+        $result = false;
 
-        $product = ProductQuantity::query()->where("id", $id)->firstOrFail();
-        $result = $product->delete();
+        try {
+            $id = decrypt($id);
+            $result = ProductQuantity::where("id", $id)->firstOrFail()->delete();
 
-        return response(["result" => (bool)$result]);
+        } catch (Exception $e) {
+
+            $error = $e->getMessage();
+        } finally {
+
+            return response(["result" => (bool)$result, "error" => $error]);
+        }
     }
 }

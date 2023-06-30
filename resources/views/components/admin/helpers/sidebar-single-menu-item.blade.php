@@ -2,7 +2,7 @@
     <a href="{{ $url }}" class="side-nav-link">
         <i class="{{ $iconName }}"></i>
         @if(isset($count))
-            <span class="badge bg-primary float-end">{{ $count }}</span>
+            <span class="badge {{ $counterColor ?? "bg-primary" }} float-end">{{ $count }}</span>
         @endif
         <span>{{ $name }}</span>
     </a>

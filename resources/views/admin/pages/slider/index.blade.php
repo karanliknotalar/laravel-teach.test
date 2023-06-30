@@ -56,7 +56,7 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-body">
-                    <table id="basic-datatable" class="table dt-responsive nowrap w-100">
+                    <table id="sliders-datatable" class="table dt-responsive nowrap w-100">
                         <thead>
                         <tr>
                             <th>Resim</th>
@@ -70,7 +70,7 @@
                         </thead>
                         <tbody>
                         @foreach($sliders as $slider)
-                            <tr>
+                            <tr itemid="{{ $slider->id }}">
                                 <td>
                                     <img src="{{ asset($slider->image) }}" alt="image"
                                          class="img-fluid avatar-lg">
@@ -93,7 +93,7 @@
                                                     class="mdi mdi-pencil"></i>
                                             </button>
                                         </a>
-                                        <button type="button" class="btn btn-danger p-1" id="delete_id_{{ $slider->id }}">
+                                        <button type="button" class="btn btn-danger p-1 btnsil">
                                             <i class="mdi mdi-delete"></i>
                                         </button>
                                     </div>
@@ -123,7 +123,7 @@
     <script>
         <!-- Datatable Init js -->
         $(document).ready(function () {
-            $("#basic-datatable").DataTable({
+            $("#sliders-datatable").DataTable({
                 keys: !0,
                 language: {
                     paginate: {
@@ -152,13 +152,9 @@
 
         $("input:checkbox").on("click", function (p) {
 
-            if (!p.target.id.includes("status_id_")) {
-                return;
-            }
-
-            const id = p.target.id.replace("status_id_", "");
-            const url = "{{ route("slider.update", ["slider" => "XXXXX"]) }}".replace("XXXXX", id);
-            const status = p.target.checked ? "1" : 0;
+            const id = $(this).closest("tr").attr("itemid");
+            const url = "{{ route("slider.update", ["slider" => ":id"]) }}".replace(":id", id);
+            const status = $(this).prop("checked") ? 1 : 0;
 
             $.ajax({
                 method: "PUT",
@@ -179,13 +175,9 @@
     </script>
     <script>
         <!-- Delete Slider js -->
-        $("button:button").on("click", function (p) {
-            if (!p.currentTarget.id.includes("delete_id_")) {
-                return;
-            }
-            const id = p.currentTarget.id.replace("delete_id_", "");
-            console.log(id);
-            const url = "{{ route("slider.destroy", ["slider" => "XXXXX"]) }}".replace("XXXXX", id);
+        $(".btnsil").on("click", function (p) {
+            const id = $(this).closest("tr").attr("itemid");
+            const url = "{{ route("slider.destroy", ["slider" => ":id"]) }}".replace(":id", id);
 
             const swal = Swal.mixin({
                 customClass: {
@@ -209,8 +201,8 @@
                         method: "DELETE",
                         url: url,
                         data: {"_token": "{{ csrf_token() }}",},
-                        success: function (result) {
-                            if (result === "success") {
+                        success: function (response) {
+                            if (response.result === true) {
                                 swal.fire('Silindi!', '', 'success')
                                 setTimeout(function () {
                                     location.reload();

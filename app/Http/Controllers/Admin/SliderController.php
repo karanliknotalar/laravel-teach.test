@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\File;
 use Str;
+use \App\Helper\Helper;
 
 class SliderController extends Controller
 {
@@ -47,7 +48,8 @@ class SliderController extends Controller
             "status" => $request["status"],
         ]);
 
-        if (!empty($imageName) && $result) $this->imgSave($imageName, $request);
+//        if (!empty($imageName) && $result) $this->imgSave($imageName, $request);
+        if (!empty($imageName) && $result) Helper::fileSave($request, $imageName);
 
         return $result ?
             back()->with("status", "Kayıt işlemi başarılı.") :
@@ -99,9 +101,8 @@ class SliderController extends Controller
                     "image" => 'image|mimes:jpeg,png,jpg,gif,svg|max:1024',
                 ]);
 
-                if (isset($request->image)) $this->imgDelete($slider, true);
-
                 $imageName = isset($request->image) ? $this->getImgName($request) : null;
+                $tempImg = $slider->image;
 
                 $result = $slider->update([
                     "name" => $request["name"],
@@ -111,7 +112,8 @@ class SliderController extends Controller
                     "shop_url" => $request["shop_url"] ?? "",
                 ]);
 
-                if (!empty($imageName) && $result) $this->imgSave($imageName, $request);
+                if (isset($request->image)) Helper::fileDelete($slider, $tempImg ?? null);
+                if (!empty($imageName) && $result) Helper::fileSave($request, $imageName);
 
                 return $result ?
                     back()->with("status", "Güncelleme işlemi başarılı.") :
@@ -133,40 +135,14 @@ class SliderController extends Controller
         $slider = Slider::query()->where("id", $id)->first();
         $result = $slider->delete();
 
-        if ($result) $this->imgDelete($slider, $result);
+        if ($result) Helper::fileDelete($result, $slider->image ?? null);
 
-        return $result ? "success" : "error";
+        return response(["result" => (bool)$result]);
     }
 
-    private function getImgSliderDir()
+
+    public function getImgName($request): string
     {
-        return (public_path("images/sliders"));
+        return Helper::getFileFullPath("images/sliders/", $request->name, $request->image);
     }
-
-    public function getImgName($request)
-    {
-        return "images/sliders/" . Str::slug($request->name) . "_" . time() . "." . $request->image->extension();
-    }
-
-    private function imgDelete($model, $result)
-    {
-        $imgDir = $model->image ?? null;
-
-        if ($result
-            && !empty($model->image)
-            && File::exists($this->getImgSliderDir())
-            && File::isFile($imgDir)) {
-            File::delete($imgDir);
-        }
-    }
-
-    private function imgSave($imageName, $request)
-    {
-        $imgDir = $this->getImgSliderDir();
-
-        if (!File::exists($imgDir)) File::makeDirectory($imgDir);
-
-        $request->image->move($imgDir, $imageName);
-    }
-
 }

@@ -25,7 +25,7 @@
                                     <div class="dropdown-menu" aria-labelledby="dropdownMenuReference">
                                         <a class="dropdown-item"
                                            href="{{ request()->fullUrlWithQuery(["order" => "name", "director" => "asc"]) }}"
-                                           data-order="a_to_z_order">A dan Z ye</a>
+                                           data-order="a_to_z_order" onclick="productsListGet('')">A dan Z ye</a>
                                         <a class="dropdown-item"
                                            href="{{ request()->fullUrlWithQuery(["order" => "name", "director" => "desc"]) }}"
                                            data-order="z_to_a_order">Z Den A ya</a>
@@ -41,32 +41,35 @@
                             </div>
                         </div>
                     </div>
-                    <div class="row mb-5">
-                        @if(isset($products))
-                            @foreach($products as $product)
-                                <div class="col-sm-6 col-lg-4 mb-4" data-aos="fade-up">
-                                    <div class="block-4 text-center border">
-                                        <figure class="block-4-image">
-                                            <a href="{{ route("page.product", ["slug_name" => $product->slug_name]) }}">
-                                                <img
-                                                    src="{{ $product->image != null ? asset($product->image) : asset("images/cloth_1.jpg") }}"
-                                                    alt="{{ $product->name }}" class="img-fluid">
-                                            </a>
-                                        </figure>
-                                        <div class="block-4-text p-4">
-                                            <h3>
-                                                <a href="{{ route("page.product", ["slug_name" => $product->slug_name]) }}">{{ $product->name }}</a>
-                                            </h3>
-                                            <p class="mb-0">{{ $product->sort_description }}</p>
-                                            <p class="text-primary font-weight-bold">{{ number_format($product->price, 2) }}
-                                                TL</p>
+                    <div class="productList">
+                        <div class="row mb-5">
+                            @if(isset($products) && $products->count() > 0)
+                                @foreach($products as $product)
+                                    <div class="col-sm-6 col-lg-4 mb-4" data-aos="fade-up">
+                                        <div class="block-4 text-center border">
+                                            <figure class="block-4-image">
+                                                <a href="{{ route("page.product", ["slug_name" => $product->slug_name]) }}">
+                                                    <img
+                                                        src="{{ $product->image != null ? asset($product->image) : asset("images/cloth_1.jpg") }}"
+                                                        alt="{{ $product->name }}" class="img-fluid">
+                                                </a>
+                                            </figure>
+                                            <div class="block-4-text p-4">
+                                                <h3>
+                                                    <a href="{{ route("page.product", ["slug_name" => $product->slug_name]) }}">{{ $product->name }}</a>
+                                                </h3>
+                                                <p class="mb-0">{{ $product->sort_description }}</p>
+                                                <p class="text-primary font-weight-bold">{{ number_format($product->price, 2) }}
+                                                    TL</p>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            @endforeach
-                        @endif
+                                @endforeach
+                            @endif
+                        </div>
+                        {!! $products->links('pagination::front-products') !!}
+                        {{--                        @include("front.ajax.products-list")--}}
                     </div>
-                    {!! $products->links('pagination::front-products') !!}
                 </div>
 
                 <div class="col-md-3 order-1 mb-5 mb-md-0">
@@ -217,6 +220,7 @@
                 max: max
             };
             location.href = addQueryParamsToURL("{!! request()->fullUrlWithoutQuery(["min", "max"]) !!}", params);
+            {{--productsListGet(addQueryParamsToURL("{!! request()->fullUrlWithoutQuery(["min", "max"]) !!}", params));--}}
         }
 
         $('a[aria-controls="collapseSubCategory"]').on('click', function (e) {
@@ -239,7 +243,18 @@
             if (colorList.length > 0)
                 params["color"] = colorList.join(",");
             location.href = addQueryParamsToURL("{!! request()->fullUrlWithoutQuery(["size","color"]) !!}", params)
+            {{--productsListGet(addQueryParamsToURL("{!! request()->fullUrlWithoutQuery(["size","color"]) !!}", params));--}}
         });
+
+        function productsListGet(url) {
+            $.ajax({
+                method: "GET",
+                url: url,
+                success: function (response) {
+                    $(".productList").html(response.data);
+                }
+            });
+        }
     </script>
 
 @endsection

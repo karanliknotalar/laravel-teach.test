@@ -22,7 +22,6 @@ class ProductsController extends Controller
 
         $products = Product::where("status", "=", 1)
             ->join("product_quantities", "products.id", "product_quantities.product_id")
-            ->orderBy("products.created_at", "desc")
             ->select([
                 "products.*",
                 "product_quantities.id as product_quantities_id",
@@ -47,7 +46,7 @@ class ProductsController extends Controller
                     ->limit(1);
             })
             ->with("category:id,name,slug_name")
-            ->orderBy($request->order ?? "name", $request->director ?? "asc")
+            ->orderBy($request->order ?? "created_at", $request->director ?? "desc")
             ->whereHas("category", function ($query) use ($category_id) {
                 if (isset($category_id))
                     $query->where("category_id", $category_id)->orWhere("parent_id", $category_id);
@@ -55,6 +54,11 @@ class ProductsController extends Controller
             })
             ->paginate(12)
             ->appends($request->query());
+
+//        if ($request->ajax()){
+//            $view = view("front.ajax.products-list", compact("products"))->render();
+//            return response(["data"=> $view]);
+//        }
 
         $sizes = $this->getSizesOrColors("size", $category_id);
 

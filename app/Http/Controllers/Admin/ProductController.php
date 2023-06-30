@@ -104,8 +104,8 @@ class ProductController extends Controller
         $id = decrypt($id);
         $product = Product::query()->where("id", "=", $id)->firstOrFail();
 
-        if (Product::where("product_code", $request["product_code"])->exists())
-            return back()->withErrors(["Bu ürün kodu zaten tanımlıdır"])->withInput($request->all());
+        if ($product->product_code != $request["product_code"] && Product::where("product_code", $request["product_code"])->exists())
+            return back()->withErrors(["Bu ürün kodu zaten tanımlıdır"]);
 
         if ($product) {
 

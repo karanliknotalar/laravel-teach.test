@@ -1,9 +1,7 @@
 @extends("admin.layout.layout")
 
 @section("css")
-    <!-- Quill css -->
-    <link href="{{ $asset }}vendor/quill/quill.core.css" rel="stylesheet" type="text/css"/>
-    <link href="{{ $asset }}vendor/quill/quill.snow.css" rel="stylesheet" type="text/css"/>
+    <x-admin.quill.quill-css/>
 @endsection
 
 @section("content")
@@ -119,21 +117,6 @@
 @endsection
 
 @section("js")
-    <!-- quill js -->
-    <script src="{{ $asset }}vendor/quill/quill.min.js"></script>
-    <!-- SimpleMDE init -->
-    <script>
-        const quill = new Quill("#snow-editor", {
-            theme: "snow",
-            modules: {toolbar: [[{font: []}, {size: []}], ["bold", "italic", "underline", "strike"], [{color: []}, {background: []}], [{header: [!1, 1, 2, 3, 4, 5, 6]}], ["direction", {align: []}], ["clean"]]}
-        });
-
-        const loadquil = function () {
-            document.getElementById("quilltext").value = quill.root.innerHTML
-        };
-        loadquil();
-        quill.on('text-change', function (delta, oldDelta, source) {
-            loadquil()
-        });
-    </script>
+    <x-admin.quill.quill-js
+        :quill-element-id="'quilltext'"/>
 @endsection

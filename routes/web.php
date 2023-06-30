@@ -48,8 +48,9 @@ Route::get("/user-logout", [UserAuthController::class, "user_logout"])->name("us
 
 Route::group(["prefix" => "/sepet"], function () {
     Route::get("/", [CartController::class, "cart"])->name("page.cart");
-    Route::post("/ekle", [CartController::class, "add_cart"])->name("cart.add-cart");
-    Route::post("/sil", [CartController::class, "remove_cart"])->name("cart.remove-cart");
+    Route::post("/ekle", [CartController::class, "addCart"])->name("cart.add-cart");
+    Route::post("/sil", [CartController::class, "removeCart"])->name("cart.remove-cart");
+    Route::post("/guncelle", [CartController::class, "updateCartQuantity"])->name("cart.update-cart-quantity");
 });
 
 Route::group(["middleware" => "guest"], function () {

@@ -120,10 +120,8 @@
                 hideAfter: 1500,
             });
         }
-
         $(document).ready(function () {
             $("#addCart").click(function () {
-
                 $.ajax({
                     method: "POST",
                     url: "{{ route("cart.add-cart") }}",
@@ -131,13 +129,10 @@
                     success: function (response) {
                         if (response.success) {
                             toastMsg("success", "Başarılı", response.message)
-                        } else if (response.quantity) {
-                            toastMsg("error", "Stok", response.message)
-                        } else if (response.error) {
-                            toastMsg("error", "Ürün", response.message)
-                        }
+                        } else
+                            toastMsg("error", response.error, response.message)
                     }
-                })
+                });
             });
         });
     </script>

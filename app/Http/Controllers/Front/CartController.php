@@ -13,7 +13,6 @@ class CartController extends Controller
     {
 
         $cartItems = session("cart", []);
-//        session()->pull("cart", []);
         $totalPrice = 0;
 
         foreach ($cartItems as $cartItem) {
@@ -24,16 +23,15 @@ class CartController extends Controller
         return view("front.pages.cart", compact("cartItems", "totalPrice"));
     }
 
-    public function add_cart(Request $request)
+    public function addCart(Request $request)
     {
-//        return response($request->all());
+
+//        return $request->all();
 
         $product_id = decrypt($request->product_id);
         $quantity = $request->quantity;
         $size = $request->size;
         $color = $request->color;
-
-//        return $product_id
 
         $cartItems = session("cart", []);
 
@@ -44,6 +42,9 @@ class CartController extends Controller
                 $cartId = $product_id . "_" . $productQuantity->id;
 
                 if (array_key_exists($cartId, $cartItems)) {
+
+                    if ($productQuantity->quantity <= $cartItems[$cartId]["quantity"])
+                        return response(["success" => false, "error" => "stok", "message" => "stok yetersiz"]);
 
                     $cartItems[$cartId]["quantity"] += $quantity;
 
@@ -56,24 +57,24 @@ class CartController extends Controller
                         "slug_name" => $product->slug_name,
                         "image" => $product->image,
                         "price" => $productQuantity->price,
-                        "quantity" => $request->quantity,
+                        "quantity" => (int)$request->quantity,
                         "size" => $size,
                         "color" => $color,
                         "product_id" => $product_id,
-                        "product_quantity_id" => $productQuantity->id,
+                        "product_quantity_id" => $productQuantity->id
                     ];
                 }
                 session(["cart" => $cartItems]);
 
                 return response(["success" => true, "message" => "ürün sepete eklendi"]);
             } else
-                return response(["quantity" => true, "message" => "stok yetersiz"]);
+                return response(["success" => false, "error" => "stok", "message" => "stok yetersiz"]);
         } else
-            return response(["error" => true, "message" => "ürün ile ilgili bir sorun oluştu"]);
+            return response(["success" => false, "error" => "ürün", "message" => "ürün ile ilgili bir sorun oluştu"]);
 
     }
 
-    public function remove_cart(Request $request)
+    public function removeCart(Request $request)
     {
         $product_id = decrypt($request->product_id);
         $productQuantity = decrypt($request->product_quantity_id);
@@ -88,5 +89,34 @@ class CartController extends Controller
 
         session(["cart" => $cartItems]);
         return back();
+    }
+
+    public function updateCartQuantity(Request $request)
+    {
+
+//        return $request->all();
+        $cartId = decrypt($request->cartId);
+        $product_id = explode("_", $cartId)[0];
+        $productQuantity = explode("_", $cartId)[1];
+        $quantity = $request->quantity;
+
+        $cartItems = session("cart", []);
+
+        if (Product::where("id", $product_id)->exists()) {
+
+            if (ProductQuantity::where([["id", "=", $productQuantity], ["product_id", "=", $product_id], ["quantity", ">=", $quantity]])->exists()) {
+
+                if (array_key_exists($cartId, $cartItems)) {
+
+                    $cartItems[$cartId]["quantity"] = $quantity > 0 ? $quantity : 1;
+                }
+
+                session(["cart" => $cartItems]);
+
+                return response(["success" => true, "message" => "sepet güncellendi"]);
+            } else
+                return response(["success" => false, "error" => "stok", "message" => "stok yetersiz"]);
+        } else
+            return response(["success" => false, "error" => "ürün", "message" => "ürün ile ilgili bir sorun oluştu"]);
     }
 }

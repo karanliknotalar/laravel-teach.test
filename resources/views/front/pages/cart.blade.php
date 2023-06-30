@@ -1,6 +1,7 @@
 @extends("front.layout.layout")
 
 @section("css")
+    <link rel="stylesheet" href="{{ asset('/') }}jquery-toast/jquery.toast.min.css">
 @endsection
 
 @section("content")
@@ -28,8 +29,8 @@
                             </thead>
                             <tbody>
                             @if(isset($cartItems))
-                                @foreach($cartItems as $cartItem)
-                                    <tr>
+                                @foreach($cartItems as $cartId=>$cartItem)
+                                    <tr cart-id="{{ encrypt($cartId) }}">
                                         <td class="product-thumbnail">
                                             <img src="{{ asset($cartItem["image"] ?? "images/cloth_1.jpg")  }}"
                                                  alt="{{ $cartItem["name"] }}" class="img-fluid">
@@ -38,7 +39,8 @@
                                             <a href="{{ route("page.product", [$cartItem["slug_name"] ?? ""]) }}">
                                                 <h2 class="h5 text-black">{{ $cartItem["name"] }}</h2>
                                             </a>
-                                            <span>{{ $cartItem["color"] ?? "" }}</span> - <span>{{ $cartItem["size"] ?? "" }}</span>
+                                            <span>{{ $cartItem["color"] ?? "" }}</span> -
+                                            <span>{{ $cartItem["size"] ?? "" }}</span>
                                         </td>
                                         <td>{{ number_format($cartItem["price"], 2) }} TL</td>
                                         <td>
@@ -51,9 +53,7 @@
                                                 </div>
                                                 <input type="text" class="form-control text-center"
                                                        value="{{ $cartItem["quantity"] }}"
-                                                       placeholder=""
-                                                       aria-label="Example text with button addon"
-                                                       aria-describedby="button-addon1">
+                                                       name="quantity" disabled>
                                                 <div class="input-group-append">
                                                     <button class="btn btn-outline-primary js-btn-plus"
                                                             type="button">
@@ -68,8 +68,10 @@
                                         <td>
                                             <form action="{{ route("cart.remove-cart") }}" method="post">
                                                 @csrf
-                                                <input type="hidden" name="product_id" value="{{ encrypt($cartItem["product_id"]) }}">
-                                                <input type="hidden" name="product_quantity_id" value="{{ encrypt($cartItem["product_quantity_id"]) }}">
+                                                <input type="hidden" name="product_id"
+                                                       value="{{ encrypt($cartItem["product_id"]) }}">
+                                                <input type="hidden" name="product_quantity_id"
+                                                       value="{{ encrypt($cartItem["product_quantity_id"]) }}">
                                                 <input role="button" type="submit" value="X"
                                                        class="btn btn-primary btn-sm" id="removeCard">
                                             </form>
@@ -132,4 +134,46 @@
 @endsection
 
 @section("js")
+    <script src="{{ asset('/') }}jquery-toast/jquery.toast.min.js"></script>
+    <script>
+        function toastMsg(icon, title, message) {
+            $.toast({
+                heading: title,
+                text: message,
+                showHideTransition: 'slide',
+                icon: icon,
+                position: 'bottom-right',
+                hideAfter: 1500,
+            });
+        }
+
+        function updateCartQuantity(btn, action) {
+            let cartId = btn.closest("tr").attr("cart-id");
+            let quantity = parseInt(btn.closest("td").find("input").attr("value"));
+
+            $.ajax({
+                method: "POST",
+                url: "{{ route("cart.update-cart-quantity") }}",
+                data: {
+                    "_token": "{{ csrf_token() }}",
+                    "cartId": cartId,
+                    "quantity": action === "+" ? quantity + 1 : quantity - 1,
+                },
+                success: function (response) {
+                    if (response.success)
+                        location.reload();
+                    else
+                        toastMsg("error", response.error, response.message)
+                }
+            });
+        }
+
+        $(".js-btn-minus").on("click", function () {
+            updateCartQuantity($(this), "-")
+        });
+
+        $(".js-btn-plus").on("click", function () {
+            updateCartQuantity($(this), "+")
+        });
+    </script>
 @endsection

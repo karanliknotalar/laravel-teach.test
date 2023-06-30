@@ -70,12 +70,7 @@
                 </tr>
             @endforeach
         </x-slot>
-
     </x-admin.datatable.layout.datatable-items>
-    <x-admin.helpers.button
-        :type="'submit'"
-        :text="'Güncelle'"
-        :class="'btn btn-primary'"/>
 @endsection
 
 @section("js")

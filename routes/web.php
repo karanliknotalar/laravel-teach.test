@@ -66,10 +66,10 @@ Route::group(["prefix" => "admin", "middleware" => ["admin.dashboard.shared", "a
     Route::get("/", [DashboardController::class, "index"])->name("dashboard.index");
     Route::get("/logout", [AdminAuthController::class, "logout"])->name("admin-auth.logout");
 
-    Route::resource("slider", "Admin\SliderController");
-    Route::resource("product", "Admin\ProductController");
-    Route::resource("category", "Admin\CategoryController");
-    Route::resource("product-quantity","Admin\ProductQuantityController");
+    Route::resource("slider", "Admin\SliderController")->except("show")g;
+    Route::resource("product", "Admin\ProductController")->except("show");
+    Route::resource("category", "Admin\CategoryController")->except("show");
+    Route::resource("product-quantity","Admin\ProductQuantityController")->except("update", "index");
 
 
 });

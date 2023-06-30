@@ -71,13 +71,23 @@
                         <div class="d-flex">
                             <a class="mx-1"
                                href="{{ route("category.edit", ["category" => $categoryId]) }}">
-                                <button type="button" class="btn btn-primary p-1"><i
-                                        class="mdi mdi-pencil"></i>
-                                </button>
+                                <x-admin.helpers.button
+                                    :over-text="true"
+                                    :message="'Kategoriyi düzenle'"
+                                    :class="'btn btn-primary p-1'">
+                                    <x-slot:text>
+                                        <i class="mdi mdi-pencil"></i>
+                                    </x-slot:text>
+                                </x-admin.helpers.button>
                             </a>
-                            <button type="button" class="btn btn-danger p-1 btnsil">
-                                <i class="mdi mdi-delete"></i>
-                            </button>
+                            <x-admin.helpers.button
+                                :over-text="true"
+                                :message="'Kategoriyi sil'"
+                                :class="'btn btn-danger p-1 btnsil mx-1'">
+                                <x-slot:text>
+                                    <i class="mdi mdi-delete"></i>
+                                </x-slot:text>
+                            </x-admin.helpers.button>
                         </div>
                     </td>
                     <td>{{ $category->created_at }}</td>

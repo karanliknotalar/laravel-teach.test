@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Helper\Helper;
+use App\Http\Requests\Admin\CategoryFormRequest;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
@@ -31,18 +32,21 @@ class CategoryController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(CategoryFormRequest $request)
     {
-        $request->validate([
-            "name" => "required",
-            "image" => 'image|mimes:jpeg,png,jpg,gif,svg|max:1024',
-        ]);
 
         $imageName = isset($request->image) ? $this->getImgName($request) : null;
 
+//        $is_main_category = $request->categoryType == "main";
+
+//        if ($is_main_category) $request->validate(["image" => 'required']);
         $is_main_category = $request->categoryType == "main";
 
-        if ($is_main_category) $request->validate(["image" => 'required']);
+        if ($is_main_category) {
+            $request->validate(["image" => 'required']);
+        } else {
+            $request->validate(["parent_id" => 'required|numeric']);
+        }
 
         $result = Category::query()->create([
             "parent_id" => $is_main_category ? null : $request["parent_id"],
@@ -87,7 +91,7 @@ class CategoryController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(CategoryFormRequest $request, string $id)
     {
         $id = decrypt($id);
         $category = Category::query()->where("id", "=", $id)->firstOrFail();
@@ -102,20 +106,11 @@ class CategoryController extends Controller
 
             } else {
 
-                $request->validate([
-                    "name" => "required",
-                    "image" => 'image|mimes:jpeg,png,jpg,gif,svg|max:1024',
-                    "categoryType" => "required",
-                    "status" => "required",
-                ]);
-
                 $imageName = isset($request->image) ? $this->getImgName($request) : null;
                 $tempImg = $category->image;
                 $is_main_category = $request->categoryType == "main";
 
-                if ($is_main_category) {
-                    $request->validate(["image" => 'required']);
-                } else {
+                if (!$is_main_category) {
                     $request->validate(["parent_id" => 'required|numeric']);
                 }
 

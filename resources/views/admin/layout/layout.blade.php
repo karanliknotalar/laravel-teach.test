@@ -58,8 +58,8 @@
 </div>
 <!-- END wrapper -->
 
-<!-- Theme Settings -->
-@include("admin.inc.theme-settings")
+{{--<!-- Theme Settings -->--}}
+{{--@include("admin.inc.theme-settings")--}}
 
 <!-- Vendor js -->
 <script src="{{ $asset }}js/vendor.min.js"></script>

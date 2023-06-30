@@ -7,7 +7,7 @@
 @section("content")
     <x-admin.helpers.layout.edit-page-layout
         :model="$category ?? null"
-        :page-title="'Ürün'"
+        :page-title="'Kategori'"
         :image="$category->image ?? ''">
 
         <x-slot name="contents">
@@ -44,7 +44,7 @@
                     @endphp
                     <select class="form-select" id="categoryTypeSelect"
                             aria-label="Kategori Türü" name="categoryType">
-                        <option {{ isset($category) ? "" : "selected" }}>Kategori Türü</option>
+                        <option value="-1" {{ isset($category) ? "" : "selected" }}>Kategori Türü</option>
                         <option
                             value="main" {{ isset($category) ? $parent_id ? "" : "selected" : "" }}>
                             Main

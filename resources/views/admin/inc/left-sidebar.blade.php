@@ -1,7 +1,7 @@
 <div class="leftside-menu">
 
     <!-- Brand Logo Light -->
-    <a href="index.html" class="logo logo-light">
+    <a href="{{ route("dashboard.index") }}" class="logo logo-light">
                     <span class="logo-lg">
                         <img src="{{ $asset }}images/logo.png" alt="logo">
                     </span>
@@ -46,41 +46,17 @@
 
             <li class="side-nav-title">Navigation</li>
 
-            <li class="side-nav-item">
-                <a data-bs-toggle="collapse" href="#sidebarDashboards" aria-expanded="false"
-                   aria-controls="sidebarDashboards" class="side-nav-link">
-                    <i class="uil-home-alt"></i>
-                    <span class="badge bg-success float-end">5</span>
-                    <span> Dashboards </span>
-                </a>
-                <div class="collapse" id="sidebarDashboards">
-                    <ul class="side-nav-second-level">
-                        <li>
-                            <a href="dashboard-analytics.html">Analytics</a>
-                        </li>
-                        <li>
-                            <a href="index.html">Ecommerce</a>
-                        </li>
-                        <li>
-                            <a href="dashboard-projects.html">Projects</a>
-                        </li>
-                        <li>
-                            <a href="dashboard-crm.html">CRM</a>
-                        </li>
-                        <li>
-                            <a href="dashboard-wallet.html">E-Wallet</a>
-                        </li>
-                    </ul>
-                </div>
-            </li>
-
-            <li class="side-nav-title">Apps</li>
+            <x-admin.helpers.sidebar-single-menu-item
+                :url='route("dashboard.index")'
+                :name="'Dashboards'"
+                :icon-name="'uil-home-alt'"
+            />
 
             <x-admin.helpers.sidebar-single-menu-item
                 :url='route("category.index")'
                 :name="'Kategoriler'"
                 :icon-name="'mdi mdi-box-shadow'"
-                {{--                :count="$productCount"--}}
+                :count="$categoryCount"
             />
 
             <x-admin.helpers.sidebar-single-menu-item
@@ -99,16 +75,16 @@
                 :url='route("service.index")'
                 :name="'Hizmetler'"
                 :icon-name="'mdi mdi-truck-minus'"
-{{--                :count="$productCount"--}}
+                :count="$serviceCount"
             />
 
-{{--            <li class="side-nav-item">--}}
-{{--                <a href="" class="side-nav-link">--}}
-{{--                    <i class="mdi mdi-room-service"></i>--}}
-{{--                    <span class="badge bg-primary float-end"></span>--}}
-{{--                    <span>Test</span>--}}
-{{--                </a>--}}
-{{--            </li>--}}
+            {{--            <li class="side-nav-item">--}}
+            {{--                <a href="" class="side-nav-link">--}}
+            {{--                    <i class="mdi mdi-room-service"></i>--}}
+            {{--                    <span class="badge bg-primary float-end"></span>--}}
+            {{--                    <span>Test</span>--}}
+            {{--                </a>--}}
+            {{--            </li>--}}
 
         </ul>
         <div class="clearfix"></div>

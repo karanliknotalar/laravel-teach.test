@@ -22,11 +22,11 @@
                         <h3 class="footer-heading mb-4">İletişim</h3>
                         <ul class="list-unstyled">
                             @if(isset($site_contact_setting['address']))
-                                <li class="address">{{ $site_contact_setting['address'] ?? "" }}</li>
+                                <li class="address">{!! $site_contact_setting['address'] ?? "" !!}</li>
                             @endif
                             @if(isset($site_contact_setting['phone']))
                                 <li class="phone">
-                                    <a href="tel://{{$site_contact_setting['phone'] ?? ""}}">{{ $site_contact_setting['phone'] ?? "" }}</a>
+                                    <a href="tel://{{ $site_contact_setting['phone'] ?? ""}}">{{ $site_contact_setting['phone'] ?? "" }}</a>
                                 </li>
                             @endif
                             @if(isset($site_contact_setting['email']))

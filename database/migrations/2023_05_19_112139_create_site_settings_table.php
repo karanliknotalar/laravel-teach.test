@@ -14,6 +14,7 @@ return new class extends Migration {
             $table->id();
             $table->string("name")->nullable();
             $table->string("content")->nullable();
+            $table->string("type", 80);
             $table->timestamps();
         });
     }

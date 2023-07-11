@@ -15,17 +15,20 @@ class SiteSettingSeeder extends Seeder
     {
         SiteSetting::create([
             "name" => "address",
-            "content" => "Bla bla mahallesi. Bla bla Sk. No: 999 Blabla/BLABLA"
+            "content" => "Bla bla mahallesi. Bla bla Sk. No: 999 Blabla/BLABLA",
+            "type"=> "text"
         ]);
 
         SiteSetting::create([
             "name" => "phone",
-            "content" => "+905551112233"
+            "content" => "+905551112233",
+            "type"=> "text"
         ]);
 
         SiteSetting::create([
             "name" => "email",
-            "content" => "blablabla@blablana.com"
+            "content" => "blablabla@blablana.com",
+            "type"=> "email"
         ]);
     }
 }

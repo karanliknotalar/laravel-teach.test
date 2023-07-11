@@ -11,7 +11,7 @@
         :image="$slider->image ?? ''">
         <x-slot name="contents">
             <form
-                action="{{ isset($slider) ? route("slider.update", ["slider" => encrypt($slider->id)]) : route("slider.store")  }}"
+                action="{{ isset($slider) ? route("slider.update", ["slider" => encrypt($slider->id)]) : route("slider.store") }}"
                 method="post" enctype="multipart/form-data">
                 @csrf
                 @if(isset($slider))

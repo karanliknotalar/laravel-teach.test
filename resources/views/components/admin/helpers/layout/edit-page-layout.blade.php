@@ -71,7 +71,7 @@
                     </div>
                 </div>
             @endif
-            @if(isset($model) && isset($image))
+            @if(isset($model) && isset($image) && !($image == null))
                 <div class="card">
                     <div class="card-body">
                         <div class="tab-content">

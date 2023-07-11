@@ -91,6 +91,12 @@
                 :name="'Hakkında'"
                 :icon-name="'ri-team-fill'"
             />
+            <x-admin.helpers.sidebar-single-menu-item
+                :url='route("site-settings.index")'
+                :name="'Site Ayarları'"
+                :icon-name="'ri-settings-fill'"
+            />
+
 
         </ul>
         <div class="clearfix"></div>

@@ -2,14 +2,17 @@
 
 namespace App\Http\Controllers\Front;
 
+use App\Helper\Helper;
+use App\Models\Coupon;
 use App\Models\Product;
 use App\Models\ProductQuantity;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Carbon;
 
 class CartController extends Controller
 {
-    public function cart(Request $request)
+    public function cart()
     {
 
         $cartItems = session("cart", []);
@@ -27,18 +30,22 @@ class CartController extends Controller
                 $unsetting_product[$cartId] = $cartItem;
                 unset($cartItems[$cartId]);
             }
-
         }
+        if (session()->has("coupon")) {
 
+            $second = Helper::checkCoupon(session("coupon")["expired_at"]);
+            if ($second > 0){
+                $totalPrice -= session("coupon")["price"];
+            } else {
+                session()->forget("coupon");
+            }
+        }
         session(["cart" => $cartItems]);
         return view("front.pages.cart", compact("cartItems", "totalPrice", "unsetting_product"));
     }
 
     public function addCart(Request $request)
     {
-
-//        return $request->all();
-
         $product_id = decrypt($request->product_id);
         $quantity = $request->quantity;
         $size = $request->size;
@@ -131,4 +138,28 @@ class CartController extends Controller
         } else
             return response(["success" => false, "error" => "ürün", "message" => "ürün ile ilgili bir sorun oluştu"]);
     }
+
+    public function addCoupon(Request $request)
+    {
+        $coupon = Coupon::where("name", $request->coupon_name ?? "")->where("status", 1)->first();
+
+        if ($coupon) {
+
+            $second = Helper::checkCoupon($coupon->expired_at);
+
+            if ($second > 0) {
+                session("coupon", []);
+                session(["coupon" => ["price" => $coupon->price, "name" => $coupon->name, "expired_at" => $coupon->expired_at]]);
+            } else {
+                session()->forget("coupon");
+                return back()->withErrors(["Kupon sona ermiş."]);
+            }
+
+        } else {
+            session()->forget("coupon");
+            return back()->withErrors(["Böyle bir kupon mevcut değil."]);
+        }
+        return back()->with("status", "Kupon Eklendi");
+    }
+
 }

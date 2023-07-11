@@ -4,6 +4,7 @@ namespace App\Helper;
 
 use File;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Str;
 
 class Helper
@@ -53,5 +54,11 @@ class Helper
             return "{$slug}-2";
         }
         return $slug;
+    }
+    public static function checkCoupon($expired_at): float|int
+    {
+        $dateNow = Carbon::parse(date('Y-m-d H:i:s'));
+        $expired_at = Carbon::parse($expired_at);
+        return $dateNow->diffInSeconds($expired_at, absolute: false);
     }
 }

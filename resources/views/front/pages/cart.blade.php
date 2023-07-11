@@ -18,6 +18,18 @@
                     {{ count($unsetting_product) }} ürün sepetinizden kaldırıldı.
                 </div>
             @endif
+            @if(session()->has("status"))
+                <div class="alert alert-success">
+                    {{ session("status") }}
+                </div>
+            @endif
+            @if(count($errors) > 0)
+                @foreach($errors->all() as $error)
+                    <div class="alert alert-warning">
+                        {{ $error }}
+                    </div>
+                @endforeach
+            @endif
             <div class="row mb-5">
                 <div class="col-md-12">
                     <div class="site-blocks-table">
@@ -90,20 +102,22 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-6">
+                <form action="{{ route('cart.add-coupon') }}" method="post" class="col-md-6">
+                    @csrf
                     <div class="row">
                         <div class="col-md-12">
                             <label class="text-black h4" for="coupon">Kupon</label>
                             <p>Kupon kodunuz var ise ekleyin</p>
                         </div>
                         <div class="col-md-8 mb-3 mb-md-0">
-                            <input type="text" class="form-control py-3" id="coupon" placeholder="Kupon Kodu">
+                            <input type="text" class="form-control py-3" id="coupon" placeholder="Kupon Kodu"
+                                   name="coupon_name">
                         </div>
                         <div class="col-md-4">
-                            <button class="btn btn-primary btn-sm">Kuponu Ekle</button>
+                            <button type="submit" class="btn btn-primary btn-sm">Kuponu Ekle</button>
                         </div>
                     </div>
-                </div>
+                </form>
                 <div class="col-md-6 pl-5">
                     <div class="row justify-content-end">
                         <div class="col-md-7">

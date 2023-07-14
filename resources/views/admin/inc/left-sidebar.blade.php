@@ -96,6 +96,11 @@
                 :name="'Site Ayarları'"
                 :icon-name="'ri-settings-fill'"
             />
+            <x-admin.helpers.sidebar-single-menu-item
+                :url='route("coupon.index")'
+                :name="'Kuponlar'"
+                :icon-name="'ri-settings-fill'"
+            />
 
 
         </ul>

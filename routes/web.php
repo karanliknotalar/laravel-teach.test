@@ -84,7 +84,8 @@ Route::group(["prefix" => "admin", "middleware" => ["admin.dashboard.shared", "a
     Route::post("about", [AboutController::class, "update"])->name("about.update");
 
     Route::resource("contact", "Admin\ContactController")->only("index", "show", "destroy");
-    Route::resource("site-settings", "Admin\SiteSettingController");
+    Route::resource("site-settings", "Admin\SiteSettingController")->except("show");
+    Route::resource("coupon", "Admin\CouponController")->except("show");
 
 });
 

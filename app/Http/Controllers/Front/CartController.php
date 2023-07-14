@@ -8,7 +8,6 @@ use App\Models\Product;
 use App\Models\ProductQuantity;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
-use Illuminate\Support\Carbon;
 
 class CartController extends Controller
 {

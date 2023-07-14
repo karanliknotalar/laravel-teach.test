@@ -9,41 +9,50 @@
 @section("content")
 
     <x-admin.helpers.page-title-box
-        :title="'Hizmetler'"/>
+        :title="'Kuponlar'"/>
 
     <x-admin.datatable.layout.datatable-items
-        :add-new-route='route("service.create")'>
+        :add-new-route='route("coupon.create")'>
 
         <x-slot name="ths">
-            <th>Başlık</th>
-            <th>İçerik</th>
+            <th style="width: 20%">Kupon Adı</th>
+            <th style="width: 20%">İndirim Tutarı</th>
             <th>Durum</th>
+            <th>Sona Erme</th>
             <th>Eylem</th>
             <th>Oluşturulma</th>
         </x-slot>
 
         <x-slot name="tbody">
-            @foreach($services as $service)
+            @foreach($coupons as $coupon)
                 @php
-                    $serviceId = encrypt($service->id);
+                    $couponId = encrypt($coupon->id);
                 @endphp
-                <tr itemid="{{ $serviceId }}">
+                <tr itemid="{{ $couponId }}">
 
-                    <td>{{ $service->title }}</td>
-                    <td>{!! $service->content ?? "" !!}</td>
+                    <td>{{ $coupon->name }}</td>
+                    <td>{{ number_format($coupon->price, 2) }} TL</td>
                     <td>
                         <x-admin.helpers.datatable-checkbox
-                            :id="$serviceId"
-                            :status="$service->status"
-                            :select-class="'serviceStatus'"/>
+                            :id="$couponId"
+                            :status="$coupon->status"
+                            :select-class="'couponStatus'"/>
+                    </td>
+                    <td>{{ $coupon->expired_at }}<br>
+                        @php
+                            $secondCheck = Helper::checkCoupon($coupon->expired_at) > 0;
+                        @endphp
+                        <span class="small {{ $secondCheck ? "link-success" : "link-danger" }}">
+                            {{  $secondCheck ? "Aktif" : "Süresi Dolmuş" }}
+                        </span>
                     </td>
                     <td class="table-action">
                         <div class="d-flex">
                             <a class="mx-1"
-                               href="{{ route("service.edit", ["service" => $serviceId]) }}">
+                               href="{{ route("coupon.edit", ["coupon" => $couponId]) }}">
                                 <x-admin.helpers.button
                                     :over-text="true"
-                                    :message="'Hizmeti düzenle'"
+                                    :message="'Kuponu düzenle'"
                                     :class="'btn btn-primary p-1'">
                                     <x-slot:text>
                                         <i class="mdi mdi-pencil"></i>
@@ -52,7 +61,7 @@
                             </a>
                             <x-admin.helpers.button
                                 :over-text="true"
-                                :message="'Hizmeti sil'"
+                                :message="'Kuponu sil'"
                                 :class="'btn btn-danger p-1 btnDelete mx-1'">
                                 <x-slot:text>
                                     <i class="mdi mdi-delete"></i>
@@ -60,7 +69,7 @@
                             </x-admin.helpers.button>
                         </div>
                     </td>
-                    <td>{{ $service->created_at }}</td>
+                    <td>{{ $coupon->created_at }}</td>
                 </tr>
             @endforeach
         </x-slot>
@@ -70,14 +79,14 @@
 
 @section("js")
     <x-admin.datatable.datatable-js
-        :column-defs-targets="'[2, 3]'"
+        :column-defs-targets="'[2, 4]'"
         :order-index="'0'"
         :director="'desc'"/>
 
     <x-admin.sweet-alert2.sweet-alert2-js
         :use-delete-js="true"
         :select-btn-query="'.btnDelete'"
-        :destroy-route='route("service.destroy", ["service" => ":id"])'
+        :destroy-route='route("coupon.destroy", ["coupon" => ":id"])'
         :reverse-btn="true">
         <x-slot name="id">
             $(this).closest('tr').attr('itemid')
@@ -86,8 +95,8 @@
 
     <x-admin.jquery-toast.jquery-toast-js
         :use-toast-status="true"
-        :select-checkbox-query="'.serviceStatus'"
-        :update-route='route("service.update", ["service" => ":id"])'>
+        :select-checkbox-query="'.couponStatus'"
+        :update-route='route("coupon.update", ["coupon" => ":id"])'>
         <x-slot name="id">
             $(this).closest("tr").attr("itemid")
         </x-slot>

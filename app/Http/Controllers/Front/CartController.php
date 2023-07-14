@@ -33,7 +33,7 @@ class CartController extends Controller
         if (session()->has("coupon")) {
 
             $second = Helper::checkCoupon(session("coupon")["expired_at"]);
-            if ($second > 0){
+            if ($second > 0 && count($cartItems) > 0 && $totalPrice > session("coupon")["price"]){
                 $totalPrice -= session("coupon")["price"];
             } else {
                 session()->forget("coupon");

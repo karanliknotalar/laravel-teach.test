@@ -80,7 +80,8 @@
                                             </div>
 
                                         </td>
-                                        <td>{{ number_format($cartItem["price"] * $cartItem["quantity"], 2) }}TL
+                                        <td>
+                                            {{ number_format($cartItem["price"] * $cartItem["quantity"], 2) }}TL
                                         </td>
                                         <td>
                                             <form action="{{ route("cart.remove-cart") }}" method="post">
@@ -128,6 +129,14 @@
                             </div>
 
                             <div class="row mb-5">
+                                @if(session()->has("coupon"))
+                                    <div class="col-md-6">
+                                        <span class="text-black">Kupon ({{ session("coupon")['name'] }})</span>
+                                    </div>
+                                    <div class="col-md-6 text-right">
+                                        <strong class="text-black">{{ number_format(session("coupon")['price'], 2) ?? 0 }} TL</strong>
+                                    </div>
+                                @endif
                                 <div class="col-md-6">
                                     <span class="text-black">Toplam</span>
                                 </div>

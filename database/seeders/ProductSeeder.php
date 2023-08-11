@@ -17,7 +17,7 @@ class ProductSeeder extends Seeder
     {
 //        Product::factory(30)->create();
         $categories = Category::query()->with("base_category")->get();
-
+        $featuredC = 0;
         foreach ($categories as $category) {
 
             for ($i = 0; $i < random_int(3, 4); $i++) {
@@ -25,7 +25,7 @@ class ProductSeeder extends Seeder
                 $base = $category->base_category->name ?? "";
                 $base = $base == "" ? "" : $base . " - ";
                 $name = $base . $category->name . " - Ürün " . random_int(100, 999);
-
+                $featuredC += 1;
                 Product::create([
                     "category_id" => $category->id,
                     "name" => $name,
@@ -34,7 +34,8 @@ class ProductSeeder extends Seeder
                     "image" => null,
                     "description" => "Uzun Açıklama",
                     "sort_description" => "Kısa Açıklama",
-                    "status" => 1
+                    "status" => 1,
+                    "featured" => $featuredC < 5 ? 1 : 0
                 ]);
             }
         }

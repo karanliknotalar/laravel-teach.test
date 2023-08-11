@@ -81,6 +81,7 @@ Route::group(["prefix" => "admin", "middleware" => ["admin.dashboard.shared", "a
     Route::resource("service", "Admin\ServiceController")->except("show");
 
     Route::post("product/update-status/{id}", "Admin\ProductController@update_status")->name("product.update-status");
+    Route::post("product/featured-status/{id}", "Admin\ProductController@featured_status")->name("product.featured-status");
     Route::post("slider/update-status/{id}", "Admin\SliderController@update_status")->name("slider.update-status");
     Route::post("category/update-status/{id}", "Admin\CategoryController@update_status")->name("category.update-status");
     Route::post("service/update-status/{id}", "Admin\ServiceController@update_status")->name("service.update-status");

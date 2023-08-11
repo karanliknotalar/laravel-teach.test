@@ -18,8 +18,7 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $products = Product::where("products.status", "=", "1")
-            ->join("categories", "products.category_id", "=", "categories.id")
+        $products = Product::join("categories", "products.category_id", "=", "categories.id")
             ->select(["categories.name as category_name", "products.*"])
             ->get();
 
@@ -170,6 +169,22 @@ class ProductController extends Controller
         if ($product) {
 
             $product->status = $request->only("status")["status"];
+            $result = $product->save();
+
+            return response(["result" => (bool)$result]);
+
+        } else
+            return response(["result" => false]);
+    }
+
+    public function featured_status(Request $request, $id)
+    {
+        $id = decrypt($id);
+        $product = Product::query()->where("id", "=", $id)->firstOrFail();
+
+        if ($product) {
+
+            $product->featured = $request->only("status")["status"];
             $result = $product->save();
 
             return response(["result" => (bool)$result]);

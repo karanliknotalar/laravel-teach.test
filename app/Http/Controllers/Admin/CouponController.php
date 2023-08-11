@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Requests\Admin\CouponRequest;
 use App\Models\Coupon;
-use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
@@ -110,6 +109,7 @@ class CouponController extends Controller
             return response(["result" => (bool)$result, "error" => $error]);
         }
     }
+
     public function update_status(Request $request, $id)
     {
         $id = decrypt($id);

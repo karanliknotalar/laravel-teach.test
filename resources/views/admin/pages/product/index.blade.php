@@ -20,6 +20,7 @@
             <th>Kategori</th>
             <th>Kısa Açıklama</th>
             <th>Durum</th>
+            <th>Özellikli</th>
             <th>Eylem</th>
             <th>Eklenme T.</th>
         </x-slot>
@@ -43,6 +44,12 @@
                             :id="$productId"
                             :status="$product->status"
                             :select-class="'productStatus'"/>
+                    </td>
+                    <td>
+                        <x-admin.helpers.datatable-checkbox
+                            :id="'featured_'.$productId"
+                            :status="$product->featured"
+                            :select-class="'featuredStatus'"/>
                     </td>
                     <td class="table-action">
                         <div class="d-flex">
@@ -105,6 +112,16 @@
         :use-toast-status="true"
         :select-checkbox-query="'.productStatus'"
         :update-route='route("product.update-status", ["id" => ":id"])'
+        :method="'POST'">
+        <x-slot name="id">
+            $(this).closest("tr").attr("itemid")
+        </x-slot>
+    </x-admin.jquery-toast.jquery-toast-js>
+
+    <x-admin.jquery-toast.jquery-toast-js
+        :use-toast-status="true"
+        :select-checkbox-query="'.featuredStatus'"
+        :update-route='route("product.featured-status", ["id" => ":id"])'
         :method="'POST'">
         <x-slot name="id">
             $(this).closest("tr").attr("itemid")

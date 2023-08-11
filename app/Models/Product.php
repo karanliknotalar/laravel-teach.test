@@ -19,6 +19,7 @@ class Product extends Model
         "description",
         "sort_description",
         "status",
+        "featured",
         "product_code"
     ];
 

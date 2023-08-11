@@ -20,6 +20,7 @@ return new class extends Migration {
             $table->longText("description")->nullable();
             $table->text("sort_description")->nullable();
             $table->tinyInteger("status")->default(0);
+            $table->tinyInteger("featured")->default(0);
             $table->timestamps();
 
             $table->foreign("category_id")->on("categories")->references("id");

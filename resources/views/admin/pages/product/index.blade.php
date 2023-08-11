@@ -33,7 +33,8 @@
                         <img src="{{ asset($product->image ?? "images/cloth_1.jpg") }}" alt="image"
                              class="img-fluid avatar-lg">
                     </td>
-                    <td>{{ $product->name }} <br><span class="small text-success">Ürün Kodu: {{ $product->product_code }}</span></td>
+                    <td>{{ $product->name }} <br><span
+                            class="small text-success">Ürün Kodu: {{ $product->product_code }}</span></td>
                     <td>{{ $product->category_name }}</td>
                     <td>{{ $product->sort_description ?? "" }}</td>
 
@@ -103,7 +104,8 @@
     <x-admin.jquery-toast.jquery-toast-js
         :use-toast-status="true"
         :select-checkbox-query="'.productStatus'"
-        :update-route='route("product.update", ["product" => ":id"])'>
+        :update-route='route("product.update-status", ["id" => ":id"])'
+        :method="'POST'">
         <x-slot name="id">
             $(this).closest("tr").attr("itemid")
         </x-slot>

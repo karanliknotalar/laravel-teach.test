@@ -20,7 +20,7 @@
             const status = $(this).prop("checked") ? 1 : 0;
 
             $.ajax({
-                method: "{{ $method ?? "PUT" }}",
+                method: "{{ $method ?? "POST" }}",
                 url: url,
                 data: {
                     "_token": "{{ csrf_token() }}",

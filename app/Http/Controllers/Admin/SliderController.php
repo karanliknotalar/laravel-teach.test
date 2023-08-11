@@ -6,6 +6,7 @@ use App\Helper\Helper;
 use App\Http\Requests\Admin\SliderFormRequest;
 use App\Models\Slider;
 use Exception;
+use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 
 class SliderController extends Controller
@@ -82,34 +83,25 @@ class SliderController extends Controller
 
         if ($slider) {
 
-            if (count($request->all()) == 2) {
+            $imageName = Helper::getFileName($request->name, $request->image, "images/sliders/");
+            $tempImg = $slider->image;
 
-                $slider->status = $request->only("status")["status"];
-                $result = $slider->save();
-                return response(["result" => (bool)$result]);
+            $result = $slider->update([
+                "name" => $request["name"],
+                "content" => $request["content"] ?? "",
+                "image" => $imageName ?? $slider->image,
+                "status" => $request["status"] == "on",
+                "shop_url" => $request["shop_url"] ?? "",
+            ]);
 
-            } else {
-
-                $imageName = Helper::getFileName($request->name, $request->image, "images/sliders/");
-                $tempImg = $slider->image;
-
-                $result = $slider->update([
-                    "name" => $request["name"],
-                    "content" => $request["content"] ?? "",
-                    "image" => $imageName ?? $slider->image,
-                    "status" => $request["status"] == "on",
-                    "shop_url" => $request["shop_url"] ?? "",
-                ]);
-
-                if (!empty($imageName) && $result) {
-                    Helper::fileDelete($tempImg ?? null);
-                    Helper::fileSave($request->image, $imageName);
-                }
-
-                return $result ?
-                    back()->with("status", "Güncelleme işlemi başarılı.") :
-                    back()->withErrors(["Güncelleme işlemi sırasında hata oluştu."]);
+            if (!empty($imageName) && $result) {
+                Helper::fileDelete($tempImg ?? null);
+                Helper::fileSave($request->image, $imageName);
             }
+
+            return $result ?
+                back()->with("status", "Güncelleme işlemi başarılı.") :
+                back()->withErrors(["Güncelleme işlemi sırasında hata oluştu."]);
 
         } else
             return back()->withErrors(["Veritabanında böyle bir kayıt yok veya getirilemedi."]);
@@ -138,6 +130,21 @@ class SliderController extends Controller
 
             return response(["result" => (bool)$result, "error" => $error]);
         }
+    }
+
+    public function update_status(Request $request, $id)
+    {
+        $id = decrypt($id);
+        $slider = Slider::query()->where("id", "=", $id)->firstOrFail();
+
+        if ($slider) {
+
+            $slider->status = $request->only("status")["status"];
+            $result = $slider->save();
+            return response(["result" => (bool)$result]);
+
+        } else
+            return response(["result" => false]);
     }
 
 }

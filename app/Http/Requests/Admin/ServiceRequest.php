@@ -21,11 +21,6 @@ class ServiceRequest extends FormRequest
      */
     public function rules(): array
     {
-
-        if (count($this->all()) == 2) {
-            return [];
-        }
-
         return [
             "title" => "required|min:10|max:100",
             "content" => 'required|max:255|min:25',

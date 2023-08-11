@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Requests\Admin\ServiceRequest;
 use App\Models\Service;
 use Exception;
+use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 
 class ServiceController extends Controller
@@ -74,25 +75,16 @@ class ServiceController extends Controller
 
         if ($service) {
 
-            if (count($request->all()) == 2) {
+            $result = $service->update([
+                "title" => $request["title"],
+                "content" => $request["content"] ?? null,
+                "icon" => $request["icon"] ?? null,
+                "status" => $request["status"] == "on",
+            ]);
 
-                $service->status = $request->only("status")["status"];
-                $result = $service->save();
-                return response(["result" => (bool)$result]);
-
-            } else {
-
-                $result = $service->update([
-                    "title" => $request["title"],
-                    "content" => $request["content"] ?? null,
-                    "icon" => $request["icon"] ?? null,
-                    "status" => $request["status"] == "on",
-                ]);
-
-                return $result ?
-                    back()->with("status", "Güncelleme işlemi başarılı.") :
-                    back()->withErrors(["Güncelleme işlemi sırasında hata oluştu."]);
-            }
+            return $result ?
+                back()->with("status", "Güncelleme işlemi başarılı.") :
+                back()->withErrors(["Güncelleme işlemi sırasında hata oluştu."]);
 
         } else
             return back()->withErrors(["Veritabanında böyle bir kayıt yok veya getirilemedi."]);
@@ -118,5 +110,19 @@ class ServiceController extends Controller
 
             return response(["result" => (bool)$result, "error" => $error]);
         }
+    }
+    public function update_status(Request $request, $id)
+    {
+        $id = decrypt($id);
+        $service = Service::query()->where("id", "=", $id)->firstOrFail();
+
+        if ($service) {
+
+            $service->status = $request->only("status")["status"];
+            $result = $service->save();
+            return response(["result" => (bool)$result]);
+
+        } else
+            return response(["result" => false]);
     }
 }

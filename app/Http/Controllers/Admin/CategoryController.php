@@ -6,6 +6,7 @@ use App\Helper\Helper;
 use App\Http\Requests\Admin\CategoryFormRequest;
 use App\Models\Category;
 use Exception;
+use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Str;
 
@@ -95,43 +96,34 @@ class CategoryController extends Controller
 
         if ($category) {
 
-            if (count($request->all()) == 2) {
+            $imageName = Helper::getFileName($request->name, $request->image, "images/categories/");
+            $tempImg = $category->image;
 
-                $category->status = $request->only("status")["status"];
-                $result = $category->save();
-                return response(["result" => (bool)$result]);
+            $is_main_category = $request->categoryType == "main";
 
-            } else {
-
-                $imageName = Helper::getFileName($request->name, $request->image, "images/categories/");
-                $tempImg = $category->image;
-
-                $is_main_category = $request->categoryType == "main";
-
-                if (!$is_main_category) {
-                    $request->validate(["parent_id" => 'required|numeric']);
-                }
-
-                $result = $category->update([
-                    "parent_id" => $is_main_category ? null : $request["parent_id"],
-                    "name" => $request["name"],
-                    "slug_name" => Helper::renameExistSlug(new Category(), "slug_name", $request["name"]),
-                    "description" => $request["description"] ?? null,
-                    "seo_description" => $request["seo_description"],
-                    "seo_keywords" => $request["seo_keywords"],
-                    "image" => $imageName ?? $category->image,
-                    "status" => $request["status"] == "on",
-                ]);
-
-                if (!empty($imageName) && $result) {
-                    Helper::fileDelete($tempImg ?? null);
-                    Helper::fileSave($request->image, $imageName);
-                }
-
-                return $result ?
-                    back()->with("status", "Güncelleme işlemi başarılı.") :
-                    back()->withErrors(["Güncelleme işlemi sırasında hata oluştu."]);
+            if (!$is_main_category) {
+                $request->validate(["parent_id" => 'required|numeric']);
             }
+
+            $result = $category->update([
+                "parent_id" => $is_main_category ? null : $request["parent_id"],
+                "name" => $request["name"],
+                "slug_name" => Helper::renameExistSlug(new Category(), "slug_name", $request["name"]),
+                "description" => $request["description"] ?? null,
+                "seo_description" => $request["seo_description"],
+                "seo_keywords" => $request["seo_keywords"],
+                "image" => $imageName ?? $category->image,
+                "status" => $request["status"] == "on",
+            ]);
+
+            if (!empty($imageName) && $result) {
+                Helper::fileDelete($tempImg ?? null);
+                Helper::fileSave($request->image, $imageName);
+            }
+
+            return $result ?
+                back()->with("status", "Güncelleme işlemi başarılı.") :
+                back()->withErrors(["Güncelleme işlemi sırasında hata oluştu."]);
 
         } else
             return back()->withErrors(["Veritabanında böyle bir kayıt yok veya getirilemedi."]);
@@ -159,5 +151,19 @@ class CategoryController extends Controller
 
             return response(["result" => (bool)$result, "error" => $error]);
         }
+    }
+    public function update_status(Request $request, $id)
+    {
+        $id = decrypt($id);
+        $category = Category::query()->where("id", "=", $id)->firstOrFail();
+
+        if ($category) {
+
+            $category->status = $request->only("status")["status"];
+            $result = $category->save();
+            return response(["result" => (bool)$result]);
+
+        } else
+            return response(["result" => false]);
     }
 }

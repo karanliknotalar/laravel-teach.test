@@ -25,20 +25,14 @@ class ProductFormRequest extends FormRequest
     {
         if (Route::is("product.update")) {
 
-            if (count($this->all()) != 2) {
-
-                return [
-                    "name" => "required|min:5",
-                    "product_code" => "required",
-                    "image" => 'image|mimes:jpeg,png,jpg,gif,svg|max:1024',
-                    "description" => 'required|min:25',
-                    "sort_description" => 'required|min:15',
-                    "category_id" => 'required|numeric'
-                ];
-
-            } else {
-                return [];
-            }
+            return [
+                "name" => "required|min:5",
+                "product_code" => "required",
+                "image" => 'image|mimes:jpeg,png,jpg,gif,svg|max:1024',
+                "description" => 'required|min:25',
+                "sort_description" => 'required|min:15',
+                "category_id" => 'required|numeric'
+            ];
         }
 
         return [

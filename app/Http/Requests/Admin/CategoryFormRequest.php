@@ -24,18 +24,12 @@ class CategoryFormRequest extends FormRequest
     {
         if (Route::is("category.update")) {
 
-            if (count($this->all()) != 2) {
-
-                return [
-                    "name" => "required",
-                    "image" => 'image|mimes:jpeg,png,jpg,gif,svg|max:1024',
-                    "categoryType" => "required",
-                    "status" => "required",
-                ];
-
-            } else {
-                return [];
-            }
+            return [
+                "name" => "required",
+                "image" => 'image|mimes:jpeg,png,jpg,gif,svg|max:1024',
+                "categoryType" => "required",
+                "status" => "required",
+            ];
         }
 
         return [

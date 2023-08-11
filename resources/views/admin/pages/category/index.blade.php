@@ -94,7 +94,8 @@
     <x-admin.jquery-toast.jquery-toast-js
         :use-toast-status="true"
         :select-checkbox-query="'.categoryStatus'"
-        :update-route='route("category.update", ["category" => ":id"])'>
+        :update-route='route("category.update-status", ["id" => ":id"])'
+        :method="'POST'">
         <x-slot name="id">
             $(this).closest("tr").attr("itemid")
         </x-slot>

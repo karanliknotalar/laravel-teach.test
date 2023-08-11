@@ -8,6 +8,7 @@ use App\Models\Category;
 use App\Models\Product;
 use App\Models\ProductQuantity;
 use Exception;
+use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 
 class ProductController extends Controller
@@ -109,37 +110,28 @@ class ProductController extends Controller
 
         if ($product) {
 
-            if (count($request->all()) == 2) {
+            $imageName = Helper::getFileName($request->name, $request->image, "images/products/");
+            $tempImg = $product->image;
 
-                $product->status = $request->only("status")["status"];
-                $result = $product->save();
-                return response(["result" => (bool)$result]);
+            $result = $product->update([
+                "category_id" => $request["category_id"],
+                "product_code" => $request["product_code"],
+                "name" => $request["name"],
+                "slug_name" => Helper::renameExistSlug(new Product(), "slug_name", $request["name"]),
+                "description" => $request["description"],
+                "sort_description" => $request["sort_description"],
+                "image" => $imageName ?? $product->image,
+                "status" => $request["status"] == "on",
+            ]);
 
-            } else {
-
-                $imageName = Helper::getFileName($request->name, $request->image, "images/products/");
-                $tempImg = $product->image;
-
-                $result = $product->update([
-                    "category_id" => $request["category_id"],
-                    "product_code" => $request["product_code"],
-                    "name" => $request["name"],
-                    "slug_name" => Helper::renameExistSlug(new Product(), "slug_name", $request["name"]),
-                    "description" => $request["description"],
-                    "sort_description" => $request["sort_description"],
-                    "image" => $imageName ?? $product->image,
-                    "status" => $request["status"] == "on",
-                ]);
-
-                if (!empty($imageName) && $result) {
-                    Helper::fileDelete($tempImg ?? null);
-                    Helper::fileSave($request->image, $imageName);
-                }
-
-                return $result ?
-                    back()->with("status", "Güncelleme işlemi başarılı.") :
-                    back()->withErrors(["Güncelleme işlemi sırasında hata oluştu."]);
+            if (!empty($imageName) && $result) {
+                Helper::fileDelete($tempImg ?? null);
+                Helper::fileSave($request->image, $imageName);
             }
+
+            return $result ?
+                back()->with("status", "Güncelleme işlemi başarılı.") :
+                back()->withErrors(["Güncelleme işlemi sırasında hata oluştu."]);
 
         } else
             return back()->withErrors(["Veritabanında böyle bir kayıt yok veya getirilemedi."]);
@@ -167,6 +159,23 @@ class ProductController extends Controller
 
             return response(["result" => (bool)$result, "error" => $error]);
         }
+    }
+
+    public function update_status(Request $request, $id)
+    {
+        $id = decrypt($id);
+        $product = Product::query()->where("id", "=", $id)->firstOrFail();
+
+
+        if ($product) {
+
+            $product->status = $request->only("status")["status"];
+            $result = $product->save();
+
+            return response(["result" => (bool)$result]);
+
+        } else
+            return response(["result" => false]);
     }
 
 }

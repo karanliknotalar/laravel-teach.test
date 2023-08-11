@@ -96,7 +96,8 @@
     <x-admin.jquery-toast.jquery-toast-js
         :use-toast-status="true"
         :select-checkbox-query="'.couponStatus'"
-        :update-route='route("coupon.update", ["coupon" => ":id"])'>
+        :update-route='route("coupon.update-status", ["id" => ":id"])'
+        :method="'POST'">
         <x-slot name="id">
             $(this).closest("tr").attr("itemid")
         </x-slot>

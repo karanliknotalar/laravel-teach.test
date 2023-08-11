@@ -74,25 +74,16 @@ class CouponController extends Controller
 
         if ($coupon) {
 
-            if (count($request->all()) == 2) {
+            $result = $coupon->update([
+                "name" => $request["name"],
+                "price" => $request["price"],
+                "expired_at" => $request["expired_at"],
+                "status" => $request["status"] == "on",
+            ]);
 
-                $coupon->status = $request->only("status")["status"];
-                $result = $coupon->save();
-                return response(["result" => (bool)$result]);
-
-            } else {
-
-                $result = $coupon->update([
-                    "name" => $request["name"],
-                    "price" => $request["price"],
-                    "expired_at" => $request["expired_at"],
-                    "status" => $request["status"] == "on",
-                ]);
-
-                return $result ?
-                    back()->with("status", "Güncelleme işlemi başarılı.") :
-                    back()->withErrors(["Güncelleme işlemi sırasında hata oluştu."]);
-            }
+            return $result ?
+                back()->with("status", "Güncelleme işlemi başarılı.") :
+                back()->withErrors(["Güncelleme işlemi sırasında hata oluştu."]);
 
         } else
             return back()->withErrors(["Veritabanında böyle bir kayıt yok veya getirilemedi."]);
@@ -118,5 +109,19 @@ class CouponController extends Controller
 
             return response(["result" => (bool)$result, "error" => $error]);
         }
+    }
+    public function update_status(Request $request, $id)
+    {
+        $id = decrypt($id);
+        $coupon = Coupon::query()->where("id", "=", $id)->firstOrFail();
+
+        if ($coupon) {
+
+            $coupon->status = $request->only("status")["status"];
+            $result = $coupon->save();
+            return response(["result" => (bool)$result]);
+
+        } else
+            return response(["result" => false]);
     }
 }

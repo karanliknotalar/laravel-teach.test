@@ -24,16 +24,10 @@ class SliderFormRequest extends FormRequest
     {
         if (Route::is("slider.update")) {
 
-            if (count($this->all()) != 2) {
-
-                return [
-                    "name" => "required",
-                    "image" => 'image|mimes:jpeg,png,jpg,gif,svg|max:1024',
-                ];
-
-            } else {
-                return [];
-            }
+            return [
+                "name" => "required",
+                "image" => 'image|mimes:jpeg,png,jpg,gif,svg|max:1024',
+            ];
         }
 
         return [

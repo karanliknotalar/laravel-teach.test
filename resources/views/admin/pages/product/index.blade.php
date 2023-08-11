@@ -15,7 +15,7 @@
         :add-new-route='route("product.create")'>
 
         <x-slot name="ths">
-            <th>Resim</th>
+            <th style="width: max-content">Resim</th>
             <th>Ürün</th>
             <th>Kategori</th>
             <th>Kısa Açıklama</th>
@@ -31,14 +31,17 @@
                 @endphp
                 <tr itemid="{{ $productId }}">
                     <td>
-                        <img src="{{ asset($product->image ?? "images/cloth_1.jpg") }}" alt="image"
-                             class="img-fluid avatar-lg">
+                        <img src="{{ asset($product->image ?? "images/cloth_1.jpg") }}" alt="{{ $product->name }}"
+                             style="width: 6rem">
                     </td>
                     <td>{{ $product->name }} <br><span
                             class="small text-success">Ürün Kodu: {{ $product->product_code }}</span></td>
                     <td>{{ $product->category_name }}</td>
-                    <td>{{ $product->sort_description ?? "" }}</td>
-
+                    <td>
+                        <p class="text-wrap w-100">
+                            {{ $product->sort_description ?? "" }}
+                        </p>
+                    </td>
                     <td>
                         <x-admin.helpers.datatable-checkbox
                             :id="$productId"

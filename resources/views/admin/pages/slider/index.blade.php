@@ -34,7 +34,11 @@
                              class="img-fluid avatar-lg">
                     </td>
                     <td>{{ $slider->name }}</td>
-                    <td>{!! $slider->content ?? "" !!}</td>
+                    <td>
+                        <p class="text-wrap w-100">
+                            {!! $slider->content ?? "" !!}
+                        </p>
+                    </td>
                     <td>{{ $slider->shop_url ?? "" }}</td>
                     <td>
                         <x-admin.helpers.datatable-checkbox

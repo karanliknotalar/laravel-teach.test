@@ -30,7 +30,11 @@
                 <tr itemid="{{ $serviceId }}">
 
                     <td>{{ $service->title }}</td>
-                    <td>{!! $service->content ?? "" !!}</td>
+                    <td>
+                        <p class="text-wrap w-100">
+                            {!! $service->content ?? "" !!}
+                        </p>
+                    </td>
                     <td>
                         <x-admin.helpers.datatable-checkbox
                             :id="$serviceId"

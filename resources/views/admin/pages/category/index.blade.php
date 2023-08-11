@@ -33,10 +33,14 @@
                 <tr itemid="{{ $categoryId }}" class="{{ $base_categry ? "alert alert-success" : "" }}">
                     <td>
                         <img src="{{ asset($category->image) }}" alt="image"
-                             class="img-fluid avatar-lg">
+                             style="width: 6rem">
                     </td>
                     <td>{{ $category->name }}</td>
-                    <td>{!! $category->description ?? "" !!}</td>
+                    <td>
+                        <p class="text-wrap w-100">
+                            {!! $category->description ?? "" !!}
+                        </p>
+                    </td>
                     <td>{{ $base_categry ? "Ana Kategori" : "Alt Kategori" }}</td>
                     <td class="">
                         <x-admin.helpers.datatable-checkbox

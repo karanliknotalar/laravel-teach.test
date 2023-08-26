@@ -2,6 +2,7 @@
 
 namespace App\Helper;
 
+use App\Models\Invoice;
 use File;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
@@ -55,10 +56,26 @@ class Helper
         }
         return $slug;
     }
-    public static function checkCoupon($expired_at): float|int
+
+    public static function timeToSecond($expired_at): float|int
     {
         $dateNow = Carbon::parse(date('Y-m-d H:i:s'));
         $expired_at = Carbon::parse($expired_at);
         return $dateNow->diffInSeconds($expired_at, absolute: false);
+    }
+
+    public static function generateUniqOrderNo(int $len = 7): int
+    {
+        $min = "1";
+        $max = "9";
+        for ($i = 0; $i < $len - 1; $i++) {
+            $min .= "0";
+            $max .= "9";
+        }
+        $uniq_id = rand((int) $min, (int) $max);
+        if (Invoice::where("order_no", $uniq_id)->exists()) {
+            self::generateUniqOrderNo();
+        }
+        return $uniq_id;
     }
 }

@@ -3,11 +3,17 @@
 namespace App\Http\Controllers\Front;
 
 use App\Helper\Helper;
+use App\Http\Requests\InvoiceRequest;
 use App\Models\Coupon;
+use App\Models\Invoice;
+use App\Models\Order;
 use App\Models\Product;
 use App\Models\ProductQuantity;
+use Auth;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\Route;
 
 class CartController extends Controller
 {
@@ -32,14 +38,18 @@ class CartController extends Controller
         }
         if (session()->has("coupon")) {
 
-            $second = Helper::checkCoupon(session("coupon")["expired_at"]);
-            if ($second > 0 && count($cartItems) > 0 && $totalPrice > session("coupon")["price"]){
+            $second = Helper::timeToSecond(session("coupon")["expired_at"]);
+            if ($second > 0 && count($cartItems) > 0 && $totalPrice > session("coupon")["price"]) {
                 $totalPrice -= session("coupon")["price"];
             } else {
                 session()->forget("coupon");
             }
         }
         session(["cart" => $cartItems]);
+
+        if (Route::is("cart.order") && !empty(session("cart")))
+            return view("front.pages.order", compact("cartItems", "totalPrice", "unsetting_product"));
+
         return view("front.pages.cart", compact("cartItems", "totalPrice", "unsetting_product"));
     }
 
@@ -79,7 +89,8 @@ class CartController extends Controller
                         "size" => $size,
                         "color" => $color,
                         "product_id" => $product_id,
-                        "product_quantity_id" => $productQuantity->id
+                        "product_quantity_id" => $productQuantity->id,
+                        "product_code" => $product->product_code
                     ];
                 }
                 session(["cart" => $cartItems]);
@@ -111,8 +122,6 @@ class CartController extends Controller
 
     public function updateCartQuantity(Request $request)
     {
-
-//        return $request->all();
         $cartId = decrypt($request->cartId);
         $product_id = explode("_", $cartId)[0];
         $product_quantity_id = explode("_", $cartId)[1];
@@ -144,8 +153,11 @@ class CartController extends Controller
 
         if ($coupon) {
 
-            $second = Helper::checkCoupon($coupon->expired_at);
+            $second = Helper::timeToSecond($coupon->expired_at);
 
+            if (session()->has("coupon") && session("coupon")["name"] == $coupon->name) {
+                return back()->with("status", "Kupon zaten ekli");
+            }
             if ($second > 0) {
                 session("coupon", []);
                 session(["coupon" => ["price" => $coupon->price, "name" => $coupon->name, "expired_at" => $coupon->expired_at]]);
@@ -161,4 +173,55 @@ class CartController extends Controller
         return back()->with("status", "Kupon Eklendi");
     }
 
+    public function orderComplete(InvoiceRequest $request)
+    {
+        $user = $request->only("email");
+
+        if (!Auth::check()) {
+
+            if (!User::where("email", $request->email)->exists()) {
+                $user = $request->only("email");
+                $user["name"] = $request->f_name . " " . $request->l_name;
+                $user["password"] = bcrypt($request->password);
+                $user["status"] = 1;
+                $user["agreement"] = 1;
+                $user = User::create($user);
+            } else {
+                return back()->withErrors(["Bu mail ile kayıtlı üye mevcut."]);
+            }
+        }
+
+        $invoice = Invoice::create([
+            "user_id" => Auth::user()->id ?? $user->id,
+            "order_no" => Helper::generateUniqOrderNo(10),
+            "country" => $request->country ?? "",
+            "f_name" => $request->f_name ?? "",
+            "l_name" => $request->l_name ?? "",
+            "company_name" => $request->company_name ?? "",
+            "address" => $request->address ?? "",
+            "province" => $request->province ?? "",
+            "district" => $request->district ?? "",
+            "email" => $request->email ?? "",
+            "phone" => $request->phone ?? "",
+        ]);
+
+        if ($invoice) {
+            $cartItems = session("cart", []);
+            foreach ($cartItems as $cartItem) {
+
+                Order::create([
+                    "user_id" => $invoice->user_id,
+                    "product_id" => $cartItem["product_id"],
+                    "order_no" => $invoice->order_no,
+                    "product_code" => $cartItem["product_code"],
+                    "price" => $cartItem["price"],
+                    "size" => $cartItem["size"],
+                    "color" => $cartItem["color"],
+                    "quantity" => $cartItem["quantity"],
+                ]);
+            }
+            session()->forget("cart");
+        }
+        return redirect(route("home.index"));
+    }
 }

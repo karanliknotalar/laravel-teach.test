@@ -134,7 +134,7 @@
                                         <span class="text-black">Kupon ({{ session("coupon")['name'] }})</span>
                                     </div>
                                     <div class="col-md-6 text-right">
-                                        <strong class="text-black">{{ number_format(session("coupon")['price'], 2) ?? 0 }} TL</strong>
+                                        <strong class="text-black">-{{ number_format(session("coupon")['price'], 2) ?? 0 }} TL</strong>
                                     </div>
                                 @endif
                                 <div class="col-md-6">
@@ -148,7 +148,7 @@
                             <div class="row">
                                 <div class="col-md-12">
                                     <button class="btn btn-primary btn-lg py-3 btn-block"
-                                            onclick="window.location='checkout.html'">Proceed To Checkout
+                                            onclick="window.location='{{ route("cart.order") }}'">Ödeme Ekranına Geç
                                     </button>
                                 </div>
                             </div>

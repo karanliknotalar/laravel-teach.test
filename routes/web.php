@@ -52,6 +52,8 @@ Route::group(["prefix" => "/sepet"], function () {
     Route::post("/sil", [CartController::class, "removeCart"])->name("cart.remove-cart");
     Route::post("/guncelle", [CartController::class, "updateCartQuantity"])->name("cart.update-cart-quantity");
     Route::post("/kupon-ekle", "Front\CartController@addCoupon")->name("cart.add-coupon");
+    Route::get("/odeme", [CartController::class, "cart"])->name("cart.order");
+    Route::post("/odeme-tamamla", [CartController::class, "orderComplete"])->name("cart.order-complete");
 });
 
 Route::group(["middleware" => "guest"], function () {

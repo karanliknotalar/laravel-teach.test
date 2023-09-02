@@ -59,8 +59,9 @@
                                             <span>{{ $cartItem["color"] ?? "" }}</span> -
                                             <span>{{ $cartItem["size"] ?? "" }}</span>
                                         </td>
-                                        <td>{{ number_format($cartItem["price"], 2) }} ₺
-                                            <div>{{ number_format(($cartItem["price"] * $cartItem["vat"]) / 100, 2) }} ₺ <small>KDV</small></div></td>
+                                        <td><div>Ürün: {{ number_format($cartItem["price"], 2) }} ₺</div>
+                                            <div>KDV: {{ number_format(Helper::getVat($cartItem["price"], $cartItem["vat"]), 2) }} ₺</div>
+                                        </td>
                                         <td>
                                             <div class="input-group mb-3" style="max-width: 120px;">
                                                 <div class="input-group-prepend">
@@ -83,7 +84,7 @@
                                         </td>
                                         <td>
                                             @php
-                                                $total = (($cartItem["price"] * $cartItem["vat"]) / 100) + $cartItem["price"];
+                                                $total = Helper::getVatIncluded($cartItem["price"], $cartItem["vat"]);
                                             @endphp
                                             {{ number_format($total * $cartItem["quantity"], 2) }} ₺
                                         </td>

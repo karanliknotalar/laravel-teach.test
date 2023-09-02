@@ -60,7 +60,7 @@
                                                 </h3>
                                                 <p class="mb-0">{{ $product->sort_description }}</p>
                                                 @php
-                                                    $total = (($product->price * $product->vat->VAT) / 100) + $product->price;
+                                                    $total = Helper::getVatIncluded($product->price, $product->vat->VAT);
                                                 @endphp
                                                 <p class="text-primary font-weight-bold">{{ number_format($total, 2) }}
                                                 ₺</p>

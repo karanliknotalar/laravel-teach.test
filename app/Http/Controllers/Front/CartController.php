@@ -21,8 +21,6 @@ class CartController extends Controller
     public function cart()
     {
         $cartItems = session("cart", []);
-//        session("totalPrice", []);
-
         $totalPrice = 0;
         $unsetting_product = [];
 
@@ -31,7 +29,7 @@ class CartController extends Controller
             if (Product::where("id", $cartItem["product_id"])->exists() && ProductQuantity::where([["id", "=", $cartItem["product_quantity_id"]], ["quantity", ">=", $cartItem["quantity"]]])->exists()) {
 
                 if (isset($cartItem["price"]) && isset($cartItem["quantity"])) {
-                    $total = (($cartItem["price"] * $cartItem["vat"]) / 100) + $cartItem["price"];
+                    $total = Helper::getVatIncluded($cartItem["price"], $cartItem["vat"]);
                     $totalPrice += $total * $cartItem["quantity"];
                 }
             } else {
@@ -167,7 +165,6 @@ class CartController extends Controller
                 return back()->with("status", "Kupon zaten ekli");
             }
             if ($second > 0) {
-//                session("coupon", []);
                 session(["coupon" => ["price" => $coupon->price, "name" => $coupon->name, "expired_at" => $coupon->expired_at]]);
             } else {
                 session()->forget("coupon");

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Front;
 
+use App\Helper\Helper;
 use App\Models\Product;
 use App\Models\ProductQuantity;
 use Illuminate\Http\Request;
@@ -55,8 +56,8 @@ class ProductController extends Controller
         return response(
             [
                 "price" => number_format($price->price, 2),
-                "vat" => number_format(($price->price * $price->product->vat->VAT) / 100, 2),
-                "total" => number_format((($price->price * $price->product->vat->VAT) / 100) + $price->price, 2),
+                "vat" => number_format(Helper::getVat($price->price, $price->product->vat->VAT), 2),
+                "total" => number_format(Helper::getVatIncluded($price->price, $price->product->vat->VAT), 2)
             ]);
     }
 }

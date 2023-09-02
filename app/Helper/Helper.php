@@ -72,10 +72,20 @@ class Helper
             $min .= "0";
             $max .= "9";
         }
-        $uniq_id = rand((int) $min, (int) $max);
+        $uniq_id = rand((int)$min, (int)$max);
         if (Invoice::where("order_no", $uniq_id)->exists()) {
             self::generateUniqOrderNo();
         }
         return $uniq_id;
+    }
+
+    public static function getVatIncluded(float $price, int $vat): float
+    {
+        return (($price * $vat) / 100) + $price;
+    }
+
+    public static function getVat(float $price, int $vat): float
+    {
+        return ($price * $vat) / 100;
     }
 }

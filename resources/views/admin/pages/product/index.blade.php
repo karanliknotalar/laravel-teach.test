@@ -97,8 +97,8 @@
 
 @section("js")
     <x-admin.datatable.datatable-js
-        :column-defs-targets="'[0,4,5]'"
-        :order-index="'6'"
+        :column-defs-targets="'[0,4,5,6]'"
+        :order-index="'7'"
         :director="'desc'"/>
 
     <x-admin.sweet-alert2.sweet-alert2-js

@@ -59,8 +59,11 @@
                                                     <a href="{{ route("page.product", ["slug_name" => $product->slug_name]) }}">{{ $product->name }}</a>
                                                 </h3>
                                                 <p class="mb-0">{{ $product->sort_description }}</p>
-                                                <p class="text-primary font-weight-bold">{{ number_format($product->price, 2) }}
-                                                    TL</p>
+                                                @php
+                                                    $total = (($product->price * $product->vat->VAT) / 100) + $product->price;
+                                                @endphp
+                                                <p class="text-primary font-weight-bold">{{ number_format($total, 2) }}
+                                                ₺</p>
                                             </div>
                                         </div>
                                     </div>
@@ -175,7 +178,6 @@
                                 @endforeach
                             @endif
                         </div>
-
                     </div>
                 </div>
             </div>

@@ -40,7 +40,7 @@
                                 <th class="product-name">Ürün</th>
                                 <th class="product-price">Fiyat</th>
                                 <th class="product-quantity">Adet</th>
-                                <th class="product-total">Toplam</th>
+                                <th class="product-total">KDV + Toplam</th>
                                 <th class="product-remove">Kaldır</th>
                             </tr>
                             </thead>
@@ -59,7 +59,8 @@
                                             <span>{{ $cartItem["color"] ?? "" }}</span> -
                                             <span>{{ $cartItem["size"] ?? "" }}</span>
                                         </td>
-                                        <td>{{ number_format($cartItem["price"], 2) }} TL</td>
+                                        <td>{{ number_format($cartItem["price"], 2) }} ₺
+                                            <div>{{ number_format(($cartItem["price"] * $cartItem["vat"]) / 100, 2) }} ₺ <small>KDV</small></div></td>
                                         <td>
                                             <div class="input-group mb-3" style="max-width: 120px;">
                                                 <div class="input-group-prepend">
@@ -81,7 +82,10 @@
 
                                         </td>
                                         <td>
-                                            {{ number_format($cartItem["price"] * $cartItem["quantity"], 2) }}TL
+                                            @php
+                                                $total = (($cartItem["price"] * $cartItem["vat"]) / 100) + $cartItem["price"];
+                                            @endphp
+                                            {{ number_format($total * $cartItem["quantity"], 2) }} ₺
                                         </td>
                                         <td>
                                             <form action="{{ route("cart.remove-cart") }}" method="post">
@@ -134,14 +138,14 @@
                                         <span class="text-black">Kupon ({{ session("coupon")['name'] }})</span>
                                     </div>
                                     <div class="col-md-6 text-right">
-                                        <strong class="text-black">-{{ number_format(session("coupon")['price'], 2) ?? 0 }} TL</strong>
+                                        <strong class="text-black">-{{ number_format(session("coupon")['price'], 2) ?? 0 }} ₺</strong>
                                     </div>
                                 @endif
                                 <div class="col-md-6">
                                     <span class="text-black">Toplam</span>
                                 </div>
                                 <div class="col-md-6 text-right">
-                                    <strong class="text-black">{{ number_format($totalPrice, 2) ?? 0 }} TL</strong>
+                                    <strong class="text-black">{{ number_format($totalPrice, 2) ?? 0 }} ₺</strong>
                                 </div>
                             </div>
 

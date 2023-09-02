@@ -17,6 +17,7 @@ return new class extends Migration {
             $table->string("slug_name");
             $table->string("product_code")->unique();
             $table->string("image")->nullable();
+            $table->unsignedBigInteger("VAT_id");
             $table->longText("description")->nullable();
             $table->text("sort_description")->nullable();
             $table->tinyInteger("status")->default(0);

@@ -46,7 +46,8 @@ class ProductsController extends Controller
                     ->limit(1);
             })
             ->with("category:id,name,slug_name")
-            ->orderBy($request->order ?? "created_at", $request->director ?? "desc")
+            ->with("vat:id,VAT")
+            ->orderBy($request->order ?? "updated_at", $request->director ?? "desc")
             ->whereHas("category", function ($query) use ($category_id) {
                 if (isset($category_id))
                     $query->where("category_id", $category_id)->orWhere("parent_id", $category_id);

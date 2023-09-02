@@ -57,6 +57,22 @@
                     <label for="mainCategorySelect">Kategoriler</label>
                 </div>
 
+                <div class="form-floating mb-3">
+                    <select class="form-select" aria-label="KDV Oranı Seçin" name="VAT_id">
+                        <option>---KDV Oranı Seçin---</option>
+                        @if(isset($vats))
+                            @foreach($vats as $vat)
+                                <option
+                                    value="{{ $vat->id }}"
+                                    {{ isset($product->VAT_id) && $product->VAT_id == $vat->id ? "selected" : "" }}>
+                                    {{ $vat->VAT }}
+                                </option>
+                            @endforeach
+                        @endif
+                    </select>
+                    <label for="mainCategorySelect">KDV Oranı</label>
+                </div>
+
                 <x-admin.helpers.input-file
                     :name="'image'"
                     :title="'Resim Seç (1900x890)'"/>

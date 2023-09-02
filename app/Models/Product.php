@@ -18,6 +18,7 @@ class Product extends Model
         "image",
         "description",
         "sort_description",
+        "VAT_id",
         "status",
         "featured",
         "product_code"
@@ -27,6 +28,11 @@ class Product extends Model
     public function category(): HasOne
     {
         return $this->hasOne(Category::class, "id", "category_id")->where("status", "=", 1);
+    }
+
+    public function vat(): HasOne
+    {
+        return $this->hasOne(Vat::class, "id", "VAT_id");
     }
 
     public function product_size(): HasMany

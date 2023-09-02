@@ -101,6 +101,11 @@
                 :name="'Kuponlar'"
                 :icon-name="'ri-settings-fill'"
             />
+            <x-admin.helpers.sidebar-single-menu-item
+                :url='route("vat.index")'
+                :name="'KDV Oranları'"
+                :icon-name="'ri-settings-fill'"
+            />
 
 
         </ul>

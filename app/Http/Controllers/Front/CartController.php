@@ -17,10 +17,12 @@ use Illuminate\Support\Facades\Route;
 
 class CartController extends Controller
 {
+
     public function cart()
     {
-
         $cartItems = session("cart", []);
+//        session("totalPrice", []);
+
         $totalPrice = 0;
         $unsetting_product = [];
 
@@ -29,7 +31,8 @@ class CartController extends Controller
             if (Product::where("id", $cartItem["product_id"])->exists() && ProductQuantity::where([["id", "=", $cartItem["product_quantity_id"]], ["quantity", ">=", $cartItem["quantity"]]])->exists()) {
 
                 if (isset($cartItem["price"]) && isset($cartItem["quantity"])) {
-                    $totalPrice += $cartItem["price"] * $cartItem["quantity"];
+                    $total = (($cartItem["price"] * $cartItem["vat"]) / 100) + $cartItem["price"];
+                    $totalPrice += $total * $cartItem["quantity"];
                 }
             } else {
                 $unsetting_product[$cartId] = $cartItem;
@@ -47,10 +50,14 @@ class CartController extends Controller
         }
         session(["cart" => $cartItems]);
 
-        if (Route::is("cart.order") && !empty(session("cart")))
-            return view("front.pages.order", compact("cartItems", "totalPrice", "unsetting_product"));
+        $compact = compact("cartItems", "totalPrice", "unsetting_product");
 
-        return view("front.pages.cart", compact("cartItems", "totalPrice", "unsetting_product"));
+        session(["totalPrice" => $totalPrice]);
+
+        if (Route::is("cart.order") && !empty(session("cart")))
+            return view("front.pages.order", $compact);
+
+        return view("front.pages.cart", $compact);
     }
 
     public function addCart(Request $request)
@@ -78,7 +85,7 @@ class CartController extends Controller
 
                 } else {
 
-                    $product = Product::where("id", $product_id)->first();
+                    $product = Product::where("id", $product_id)->with("vat:id,VAT")->first();
 
                     $cartItems[$cartId] = [
                         "name" => $product->name,
@@ -90,7 +97,8 @@ class CartController extends Controller
                         "color" => $color,
                         "product_id" => $product_id,
                         "product_quantity_id" => $productQuantity->id,
-                        "product_code" => $product->product_code
+                        "product_code" => $product->product_code,
+                        "vat" => $product->vat->VAT
                     ];
                 }
                 session(["cart" => $cartItems]);
@@ -159,7 +167,7 @@ class CartController extends Controller
                 return back()->with("status", "Kupon zaten ekli");
             }
             if ($second > 0) {
-                session("coupon", []);
+//                session("coupon", []);
                 session(["coupon" => ["price" => $coupon->price, "name" => $coupon->name, "expired_at" => $coupon->expired_at]]);
             } else {
                 session()->forget("coupon");
@@ -194,6 +202,7 @@ class CartController extends Controller
         $invoice = Invoice::create([
             "user_id" => Auth::user()->id ?? $user->id,
             "order_no" => Helper::generateUniqOrderNo(10),
+            "amount_paid" => session("totalPrice"),
             "country" => $request->country ?? "",
             "f_name" => $request->f_name ?? "",
             "l_name" => $request->l_name ?? "",
@@ -214,13 +223,15 @@ class CartController extends Controller
                     "product_id" => $cartItem["product_id"],
                     "order_no" => $invoice->order_no,
                     "product_code" => $cartItem["product_code"],
-                    "price" => $cartItem["price"],
+                    "price" => (($cartItem["price"] * $cartItem["vat"]) / 100) + $cartItem["price"],
                     "size" => $cartItem["size"],
                     "color" => $cartItem["color"],
                     "quantity" => $cartItem["quantity"],
                 ]);
             }
             session()->forget("cart");
+            session()->forget("coupon");
+            session()->forget("totalPrice");
         }
         return redirect(route("home.index"));
     }

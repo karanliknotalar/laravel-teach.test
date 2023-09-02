@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger("user_id");
             $table->string("order_no")->unique();
+            $table->double("amount_paid", 10, 2);
             $table->string("country")->nullable();
             $table->string("f_name")->nullable();
             $table->string("l_name")->nullable();

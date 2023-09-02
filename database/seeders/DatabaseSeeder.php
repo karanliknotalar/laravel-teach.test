@@ -31,6 +31,7 @@ class DatabaseSeeder extends Seeder
             ProductQuantitySeeder::class,
             ServiceSeeder::class,
             CouponSeeder::class,
+            VatSeeder::class,
         ]);
     }
 }

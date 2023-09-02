@@ -7,6 +7,7 @@ use App\Http\Requests\Admin\ProductFormRequest;
 use App\Models\Category;
 use App\Models\Product;
 use App\Models\ProductQuantity;
+use App\Models\Vat;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
@@ -30,7 +31,9 @@ class ProductController extends Controller
      */
     public function create()
     {
-        return view("admin.pages.product.edit");
+        $vats = Vat::all();
+        $categories = Category::select(["id", "name", "parent_id"])->get();
+        return view("admin.pages.product.edit", compact("vats", "categories"));
     }
 
     /**
@@ -50,6 +53,7 @@ class ProductController extends Controller
             "slug_name" => Helper::renameExistSlug(new Product(), "slug_name", $request["name"]),
             "description" => $request["description"],
             "sort_description" => $request["sort_description"],
+            "VAT_id" => $request["VAT_id"],
             "image" => $imageName,
             "status" => $request["status"] == "on",
         ]);
@@ -81,7 +85,7 @@ class ProductController extends Controller
      */
     public function show(string $id)
     {
-//        return decrypt($id);
+
     }
 
     /**
@@ -92,8 +96,9 @@ class ProductController extends Controller
         $id = decrypt($id);
         $product = Product::query()->where("id", $id)->with("category:id,name")->firstOrFail();
         $categories = Category::select(["id", "name", "parent_id"])->get();
+        $vats = Vat::all();
 
-        return view("admin.pages.product.edit", compact("product", "categories"));
+        return view("admin.pages.product.edit", compact("product", "categories", "vats"));
     }
 
     /**
@@ -119,6 +124,7 @@ class ProductController extends Controller
                 "slug_name" => Helper::renameExistSlug(new Product(), "slug_name", $request["name"]),
                 "description" => $request["description"],
                 "sort_description" => $request["sort_description"],
+                "VAT_id" => $request["VAT_id"],
                 "image" => $imageName ?? $product->image,
                 "status" => $request["status"] == "on",
             ]);

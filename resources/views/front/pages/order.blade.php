@@ -139,10 +139,13 @@
                                         <tbody>
                                         @if(isset($cartItems))
                                             @foreach($cartItems as $cartId=>$cartItem)
+                                                @php
+                                                    $total = Helper::getVatIncluded($cartItem["price"], $cartItem["vat"]);
+                                                @endphp
                                                 <tr>
                                                     <td>{{ $cartItem["name"] }}<strong
                                                             class="mx-2">x</strong>{{ $cartItem["quantity"] }}</td>
-                                                    <td>{{ number_format($cartItem["price"] * $cartItem["quantity"], 2) }}
+                                                    <td>{{ number_format($total * $cartItem["quantity"], 2) }}
                                                         TL
                                                     </td>
                                                 </tr>

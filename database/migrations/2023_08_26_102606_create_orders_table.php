@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string("order_no");
             $table->string("product_code");
             $table->double("price", 10, 2);
+            $table->tinyInteger("VAT")->default("20");
             $table->string("size", 50);
             $table->string("color", 50);
             $table->integer("quantity")->default(0);

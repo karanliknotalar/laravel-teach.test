@@ -9,6 +9,7 @@ class Invoice extends Model
 {
     protected $fillable = [
         "user_id",
+        "coupon_id",
         "order_no",
         "amount_paid",
         "country",
@@ -20,6 +21,6 @@ class Invoice extends Model
         "district",
         "email",
         "phone",
-        "password",
+        "order_status",
     ];
 }

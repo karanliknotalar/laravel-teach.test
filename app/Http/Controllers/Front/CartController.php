@@ -198,6 +198,7 @@ class CartController extends Controller
 
         $invoice = Invoice::create([
             "user_id" => Auth::user()->id ?? $user->id,
+            "coupon_id" => Coupon::where("name", session("coupon")["name"] ?? "")->first()->id ?? null,
             "order_no" => Helper::generateUniqOrderNo(10),
             "amount_paid" => session("totalPrice"),
             "country" => $request->country ?? "",
@@ -209,6 +210,7 @@ class CartController extends Controller
             "district" => $request->district ?? "",
             "email" => $request->email ?? "",
             "phone" => $request->phone ?? "",
+            "order_status" => 0,
         ]);
 
         if ($invoice) {
@@ -220,7 +222,8 @@ class CartController extends Controller
                     "product_id" => $cartItem["product_id"],
                     "order_no" => $invoice->order_no,
                     "product_code" => $cartItem["product_code"],
-                    "price" => Helper::getVatIncluded($cartItem["price"], $cartItem["vat"]),
+                    "price" => $cartItem["price"],
+                    "VAT" => $cartItem["vat"],
                     "size" => $cartItem["size"],
                     "color" => $cartItem["color"],
                     "quantity" => $cartItem["quantity"],

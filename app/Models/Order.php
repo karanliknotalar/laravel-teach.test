@@ -13,6 +13,7 @@ class Order extends Model
         "order_no",
         "product_code",
         "price",
+        "VAT",
         "size",
         "color",
         "quantity",

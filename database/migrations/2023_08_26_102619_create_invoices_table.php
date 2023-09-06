@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('invoices', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger("user_id");
+            $table->unsignedBigInteger("coupon_id")->nullable();
             $table->string("order_no")->unique();
             $table->double("amount_paid", 10, 2);
             $table->string("country")->nullable();
@@ -25,8 +26,7 @@ return new class extends Migration
             $table->string("district")->nullable();
             $table->string("email")->nullable();
             $table->string("phone")->nullable();
-            $table->string("password")->nullable();
-
+            $table->string("order_status")->nullable();
             $table->timestamps();
         });
     }

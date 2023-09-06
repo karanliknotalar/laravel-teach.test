@@ -220,7 +220,7 @@ class CartController extends Controller
                     "product_id" => $cartItem["product_id"],
                     "order_no" => $invoice->order_no,
                     "product_code" => $cartItem["product_code"],
-                    "price" => (($cartItem["price"] * $cartItem["vat"]) / 100) + $cartItem["price"],
+                    "price" => Helper::getVatIncluded($cartItem["price"], $cartItem["vat"]),
                     "size" => $cartItem["size"],
                     "color" => $cartItem["color"],
                     "quantity" => $cartItem["quantity"],

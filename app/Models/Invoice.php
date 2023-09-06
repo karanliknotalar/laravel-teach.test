@@ -12,6 +12,8 @@ class Invoice extends Model
         "coupon_id",
         "order_no",
         "amount_paid",
+        "payment_method",
+        "payment_status",
         "country",
         "f_name",
         "l_name",

@@ -201,6 +201,8 @@ class CartController extends Controller
             "coupon_id" => Coupon::where("name", session("coupon")["name"] ?? "")->first()->id ?? null,
             "order_no" => Helper::generateUniqOrderNo(10),
             "amount_paid" => session("totalPrice"),
+            "payment_method" => "Credit Card",
+            "payment_status" => 1,
             "country" => $request->country ?? "",
             "f_name" => $request->f_name ?? "",
             "l_name" => $request->l_name ?? "",

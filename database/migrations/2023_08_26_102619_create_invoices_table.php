@@ -17,6 +17,8 @@ return new class extends Migration
             $table->unsignedBigInteger("coupon_id")->nullable();
             $table->string("order_no")->unique();
             $table->double("amount_paid", 10, 2);
+            $table->string("payment_method")->nullable();
+            $table->tinyInteger("payment_status")->default(0);
             $table->string("country")->nullable();
             $table->string("f_name")->nullable();
             $table->string("l_name")->nullable();
@@ -26,7 +28,7 @@ return new class extends Migration
             $table->string("district")->nullable();
             $table->string("email")->nullable();
             $table->string("phone")->nullable();
-            $table->string("order_status")->nullable();
+            $table->tinyInteger("order_status")->default(0);
             $table->timestamps();
         });
     }

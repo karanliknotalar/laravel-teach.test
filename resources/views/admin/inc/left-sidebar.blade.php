@@ -77,6 +77,12 @@
                 :icon-name="'mdi mdi-truck-minus'"
                 :count="$serviceCount"
             />
+            <x-admin.helpers.sidebar-single-menu-item
+                :url='route("order.index")'
+                :name="'Siparişler'"
+                :icon-name="'uil-store'"
+                :count="''"
+            />
 
             <x-admin.helpers.sidebar-single-menu-item
                 :url='route("contact.index")'

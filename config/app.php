@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Facade;
 use Illuminate\Support\ServiceProvider;
+use Carbon\Carbon;
 
 return [
 
@@ -184,6 +185,7 @@ return [
     'aliases' => Facade::defaultAliases()->merge([
         // 'Example' => App\Facades\Example::class,
         'Helper' => App\Helper\Helper::class,
+        'Carbon' => Carbon::class
     ])->toArray(),
 
 ];

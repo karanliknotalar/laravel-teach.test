@@ -89,7 +89,7 @@ class Helper
         return ($price * $vat) / 100;
     }
 
-    public static function createBreadCrumb($mainUrl): array
+    public static function createBreadCrumb($mainUrl, $replace_str): array
     {
         $currentUrl = request()->fullUrl();
         $currentUrl = str_replace($mainUrl . "/", "", $currentUrl);
@@ -104,7 +104,7 @@ class Helper
 
             if (!is_numeric($part)){
                 $breadcrumbs[] = [
-                    'text' => ucfirst(str_replace("-", " ", $part)),
+                    'name' => ucwords(str_replace($replace_str, " ", $part)),
                     'url' => $breadcrumbUrl,
                 ];
             }

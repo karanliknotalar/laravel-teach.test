@@ -8,7 +8,7 @@
     <x-front.helpers.header-url
         :main-url="route('home.index')"
         :main-url-name="'Anasayfa'"
-        :child-url="route('page.product', [$product->id, $product->slug_name])"
+        :child-url="route('page.product', ['slug_name' => $product->slug_name])"
         :child-url-name="$product->name"/>
 
     <div class="site-section">

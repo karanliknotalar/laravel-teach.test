@@ -4,12 +4,9 @@
 @endsection
 
 @section("content")
-
     <x-front.helpers.header-url
         :main-url="route('home.index')"
-        :main-url-name="'Anasayfa'"
-        :child-url="route('page.contact')"
-        :child-url-name="'İletişim'"/>
+        :main-url-name="'Anasayfa'"/>
 
     <div class="site-section">
         <div class="container">

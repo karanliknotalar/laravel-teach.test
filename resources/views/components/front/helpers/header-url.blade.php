@@ -3,10 +3,12 @@
         <div class="row">
             <div class="col-md-12 mb-0">
                 <a href="{{ $mainUrl }}">{{ $mainUrlName}}</a>
-                <span class="mx-2 mb-0">/</span>
-                <strong class="text-black">
-                    <a href="{{ $childUrl }}">{{ $childUrlName }}</a>
-                </strong>
+                @foreach (Helper::createBreadCrumb($mainUrl) as $breadcrumb)
+                    <span class="mx-2 mb-0">/</span>
+                    <strong class="text-black">
+                        <a href="{{ $breadcrumb['url'] }}">{{ $breadcrumb['text'] }}</a>
+                    </strong>
+                @endforeach
             </div>
         </div>
     </div>

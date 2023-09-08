@@ -88,4 +88,27 @@ class Helper
     {
         return ($price * $vat) / 100;
     }
+
+    public static function createBreadCrumb($mainUrl): array
+    {
+        $currentUrl = request()->fullUrl();
+        $currentUrl = str_replace($mainUrl . "/", "", $currentUrl);
+        $urlParts = explode('/', $currentUrl);
+
+        $breadcrumbs = [];
+        $breadcrumbUrl = $mainUrl;
+
+        foreach ($urlParts as $part) {
+
+            $breadcrumbUrl .= '/' . $part;
+
+            if (!is_numeric($part)){
+                $breadcrumbs[] = [
+                    'text' => ucfirst(str_replace("-", " ", $part)),
+                    'url' => $breadcrumbUrl,
+                ];
+            }
+        }
+        return $breadcrumbs;
+    }
 }

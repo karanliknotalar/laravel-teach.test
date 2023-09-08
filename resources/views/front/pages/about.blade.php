@@ -6,9 +6,7 @@
 @section("content")
     <x-front.helpers.header-url
         :main-url="route('home.index')"
-        :main-url-name="'Anasayfa'"
-        :child-url="route('page.about')"
-        :child-url-name="'Hakkımızda'"/>
+        :main-url-name="'Anasayfa'"/>
 
     <div class="site-section border-bottom" data-aos="fade">
         <div class="container">

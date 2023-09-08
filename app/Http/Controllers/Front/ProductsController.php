@@ -13,6 +13,7 @@ class ProductsController extends Controller
 
     public function products(Request $request, $category_slug = null, $category_id = null, $sub_category = null)
     {
+
         foreach ($request->query() as $key => $value) {
 
             if (empty($value)){

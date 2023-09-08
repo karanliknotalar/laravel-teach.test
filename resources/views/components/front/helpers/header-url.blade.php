@@ -5,9 +5,14 @@
                 <a href="{{ $mainUrl }}">{{ $mainUrlName}}</a>
                 @foreach (Helper::createBreadCrumb($mainUrl, "-") as $breadcrumb)
                     <span class="mx-2 mb-0">/</span>
-                    <strong class="text-black">
+                    @if($breadcrumb['url'] == request()->fullUrl())
+                        <strong class="text-black">
+                            <a href="{{ $breadcrumb['url'] }}">{{ $breadcrumb['name'] }}</a>
+                        </strong>
+                    @else
                         <a href="{{ $breadcrumb['url'] }}">{{ $breadcrumb['name'] }}</a>
-                    </strong>
+                    @endif
+
                 @endforeach
             </div>
         </div>

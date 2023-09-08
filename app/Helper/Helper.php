@@ -6,6 +6,7 @@ use App\Models\Invoice;
 use File;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Str;
 
 class Helper
@@ -91,7 +92,7 @@ class Helper
 
     public static function createBreadCrumb($mainUrl, $replace_str): array
     {
-        $currentUrl = request()->fullUrl();
+        $currentUrl = URL::current();
         $currentUrl = str_replace($mainUrl . "/", "", $currentUrl);
         $urlParts = explode('/', $currentUrl);
 
@@ -102,7 +103,7 @@ class Helper
 
             $breadcrumbUrl .= '/' . $part;
 
-            if (!is_numeric($part)){
+            if (!is_numeric($part)) {
                 $breadcrumbs[] = [
                     'name' => ucwords(str_replace($replace_str, " ", $part)),
                     'url' => $breadcrumbUrl,

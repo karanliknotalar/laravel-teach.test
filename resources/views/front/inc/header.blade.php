@@ -43,11 +43,10 @@
                             <li>
                                 <a href="{{ route("page.cart") }}" class="site-cart">
                                     <span class="icon icon-shopping_cart"></span>
-                                    @if(session()->has("cart"))
-                                        @if(count(session("cart")) > 0)
-                                            <span class="count" id="cart_count">{{ count(session("cart")) }}</span>
-                                        @endif
-                                    @endif
+                                    @php
+                                        $countVisible = (session()->has("cart") and count(session("cart")) > 0);
+                                    @endphp
+                                    <span class="count {{ $countVisible ? "d-block" : "d-none" }}" id="cart_count">{{ $countVisible ? count(session("cart")) : "" }}</span>
                                 </a>
                             </li>
                             <li class="d-inline-block d-md-none ml-md-0">

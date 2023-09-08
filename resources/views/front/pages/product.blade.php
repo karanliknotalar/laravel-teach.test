@@ -152,9 +152,10 @@
                     data: $("#cartForm").serialize(),
                     success: function (response) {
                         if (response.success) {
-                            toastMsg("success", "Başarılı", response.message)
+                            $("#cart_count").addClass("d-block").text(response.cartCount);
+                            toastMsg("success", "Başarılı", response.message);
                         } else
-                            toastMsg("error", response.error, response.message)
+                            toastMsg("error", response.error, response.message);
                     }
                 });
             });

@@ -101,7 +101,7 @@ class CartController extends Controller
                 }
                 session(["cart" => $cartItems]);
 
-                return response(["success" => true, "message" => "ürün sepete eklendi"]);
+                return response(["success" => true, "message" => "ürün sepete eklendi", "cartCount" => (session()->has("cart") and count(session("cart")) > 0) ? count(session("cart")) : 0]);
             } else
                 return response(["success" => false, "error" => "stok", "message" => "stok yetersiz"]);
         } else

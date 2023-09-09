@@ -31,7 +31,14 @@ class ProductController extends Controller
             ->limit(10)
             ->get();
 
-        return view("front.pages.product", compact("product", "f_products"));
+        $seo = [
+            "seo_title" => $product->name,
+            "seo_description" => $product->description ?? "",
+            "seo_keywords" => join(",", explode(" ",$product->name)),
+            "seo_image" => $product->image
+        ];
+
+        return view("front.pages.product", compact("product", "f_products", "seo"));
     }
 
     public function size(Request $request)

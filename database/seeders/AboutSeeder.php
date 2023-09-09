@@ -21,6 +21,7 @@ class AboutSeeder extends Seeder
             bozuk vücudun hatası alınacak bazılarımız kim Suçlayanın acısı affedeninkinden daha mı büyük?
             O en değerlidir, ama hiçbiri yok bazıları tarafından reddedilmek ve en küçük övgücüler tarafından itilmek.",
             "image" => null,
+            "keywords" => "deneme,site,meta,keys",
             "channel" => "https://"
         ]);
     }

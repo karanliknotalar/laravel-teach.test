@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Front;
 
+use App\Models\Category;
 use App\Models\Product;
 use App\Models\ProductQuantity;
 use DB;
@@ -68,7 +69,16 @@ class ProductsController extends Controller
 
         $colors = $this->getSizesOrColors("color", $category_id);
 
-        return view("front.pages.products", compact("products", "sizes", "colors", "max_price"));
+        $category = Category::where("id", $category_id)->select(["id","seo_description","seo_keywords","image","name"])->first();
+
+        $seo = [
+            "seo_title" => $category->name ?? "",
+            "seo_description" => $category->seo_description ?? "",
+            "seo_keywords" => $category->seo_keywords ?? "",
+            "seo_image" => $category->image ?? ""
+        ];
+
+        return view("front.pages.products", compact("products", "sizes", "colors", "max_price", "seo"));
     }
 
     public function getSizesOrColors($column, $category_id = null)

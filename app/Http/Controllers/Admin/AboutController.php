@@ -28,6 +28,7 @@ class AboutController extends Controller
         $result = $about->update([
             "title" => $request["title"],
             "content" => $request["content"] ?? "",
+            "keywords" => $request["keywords"] ?? "",
             "image" => $imageName ?? $about->image,
             "channel" => $request["channel"] ?? "",
         ]);

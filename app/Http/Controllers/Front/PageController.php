@@ -17,7 +17,13 @@ class PageController extends Controller
     {
         $about = About::all()->first();
         $services = Service::where("status", "=", 1)->get();
-        return view("front.pages.about", compact("about", "services"));
+        $seo = [
+            "seo_title" => $about->title,
+            "seo_description" => $about->content,
+            "seo_keywords" => $about->keywords,
+            "seo_image" => $about->image
+        ];
+        return view("front.pages.about", compact("about", "services", "seo"));
     }
 
     public function contact(Request $request)

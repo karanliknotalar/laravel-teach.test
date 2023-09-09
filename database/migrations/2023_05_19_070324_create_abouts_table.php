@@ -16,6 +16,7 @@ return new class extends Migration {
             $table->longText("content")->nullable();
             $table->string("image")->nullable();
             $table->string("channel")->nullable();
+            $table->string("keywords")->nullable();
             $table->timestamps();
         });
     }

@@ -18,19 +18,19 @@
             </div>
             <div class="col-md-6 col-lg-6">
                 <div class="block-5 mb-5">
-                    @if(isset($site_contact_setting))
+                    @if(isset($site_settings))
                         <h3 class="footer-heading mb-4">İletişim</h3>
                         <ul class="list-unstyled">
-                            @if(isset($site_contact_setting['address']))
-                                <li class="address">{!! $site_contact_setting['address'] ?? "" !!}</li>
+                            @if(isset($site_settings['address']))
+                                <li class="address">{!! $site_settings['address'] !!}</li>
                             @endif
-                            @if(isset($site_contact_setting['phone']))
+                            @if(isset($site_settings['phone']))
                                 <li class="phone">
-                                    <a href="tel://{{ $site_contact_setting['phone'] ?? ""}}">{{ $site_contact_setting['phone'] ?? "" }}</a>
+                                    <a href="tel://{{ $site_settings['phone'] }}">{{ $site_settings['phone'] }}</a>
                                 </li>
                             @endif
-                            @if(isset($site_contact_setting['email']))
-                                <li class="email">{{ $site_contact_setting['email'] }}</li>
+                            @if(isset($site_settings['email']))
+                                <li class="email">{{ $site_settings['email'] }}</li>
                             @endif
                         </ul>
                     @endif

@@ -30,5 +30,30 @@ class SiteSettingSeeder extends Seeder
             "content" => "blablabla@blablana.com",
             "type"=> "email"
         ]);
+        SiteSetting::create([
+            "name" => "seo_image",
+            "content" => "images/settings/image_1694246690.jpg",
+            "type"=> "image"
+        ]);
+        SiteSetting::create([
+            "name" => "seo_description",
+            "content" => "Uzun Açıklama",
+            "type"=> "text"
+        ]);
+        SiteSetting::create([
+            "name" => "seo_title",
+            "content" => "Site başlığı",
+            "type"=> "text"
+        ]);
+        SiteSetting::create([
+            "name" => "twitter_site",
+            "content" => "@blablacom",
+            "type"=> "text"
+        ]);
+        SiteSetting::create([
+            "name" => "twitter_author",
+            "content" => "@ahmetturan",
+            "type"=> "text"
+        ]);
     }
 }

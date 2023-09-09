@@ -82,21 +82,21 @@
                     </form>
                 </div>
                 <div class="col-md-5 ml-auto">
-                    @if(isset($site_contact_setting))
-                        @if(isset($site_contact_setting['address']))
+                    @if(isset($site_settings))
+                        @if(isset($site_settings['address']))
                             <x-front.helpers.contact-detail
                                 :name="'Adres'"
-                                :content="$site_contact_setting['address']"/>
+                                :content="$site_settings['address']"/>
                         @endif
-                        @if(isset($site_contact_setting['email']))
+                        @if(isset($site_settings['email']))
                             <x-front.helpers.contact-detail
                                 :name="'Email'"
-                                :content="$site_contact_setting['email']"/>
+                                :content="$site_settings['email']"/>
                         @endif
-                        @if(isset($site_contact_setting['phone']))
+                        @if(isset($site_settings['phone']))
                             <x-front.helpers.contact-detail
                                 :name="'Telefon'"
-                                :content="$site_contact_setting['phone']"/>
+                                :content="$site_settings['phone']"/>
                         @endif
                     @endif
                 </div>

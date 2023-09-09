@@ -29,6 +29,11 @@
                     :title="'İçerik'"/>
 
                 <x-admin.helpers.input-text
+                    :name="'keywords'"
+                    :value="$about->keywords ?? ''"
+                    :title="'Meta Anahtar Kelimeler'"/>
+
+                <x-admin.helpers.input-text
                     :name="'channel'"
                     :value="$about->channel ?? ''"
                     :title="'Tanıtım Video Linki'"/>

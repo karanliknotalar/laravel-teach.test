@@ -27,15 +27,15 @@ class AppServiceProvider extends ServiceProvider
          * Global Sayfa verilerini Db sen çekiyoruz.
          */
         $categories = null;
-        $site_contact_setting = null;
+        $site_settings = null;
 
         if (Schema::hasTable('categories'))
             $categories = Category::where("status", "=", 1)->withCount("items")->with("sub_categories")->get();
 
         if (Schema::hasTable('site_settings'))
-            $site_contact_setting = SiteSetting::all()->pluck("content", "name")->toArray();
+            $site_settings = SiteSetting::all()->pluck("content", "name")->toArray();
 
-        view()->share(compact("categories", "site_contact_setting"));
+        view()->share(compact("categories", "site_settings"));
         /**
          *
          */

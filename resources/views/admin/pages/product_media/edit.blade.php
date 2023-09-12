@@ -112,18 +112,7 @@
 
 @section("js")
     <script src="https://unpkg.com/dropzone@5/dist/min/dropzone.min.js"></script>
-    <script src="{{ $asset }}vendor/jquery-toast-plugin/jquery.toast.min.js"></script>
-    <script>
-        function showToast(message, icon, timeout) {
-            $.toast({
-                text: message,
-                icon: icon,
-                allowToastClose: false,
-                hideAfter: timeout,
-                position: 'top-right',
-            });
-        }
-    </script>
+    <x-admin.jquery-toast.jquery-toast-js-show/>
     <script>
         Dropzone.autoDiscover = false;
         new Dropzone("#ImageUp", {
@@ -147,6 +136,7 @@
             },
         });
     </script>
+
     <script src=" {{ asset("sweetalert2/sweetalert2.min.js") }} "></script>
     <script>
         <!-- Delete Slider js -->
@@ -169,6 +159,10 @@
 
 
         $(".btnDelete").on("click", function (p) {
+            const btn = $(this);
+            const id = btn.closest(".row").data("id");
+            const image = btn.data("img");
+
             swal.fire(swal_opt).then((result) => {
                 if (result.isConfirmed) {
                     $.ajax({
@@ -179,7 +173,7 @@
                             if (response.result) {
                                 showToast(response.message, "success", 1200);
                                 $(".img_count").text(response.img_count);
-                                btn.closest(".img-data").remove();
+                                btn.closest("div.image-container").remove();
                             } else {
                                 swal.fire(response.message, '', 'error');
                             }

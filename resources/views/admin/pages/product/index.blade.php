@@ -9,7 +9,7 @@
 @section("content")
 
     <x-admin.helpers.page-title-box
-        :title="'Products'"/>
+        :title="'Ürünler'"/>
 
     <x-admin.datatable.layout.datatable-items
         :add-new-route='route("product.create")'>
@@ -71,7 +71,7 @@
                                href="{{ route("product-quantity.show", ["product_quantity" => $productId]) }}">
                                 <x-admin.helpers.button
                                     :over-text="true"
-                                    :message="'Ürün stoklarını düzenle'"
+                                    :message="'Ürün resim ve stoklarını düzenle'"
                                     :class="'btn btn-warning p-1'">
                                     <x-slot:text>
                                         <i class="mdi mdi-stocking"></i>

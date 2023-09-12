@@ -2,6 +2,7 @@
 
 @section("css")
     <link rel="stylesheet" href="{{ asset('/') }}jquery-toast/jquery.toast.min.css">
+    <link rel="stylesheet" href="https://mdbcdn.b-cdn.net/wp-content/themes/mdbootstrap4/docs-app/css/dist/mdb5/plugins/standard/ecommerce-gallery.min.css">
 @endsection
 
 @section("content")
@@ -14,16 +15,16 @@
     <div class="site-section">
         <div class="container">
             <div class="row">
-                <div class="col-md-6">
-                    <img src="{{ $product->image != null ? asset($product->image) : asset("images/cloth_1.jpg") }}"
-                         alt="{{ $product->name }}" class="img-fluid">
+                <div class="col-md-6 product-gallery" id="product-gallery">
+
                 </div>
                 <div class="col-md-6 col-lg-6 my-sm-3 my-md-0">
                     <form id="cartForm">
                         @csrf
                         <input type="hidden" name="product_id" value="{{ encrypt($product->id) }}">
                         <h2 class="text-black">{{ $product->name }}</h2>
-                        <div class="mb-5"><span class="text-success small">Ürün Kodu: {{ $product->product_code }}</span></div>
+                        <div class="mb-5"><span
+                                class="text-success small">Ürün Kodu: {{ $product->product_code }}</span></div>
                         <div>{!! $product->description  ?? "" !!}</div>
 
                         <div class="form-group my-3">
@@ -55,15 +56,21 @@
                                 </div>
                             </div>
                         </div>
-                        <p><strong
+                        <p>
+                            <strong
                                 class="text-primary h4 mb-4 vat">KDV: {{ number_format(($product->low_price->price * $product->vat->VAT) / 100, 2) ?? "" }}
-                                ₺</strong></p>
-                        <p><strong
+                                ₺</strong>
+                        </p>
+                        <p>
+                            <strong
                                 class="text-primary h4 mb-4 price">Fiyat: {{ number_format($product->low_price->price, 2) ?? "" }}
-                                ₺</strong></p>
-                        <p><strong
+                                ₺</strong>
+                        </p>
+                        <p>
+                            <strong
                                 class="text-primary h4 mb-4 total">Toplam: {{ number_format(Helper::getVatIncluded($product->low_price->price, $product->vat->VAT),2) ?? "" }}
-                                ₺</strong></p>
+                                ₺</strong>
+                        </p>
                         <p><span id="addCart" class="buy-now btn btn-sm btn-primary">Sepete Ekle</span></p>
                     </form>
                 </div>
@@ -161,6 +168,7 @@
             });
         });
     </script>
+
     <script>
         $(document).ready(function () {
             let first = true;
@@ -204,11 +212,10 @@
                         'id': '{{ encrypt($product->id) }}'
                     },
                     success: function (response) {
-                        if (!response.error) {
-                            $(".price").text("Fiyat: " + response.price + " ₺")
-                            $(".vat").text("KDV: " + response.vat + " ₺")
-                            $(".total").text("Toplam: " + response.total + " ₺")
-                        }
+                        $(".price").text("Fiyat: " + response.price + " ₺")
+                        $(".vat").text("KDV: " + response.vat + " ₺")
+                        $(".total").text("Toplam: " + response.total + " ₺")
+                        $(".product-gallery").html(response.images);
                     }
                 });
             }
@@ -222,5 +229,6 @@
                 getPrice();
             });
         });
+
     </script>
 @endsection

@@ -10,7 +10,7 @@
 @section("content")
 
     <x-admin.helpers.page-title-box
-        :title="'Products'"/>
+        :title="'Ürün Stoklarını Düzenle'"/>
 
     <x-admin.datatable.layout.datatable-items
         :edit-all-route='route("product-quantity.edit", ["product_quantity" => encrypt($quantities[0]->product_id)])'>
@@ -34,6 +34,17 @@
                     <td>{{ number_format($quantity->price ?? 0, 2)}} TL</td>
                     <td class="table-action">
                         <div class="d-flex">
+                            <a class="mx-1"
+                               href="{{ route("product-images", ["product_id"=> encrypt($quantity->product_id), "color"=>$quantity->color]) }}">
+                                <x-admin.helpers.button
+                                    :over-text="true"
+                                    :message="'Ürün Resimlerini Düzenle'"
+                                    :class="'btn btn-warning p-1'">
+                                    <x-slot:text>
+                                        <i class="mdi mdi-image-album"></i>
+                                    </x-slot:text>
+                                </x-admin.helpers.button>
+                            </a>
                             <x-admin.helpers.button
                                 :over-text="true"
                                 :message="'Stoğu sil'"

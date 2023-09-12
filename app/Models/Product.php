@@ -46,4 +46,10 @@ class Product extends Model
         return $this->hasOne(ProductQuantity::class, "product_id", "id")
             ->orderBy("product_quantities.price");
     }
+
+    public function product_media(): HasOne
+    {
+        return $this->hasOne(ProductMedia::class, "product_id", "id");
+    }
+
 }

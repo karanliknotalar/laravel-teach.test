@@ -11,10 +11,22 @@ use Illuminate\Support\Str;
 
 class Helper
 {
-    public static function fileDelete($fileFullPath): void
+    public static function fileDelete($fileFullPath, $deleteEmptyParentFolders = false): void
     {
-        if (!empty($fileFullPath) && File::isFile($fileFullPath))
+        if (!empty($fileFullPath) && File::isFile($fileFullPath)){
+            $file_info = pathinfo($fileFullPath);
             File::delete($fileFullPath);
+
+            if ($deleteEmptyParentFolders){
+                // Delete All Empty Parent Folders
+                $dirname = $file_info['dirname'];
+                while ($dirname !== '.' && File::exists($dirname) && File::isEmptyDirectory($dirname) && count(File::allFiles($dirname)) === 0) {
+                    File::deleteDirectory($dirname);
+                    $file_info = pathinfo($dirname);
+                    $dirname = $file_info['dirname'];
+                }
+            }
+        }
     }
 
     public static function fileSave($file, $fileFullPath): void
@@ -23,7 +35,7 @@ class Helper
 
             $dirName = File::dirname($fileFullPath);
 
-            if (!File::exists($dirName)) File::makeDirectory($dirName);
+            if (!File::exists($dirName)) File::makeDirectory($dirName, recursive: true);
 
             $file->move($dirName, File::basename($fileFullPath));
         }

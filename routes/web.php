@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\AboutController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\ProductMediaController;
 use App\Http\Controllers\Admin\ProductQuantityController;
 use App\Http\Controllers\Admin\SliderController;
 use App\Http\Controllers\AjaxController;
@@ -97,6 +98,11 @@ Route::group(["prefix" => "admin", "middleware" => ["admin.dashboard.shared", "a
     Route::resource("contact", "Admin\ContactController")->only("index", "show", "destroy");
     Route::resource("site-settings", "Admin\SiteSettingController")->except("show");
     Route::resource("coupon", "Admin\CouponController")->except("show");
+
+    Route::get("product-images/{product_id}/{color}", [ProductMediaController::class, "images"])->name("product-images");
+    Route::post("add-image", [ProductMediaController::class, "add"])->name("add-image");
+    Route::delete("delete-image", [ProductMediaController::class, "delete"])->name("delete-image");
+    Route::post("delete-all-image", [ProductMediaController::class, "delete_all"])->name("delete-all-image");
 
 });
 

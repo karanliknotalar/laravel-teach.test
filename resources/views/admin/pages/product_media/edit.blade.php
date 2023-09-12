@@ -154,9 +154,8 @@
             showCancelButton: true,
             confirmButtonText: 'Ever, Sil',
             cancelButtonText: 'Hayır, Silme',
-            reverseButtons: false,
+            reverseButtons: true,
         }
-
 
         $(".btnDelete").on("click", function (p) {
             const btn = $(this);

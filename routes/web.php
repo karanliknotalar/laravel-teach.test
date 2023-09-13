@@ -80,7 +80,7 @@ Route::group(["prefix" => "admin", "middleware" => ["admin.dashboard.shared", "a
     Route::resource("slider", "Admin\SliderController")->except("show");
     Route::resource("product", "Admin\ProductController")->except("show");
     Route::resource("category", "Admin\CategoryController")->except("show");
-    Route::resource("product-quantity", "Admin\ProductQuantityController")->except("update", "index");
+    Route::resource("product-quantity", "Admin\ProductQuantityController")->except("update", "show");
     Route::resource("service", "Admin\ServiceController")->except("show");
     Route::resource("vat", "Admin\VatController")->except("show");
     Route::resource("order", "Admin\OrderController");

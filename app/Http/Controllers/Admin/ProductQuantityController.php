@@ -2,21 +2,34 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Helper\Helper;
 use App\Http\Requests\Admin\ProductQuantityFormRequest;
 use App\Models\Product;
+use App\Models\ProductMedia;
 use App\Models\ProductQuantity;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\DB;
 
 class ProductQuantityController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
+        $product_quantity = decrypt($request->product_quantity);
 
+        $quantities = ProductQuantity::where('product_quantities.product_id', $product_quantity)
+            ->leftJoin('product_media', function ($join) {
+                $join->on('product_quantities.product_id', '=', 'product_media.product_id')
+                    ->on('product_quantities.color', '=', 'product_media.color');
+            })
+            ->select(['product_quantities.*', DB::raw('IFNULL(product_media.images, "[]") as images')])
+            ->get();
+
+        return view("admin.pages.quantity.index", compact("quantities"));
     }
 
     /**
@@ -76,8 +89,7 @@ class ProductQuantityController extends Controller
      */
     public function show(string $id)
     {
-        $quantities = ProductQuantity::query()->where("product_id", decrypt($id))->with("product:id,name")->get();
-        return view("admin.pages.quantity.index", compact("quantities"));
+
     }
 
     /**
@@ -103,18 +115,36 @@ class ProductQuantityController extends Controller
     public function destroy(string $id)
     {
         $error = null;
-        $result = false;
+        $result = null;
 
         try {
             $id = decrypt($id);
-            $result = ProductQuantity::where("id", $id)->firstOrFail()->delete();
+            $product_quantity = ProductQuantity::where("id", $id)->first();
+
+            if ($product_quantity){
+
+                $similar_rows_count = ProductQuantity::where('product_id', $product_quantity->product_id)
+                    ->where('color', $product_quantity->color)
+                    ->count();
+                if ($similar_rows_count == 1){
+                    $product_media = ProductMedia::where(["product_id" => $product_quantity->product_id, "color" => $product_quantity->color])->first();
+
+                    $img_arr = json_decode($product_media->images, true);
+
+                    foreach ($img_arr as $img){
+                        Helper::fileDelete($img, true);
+                    }
+
+                    $product_media->delete();
+                }
+                $result = $product_quantity->delete();
+            }
 
         } catch (Exception $e) {
-
             $error = $e->getMessage();
-        } finally {
-
-            return response(["result" => (bool)$result, "error" => $error]);
+        }
+        finally {
+            return response(["result" => (bool)$result, "error" => "error"]);
         }
     }
 }

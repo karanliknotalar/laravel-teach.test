@@ -41,7 +41,7 @@
                                     :message="'Ürün Resimlerini Düzenle'"
                                     :class="'btn btn-warning p-1'">
                                     <x-slot:text>
-                                        <i class="mdi mdi-image-album"></i>
+                                        {{ count(json_decode($quantity->images)) }}x<i class="mdi mdi-image-album"></i>
                                     </x-slot:text>
                                 </x-admin.helpers.button>
                             </a>

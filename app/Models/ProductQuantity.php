@@ -27,4 +27,5 @@ class ProductQuantity extends Model
     {
         return $this->hasOne(ProductMedia::class, "product_id", "product_id");
     }
+
 }

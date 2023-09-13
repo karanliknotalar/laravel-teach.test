@@ -19,15 +19,19 @@ class ProductQuantityController extends Controller
      */
     public function index(Request $request)
     {
-        $product_quantity = decrypt($request->product_quantity);
+        $product_id = decrypt($request->product_id);
 
-        $quantities = ProductQuantity::where('product_quantities.product_id', $product_quantity)
+        $quantities = ProductQuantity::where('product_quantities.product_id', $product_id)
             ->leftJoin('product_media', function ($join) {
                 $join->on('product_quantities.product_id', '=', 'product_media.product_id')
                     ->on('product_quantities.color', '=', 'product_media.color');
             })
             ->select(['product_quantities.*', DB::raw('IFNULL(product_media.images, "[]") as images')])
             ->get();
+        if (count($quantities) == 0){
+
+            return view("admin.pages.quantity.edit", compact("product_id"));
+        }
 
         return view("admin.pages.quantity.index", compact("quantities"));
     }
@@ -97,8 +101,9 @@ class ProductQuantityController extends Controller
      */
     public function edit(string $id)
     {
-        $quantities = ProductQuantity::query()->where("product_id", decrypt($id))->with("product:id,name")->get();
-        return view("admin.pages.quantity.edit", compact("quantities"));
+        $product_id = decrypt($id);
+        $quantities = ProductQuantity::query()->where("product_id", $product_id)->with("product:id,name")->get();
+        return view("admin.pages.quantity.edit", compact("quantities","product_id"));
     }
 
     /**

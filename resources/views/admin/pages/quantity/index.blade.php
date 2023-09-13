@@ -10,7 +10,7 @@
 @section("content")
 
     <x-admin.helpers.page-title-box
-        :title="'Ürün Stoklarını Düzenle'"/>
+        :title="'Ürün Stokları ve Resimler'"/>
 
     <x-admin.datatable.layout.datatable-items
         :edit-all-route='route("product-quantity.edit", ["product_quantity" => encrypt($quantities[0]->product_id)])'>

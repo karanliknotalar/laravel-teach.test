@@ -11,9 +11,8 @@
 
         <x-admin.helpers.layout.edit-page-layout
             :model="$quantities ?? null"
-            :page-title="'Ürün Stokları'">
+            :page-title="'Ürün Stoklarını'">
             <x-slot name="contents">
-
                 <h4 class="page-title">{{ $imageElementTitle ?? "Ürün Detayları"}}
                     <x-admin.helpers.button
                         :class="'mx-2 px-1 py-1 btn btn-success'"
@@ -24,11 +23,8 @@
                         </x-slot:text>
                     </x-admin.helpers.button>
                 </h4>
-
+                <input type="hidden" value="{{ encrypt($product_id) }}" name="product_id">
                 @if(isset($quantities))
-                    <input type="hidden"
-                           value="{{ isset($quantities[0]->product_id) ? encrypt($quantities[0]->product_id) : "" }}"
-                           name="product_id">
                     @foreach($quantities as $quantity)
                         <div class="d-flex productDetail">
                             <x-admin.helpers.input-text
@@ -70,6 +66,46 @@
                             </div>
                         </div>
                     @endforeach
+                @else
+                    <div class="d-flex productDetail">
+                        <x-admin.helpers.input-text
+                            :main-class="'mx-1 mb-2'"
+                            :name="'size[]'"
+                            :value="''"
+                            :title="'Beden'"
+                            :input-type="'numeric'"/>
+
+                        <x-admin.helpers.input-text
+                            :main-class="'mx-1 mb-2'"
+                            :name="'color[]'"
+                            :value="''"
+                            :title="'Renk'"/>
+
+                        <x-admin.helpers.input-text
+                            :main-class="'mx-1 mb-2'"
+                            :name="'price[]'"
+                            :value="'0.00'"
+                            :title="'Fiyat'"
+                            :input-type="'numeric'"/>
+
+                        <x-admin.helpers.input-text
+                            :main-class="'mx-1 mb-2'"
+                            :name="'quantity[]'"
+                            :value="'0'"
+                            :title="'Stok'"
+                            :input-type="'numeric'"/>
+
+                        <div class="px-1 py-1">
+                            <x-admin.helpers.button
+                                :class="'btn btn-danger p-1 mx-1 btnRemove d-none'"
+                                :message="'Sil'"
+                                :over-text="true">
+                                <x-slot:text>
+                                    <i class="mdi mdi-delete"></i>
+                                </x-slot:text>
+                            </x-admin.helpers.button>
+                        </div>
+                    </div>
                 @endif
 
                 <x-admin.helpers.button
@@ -90,7 +126,7 @@
             product.last().find("button").removeClass("d-none")
         });
         $(document).on("click", ".btnRemove", function () {
-            if ($(".productDetail").length > {{ $quantities->count() }})
+            if ($(".productDetail").length > 1)
                 $(this).parent().parent().remove();
         });
     </script>

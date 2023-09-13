@@ -68,7 +68,7 @@
                                 </x-admin.helpers.button>
                             </a>
                             <a class="mx-1"
-                               href="{{ route("product-quantity.index", ["product_quantity" => $productId]) }}">
+                               href="{{ route("product-quantity.index", ["product_id" => $productId]) }}">
                                 <x-admin.helpers.button
                                     :over-text="true"
                                     :message="'Ürün resim ve stoklarını düzenle'"

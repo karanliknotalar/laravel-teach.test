@@ -131,16 +131,20 @@ class ProductQuantityController extends Controller
                 $similar_rows_count = ProductQuantity::where('product_id', $product_quantity->product_id)
                     ->where('color', $product_quantity->color)
                     ->count();
+
                 if ($similar_rows_count == 1){
+
                     $product_media = ProductMedia::where(["product_id" => $product_quantity->product_id, "color" => $product_quantity->color])->first();
 
-                    $img_arr = json_decode($product_media->images, true);
+                    if ($product_media){
+                        $img_arr = json_decode($product_media->images, true);
 
-                    foreach ($img_arr as $img){
-                        Helper::fileDelete($img, true);
+                        foreach ($img_arr as $img){
+                            Helper::fileDelete($img, true);
+                        }
+
+                        $product_media->delete();
                     }
-
-                    $product_media->delete();
                 }
                 $result = $product_quantity->delete();
             }

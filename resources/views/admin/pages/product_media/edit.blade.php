@@ -64,9 +64,11 @@
             <form action="{{ route('delete-all-image') }}" method="post">
                 @csrf
                 <input type="hidden" name="product_media_id" value="{{ encrypt($product->product_media->id) }}">
+
                 <button class="btn btn-danger btnAllDelete" type="button">
                     <i class="mdi mdi-image-album"></i>Tümünü Sil
                 </button>
+                <a href="{{ URL::previous() }}" class="btn btn-soft-info">Geri Git</a>
             </form>
         </div>
     @endif

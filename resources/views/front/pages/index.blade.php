@@ -113,7 +113,7 @@
                                         <div class="block-4-text p-4">
                                             <h3><a href="{{ route("page.product", ["slug_name" => $featured_product->slug_name]) }}">{{ $featured_product->name ?? "" }}</a></h3>
                                             <p class="mb-0">{{ $featured_product->sort_description ?? ""}}</p>
-                                            <p class="text-primary font-weight-bold">{{ number_format($featured_product->low_price->price, 2) }} TL</p>
+                                            <p class="text-primary font-weight-bold">{{ number_format($featured_product->low_price_product->price, 2) }} TL</p>
                                         </div>
                                     </div>
                                 </div>

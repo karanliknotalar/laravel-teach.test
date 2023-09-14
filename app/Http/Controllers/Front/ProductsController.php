@@ -57,8 +57,12 @@ class ProductsController extends Controller
 //            })
 //            ->paginate(12)
 //            ->appends($request->query());
+
         $products = Product::where("status", "=", 1)
-            ->join("product_quantities", "products.id", "product_quantities.product_id")
+            ->join("product_quantities", function ($join) {
+                $join->on("products.id", "=", "product_quantities.product_id")
+                    ->whereRaw("product_quantities.id = (SELECT id FROM product_quantities WHERE product_id = products.id ORDER BY price ASC LIMIT 1)");
+            })
             ->select([
                 "products.*",
                 "product_quantities.id as product_quantities_id",
@@ -101,7 +105,7 @@ class ProductsController extends Controller
 
         $max_price = $this->getMinMax(false);
 
-        $colors = $this->getSizesOrColors($request,"color", $category_id);
+        $colors = $this->getSizesOrColors($request, "color", $category_id);
 
         $category = Category::where("id", $category_id)->select(["id", "seo_description", "seo_keywords", "image", "name"])->first();
 

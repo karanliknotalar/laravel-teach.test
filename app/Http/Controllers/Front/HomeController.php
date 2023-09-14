@@ -17,7 +17,7 @@ class HomeController extends Controller
         $services = Service::where("status", "=", 1)->get();
         $featured_products = Product::where("status", 1)
             ->where("featured", 1)
-            ->with("low_price:product_id,price")
+            ->with("low_price_product:product_id,price")
             ->limit(10)
             ->inRandomOrder()
             ->get();

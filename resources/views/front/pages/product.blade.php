@@ -30,7 +30,7 @@
                         <div class="form-group my-3">
                             <select class="form-control" id="size" name="size">
                                 @foreach($product->product_size as $product_size)
-                                    <option {{ $product_size->size == $product->low_price->size ? "selected" : "" }}
+                                    <option {{ $product_size->size == $product->low_price_product->size ? "selected" : "" }}
                                             value="{{ $product_size->size }}">
                                         {{ $product_size->size }}
                                     </option>
@@ -58,17 +58,17 @@
                         </div>
                         <p>
                             <strong
-                                class="text-primary h4 mb-4 vat">KDV: {{ number_format(($product->low_price->price * $product->vat->VAT) / 100, 2) ?? "" }}
+                                class="text-primary h4 mb-4 vat">KDV: {{ number_format(($product->low_price_product->price * $product->vat->VAT) / 100, 2) ?? "" }}
                                 ₺</strong>
                         </p>
                         <p>
                             <strong
-                                class="text-primary h4 mb-4 price">Fiyat: {{ number_format($product->low_price->price, 2) ?? "" }}
+                                class="text-primary h4 mb-4 price">Fiyat: {{ number_format($product->low_price_product->price, 2) ?? "" }}
                                 ₺</strong>
                         </p>
                         <p>
                             <strong
-                                class="text-primary h4 mb-4 total">Toplam: {{ number_format(Helper::getVatIncluded($product->low_price->price, $product->vat->VAT),2) ?? "" }}
+                                class="text-primary h4 mb-4 total">Toplam: {{ number_format(Helper::getVatIncluded($product->low_price_product->price, $product->vat->VAT),2) ?? "" }}
                                 ₺</strong>
                         </p>
                         <p><span id="addCart" class="buy-now btn btn-sm btn-primary">Sepete Ekle</span></p>
@@ -104,7 +104,7 @@
                                                 <a href="{{ route("page.product", [$f_product->id, $f_product->slug_name]) }}">{{ $f_product->name }}</a>
                                             </h3>
                                             <p class="mb-0">{{ $f_product->sort_description ?? "" }}</p>
-                                            <p class="text-primary font-weight-bold">{{ number_format($f_product->low_price->price, 2) }}
+                                            <p class="text-primary font-weight-bold">{{ number_format($f_product->low_price_product->price, 2) }}
                                                 TL</p>
                                         </div>
                                     </div>
@@ -192,8 +192,8 @@
                                     value: p.color,
                                     text: p.color
                                 }));
-                                color.find('option[value="{{ $product->low_price->color }}"]')
-                                    .prop('selected', first && (p.color === "{{ $product->low_price->color }}"));
+                                color.find('option[value="{{ $product->low_price_product->color }}"]')
+                                    .prop('selected', first && (p.color === "{{ $product->low_price_product->color }}"));
                             });
                             getPrice();
                         }

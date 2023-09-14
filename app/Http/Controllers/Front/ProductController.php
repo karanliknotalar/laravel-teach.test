@@ -16,7 +16,7 @@ class ProductController extends Controller
     {
 
         $product = Product::with("product_size:product_id,size")
-            ->with("low_price:product_id,size,color,price")
+            ->with("low_price_product:product_id,size,color,price")
             ->with("vat:id,VAT")
             ->with(["product_media" => function ($query) {
                 $query->where('color', function ($query) {
@@ -30,7 +30,7 @@ class ProductController extends Controller
             ->where("slug_name", "=", $slug_name)
             ->firstOrFail();
 
-        $f_products = Product::query()->with("low_price:product_id,price")
+        $f_products = Product::query()->with("low_price_product:product_id,price")
             ->with("vat:id,VAT")
             ->where("status", "=", 1)
             ->where("category_id", "=", $product->category_id)

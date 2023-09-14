@@ -22,42 +22,6 @@ class ProductsController extends Controller
             }
         }
 
-//        $products = Product::where("status", "=", 1)
-//            ->join("product_quantities", "products.id", "product_quantities.product_id")
-//            ->select([
-//                "products.*",
-//                "product_quantities.id as product_quantities_id",
-//                "product_quantities.price",
-//                "product_quantities.size",
-//                "product_quantities.color",
-//            ])
-//            ->where(function ($query) use ($request) {
-//                if (isset($request->size))
-//                    $query->whereIn("size", explode(",", $request->size));
-//                if (isset($request->color))
-//                    $query->whereIn("color", explode(",", $request->color));
-//                if (isset($request->min) || isset($request->max))
-//                    $query->whereBetween("price", [$request->min ?? 0, $request->max ?? $this->getMinMax(false)]);
-//                return $query;
-//            })
-//            ->where('product_quantities.price', function ($query) {
-//                $query->select('price')
-//                    ->from('product_quantities')
-//                    ->whereColumn('product_id', 'products.id')
-//                    ->orderBy('price')
-//                    ->limit(1);
-//            })
-//            ->with("category:id,name,slug_name")
-//            ->with("vat:id,VAT")
-//            ->orderBy($request->order ?? "updated_at", $request->director ?? "desc")
-//            ->whereHas("category", function ($query) use ($category_id) {
-//                if (isset($category_id))
-//                    $query->where("category_id", $category_id)->orWhere("parent_id", $category_id);
-//                return $query;
-//            })
-//            ->paginate(12)
-//            ->appends($request->query());
-
         $products = Product::where("status", "=", 1)
             ->join("product_quantities", function ($join) {
                 $join->on("products.id", "=", "product_quantities.product_id")

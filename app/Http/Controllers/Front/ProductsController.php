@@ -67,7 +67,7 @@ class ProductsController extends Controller
 
         $sizes = $this->getSizesOrColors($request, "size", $category_id);
 
-        $max_price = $this->getMinMax(false);
+        $min_max_price = ["min"=>$this->getMinMax(true), "max"=>$this->getMinMax(false)];
 
         $colors = $this->getSizesOrColors($request, "color", $category_id);
 
@@ -80,7 +80,7 @@ class ProductsController extends Controller
             "seo_image" => $category->image ?? ""
         ];
 
-        return view("front.pages.products", compact("products", "sizes", "colors", "max_price", "seo"));
+        return view("front.pages.products", compact("products", "sizes", "colors", "seo", "min_max_price"));
     }
 
     public function getSizesOrColors($request, $column, $category_id = null)

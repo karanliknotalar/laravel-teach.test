@@ -145,10 +145,10 @@
                         </div>
                         <div class="row">
                             <div class="col-5">
-                                <button class="btn btn-primary btnReset p-1" onclick="location.href = '{{ URL::current() }}'">Sıfırla</button>
+                                <button class="btn btn-warning btnReset" onclick="location.href = '{{ URL::current() }}'">Sıfırla</button>
                             </div>
                             <div class="col-6">
-                                <button class="btn btn-primary btnFilter p-1">Filtrele</button>
+                                <button class="btn btn-group btnFilter">Filtrele</button>
                             </div>
                         </div>
                     </div>
@@ -193,14 +193,14 @@
 @section("js")
     <script>
         const min_price = {{ $products->min("price") ?? 0 }};
-        const max_price = {{ $products->max("price") ?? $max_price}};
+        const max_price = {{ $products->max("price") ?? $min_max_price["max"]}};
 
         (function () {
             const range = $("#slider-range");
             range.slider({
                 range: true,
-                min: 0,
-                max: {{ $max_price ?? 0 }},
+                min: {{ $min_max_price["min"] ?? 0 }},
+                max: {{ $min_max_price["max"] ?? 0 }},
                 values: [min_price ?? 0, max_price ?? 0],
                 slide: function (event, ui) {
                     $("#amount").val(ui.values[0] + " ₺ - " + ui.values[1] + " ₺");

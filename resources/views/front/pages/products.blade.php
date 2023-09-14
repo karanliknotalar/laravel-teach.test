@@ -143,7 +143,14 @@
                                 @endforeach
                             @endif
                         </div>
-                        <button class="btn btn-primary btnFilter">Filtrele</button>
+                        <div class="row">
+                            <div class="col-5">
+                                <button class="btn btn-primary btnReset p-1" onclick="location.href = '{{ URL::current() }}'">Sıfırla</button>
+                            </div>
+                            <div class="col-6">
+                                <button class="btn btn-primary btnFilter p-1">Filtrele</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

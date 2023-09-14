@@ -17,11 +17,46 @@ class ProductsController extends Controller
 
         foreach ($request->query() as $key => $value) {
 
-            if (empty($value)){
+            if (empty($value)) {
                 unset($request[$key]);
             }
         }
 
+//        $products = Product::where("status", "=", 1)
+//            ->join("product_quantities", "products.id", "product_quantities.product_id")
+//            ->select([
+//                "products.*",
+//                "product_quantities.id as product_quantities_id",
+//                "product_quantities.price",
+//                "product_quantities.size",
+//                "product_quantities.color",
+//            ])
+//            ->where(function ($query) use ($request) {
+//                if (isset($request->size))
+//                    $query->whereIn("size", explode(",", $request->size));
+//                if (isset($request->color))
+//                    $query->whereIn("color", explode(",", $request->color));
+//                if (isset($request->min) || isset($request->max))
+//                    $query->whereBetween("price", [$request->min ?? 0, $request->max ?? $this->getMinMax(false)]);
+//                return $query;
+//            })
+//            ->where('product_quantities.price', function ($query) {
+//                $query->select('price')
+//                    ->from('product_quantities')
+//                    ->whereColumn('product_id', 'products.id')
+//                    ->orderBy('price')
+//                    ->limit(1);
+//            })
+//            ->with("category:id,name,slug_name")
+//            ->with("vat:id,VAT")
+//            ->orderBy($request->order ?? "updated_at", $request->director ?? "desc")
+//            ->whereHas("category", function ($query) use ($category_id) {
+//                if (isset($category_id))
+//                    $query->where("category_id", $category_id)->orWhere("parent_id", $category_id);
+//                return $query;
+//            })
+//            ->paginate(12)
+//            ->appends($request->query());
         $products = Product::where("status", "=", 1)
             ->join("product_quantities", "products.id", "product_quantities.product_id")
             ->select([
@@ -41,11 +76,9 @@ class ProductsController extends Controller
                 return $query;
             })
             ->where('product_quantities.price', function ($query) {
-                $query->select('price')
+                $query->selectRaw('MIN(price)')
                     ->from('product_quantities')
-                    ->whereColumn('product_id', 'products.id')
-                    ->orderBy('price')
-                    ->limit(1);
+                    ->whereColumn('product_id', 'products.id');
             })
             ->with("category:id,name,slug_name")
             ->with("vat:id,VAT")
@@ -58,18 +91,19 @@ class ProductsController extends Controller
             ->paginate(12)
             ->appends($request->query());
 
+//        return $products;
 //        if ($request->ajax()){
 //            $view = view("front.ajax.products-list", compact("products"))->render();
 //            return response(["data"=> $view]);
 //        }
 
-        $sizes = $this->getSizesOrColors("size", $category_id);
+        $sizes = $this->getSizesOrColors($request, "size", $category_id);
 
         $max_price = $this->getMinMax(false);
 
-        $colors = $this->getSizesOrColors("color", $category_id);
+        $colors = $this->getSizesOrColors($request,"color", $category_id);
 
-        $category = Category::where("id", $category_id)->select(["id","seo_description","seo_keywords","image","name"])->first();
+        $category = Category::where("id", $category_id)->select(["id", "seo_description", "seo_keywords", "image", "name"])->first();
 
         $seo = [
             "seo_title" => $category->name ?? "",
@@ -81,7 +115,7 @@ class ProductsController extends Controller
         return view("front.pages.products", compact("products", "sizes", "colors", "max_price", "seo"));
     }
 
-    public function getSizesOrColors($column, $category_id = null)
+    public function getSizesOrColors($request, $column, $category_id = null)
     {
         return ProductQuantity::join("products", "product_quantities.product_id", "products.id")
             ->where("products.status", "=", 1)
@@ -95,6 +129,15 @@ class ProductsController extends Controller
                     $query->select('categories.id')
                         ->from('categories');
                 }
+            })
+            ->where(function ($query) use ($request) {
+                if (isset($request->size))
+                    $query->whereIn("size", explode(",", $request->size));
+                if (isset($request->color))
+                    $query->whereIn("color", explode(",", $request->color));
+                if (isset($request->min) || isset($request->max))
+                    $query->whereBetween("price", [$request->min ?? 0, $request->max ?? $this->getMinMax(false)]);
+                return $query;
             })
             ->select([
                 "product_quantities.{$column}",

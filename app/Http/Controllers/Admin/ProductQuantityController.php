@@ -22,11 +22,11 @@ class ProductQuantityController extends Controller
         $product_id = decrypt($request->product_id);
 
         $quantities = ProductQuantity::where('product_quantities.product_id', $product_id)
-            ->leftJoin('product_media', function ($join) {
-                $join->on('product_quantities.product_id', '=', 'product_media.product_id')
-                    ->on('product_quantities.color', '=', 'product_media.color');
+            ->leftJoin('product_medias', function ($join) {
+                $join->on('product_quantities.product_id', '=', 'product_medias.product_id')
+                    ->on('product_quantities.color', '=', 'product_medias.color');
             })
-            ->select(['product_quantities.*', DB::raw('IFNULL(product_media.images, "[]") as images')])
+            ->select(['product_quantities.*', DB::raw('IFNULL(product_medias.images, "[]") as images')])
             ->get();
         if (count($quantities) == 0){
 

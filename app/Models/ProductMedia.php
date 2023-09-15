@@ -10,14 +10,17 @@ class ProductMedia extends Model
 {
     use HasFactory;
 
+    protected $table = 'product_medias';
+
     protected $fillable = [
         "product_id",
         "color",
         "images",
+        "showcase_id"
     ];
 
     public function product (): HasOne
     {
-       return $this->hasOne(Product::class, "id", "product_id");
+        return $this->hasOne(Product::class, "id", "product_id");
     }
 }

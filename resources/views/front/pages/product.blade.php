@@ -58,17 +58,17 @@
                         </div>
                         <p>
                             <strong
-                                class="text-primary h4 mb-4 vat">KDV: {{ number_format(($product->low_price_product->price * $product->vat->VAT) / 100, 2) ?? "" }}
+                                class="text-primary h4 mb-4 vat">KDV: {{ number_format((($product->low_price_product->price ?? 0) * $product->vat->VAT) / 100, 2) ?? "" }}
                                 ₺</strong>
                         </p>
                         <p>
                             <strong
-                                class="text-primary h4 mb-4 price">Fiyat: {{ number_format($product->low_price_product->price, 2) ?? "" }}
+                                class="text-primary h4 mb-4 price">Fiyat: {{ number_format(($product->low_price_product->price ?? 0), 2) ?? "" }}
                                 ₺</strong>
                         </p>
                         <p>
                             <strong
-                                class="text-primary h4 mb-4 total">Toplam: {{ number_format(Helper::getVatIncluded($product->low_price_product->price, $product->vat->VAT),2) ?? "" }}
+                                class="text-primary h4 mb-4 total">Toplam: {{ number_format(Helper::getVatIncluded(($product->low_price_product->price ?? 0), $product->vat->VAT),2) ?? "" }}
                                 ₺</strong>
                         </p>
                         <p><span id="addCart" class="buy-now btn btn-sm btn-primary">Sepete Ekle</span></p>
@@ -192,8 +192,8 @@
                                     value: p.color,
                                     text: p.color
                                 }));
-                                color.find('option[value="{{ $product->low_price_product->color }}"]')
-                                    .prop('selected', first && (p.color === "{{ $product->low_price_product->color }}"));
+                                color.find('option[value="{{ $product->low_price_product ? $product->low_price_product->color : "" }}"]')
+                                    .prop('selected', first && (p.color === "{{ $product->low_price_product ? $product->low_price_product->color : "" }}"));
                             });
                             getPrice();
                         }

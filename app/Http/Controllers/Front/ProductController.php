@@ -22,19 +22,22 @@ class ProductController extends Controller
                 $query->where('color', function ($query) {
                     $query->select('color')
                         ->from('product_quantities')
-                        ->whereColumn('product_id', 'product_media.product_id')
+                        ->whereColumn('product_id', 'product_medias.product_id')
                         ->limit(1);
                 })->select(["product_id", "images"]);
             }])
             ->where("status", "=", 1)
             ->where("slug_name", "=", $slug_name)
-            ->firstOrFail();
+            ->first();
 
-        $f_products = Product::query()->with("low_price_product:product_id,price")
+        $f_products = Product::where("status", "=", 1)
+            ->with("low_price_product:product_id,price")
             ->with("vat:id,VAT")
-            ->where("status", "=", 1)
             ->where("category_id", "=", $product->category_id)
             ->where("id", "!=", $product->id)
+            ->whereHas('low_price_product', function ($query) {
+                $query->whereNotNull('price');
+            })
             ->inRandomOrder()
             ->limit(10)
             ->get();

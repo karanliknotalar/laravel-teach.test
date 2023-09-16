@@ -44,7 +44,8 @@
                                     @php
                                         $countVisible = (session()->has("cart") and count(session("cart")) > 0);
                                     @endphp
-                                    <span class="count {{ $countVisible ? "d-block" : "d-none" }}" id="cart_count">{{ $countVisible ? count(session("cart")) : "" }}</span>
+                                    <span class="count {{ $countVisible ? "d-block" : "d-none" }}"
+                                          id="cart_count">{{ $countVisible ? count(session("cart")) : "" }}</span>
                                 </a>
                             </li>
                             <li class="d-inline-block d-md-none ml-md-0">

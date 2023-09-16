@@ -45,7 +45,6 @@ class ProductsController extends Controller
                     $query->where("name", 'LIKE', '%' . $request->search . '%');
                 return $query;
             })
-
             ->where('product_quantities.price', function ($query) {
                 $query->selectRaw('MIN(price)')
                     ->from('product_quantities')
@@ -109,6 +108,8 @@ class ProductsController extends Controller
                     $query->whereIn("color", explode(",", $request->color));
                 if (isset($request->min) || isset($request->max))
                     $query->whereBetween("price", [$request->min ?? 0, $request->max ?? $this->getMinMax(false)]);
+                if (isset($request->search))
+                    $query->where("name", 'LIKE', '%' . $request->search . '%');
                 return $query;
             })
             ->select([

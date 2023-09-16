@@ -4,7 +4,7 @@
             <div class="row align-items-center">
 
                 <div class="col-6 col-md-4 order-2 order-md-1 site-search-icon text-left">
-                    <form action="{{ route("page.products") }}" class="site-block-top-search">
+                    <form action="{{ route("page.products") }}" class="site-block-top-search" method="get">
                         <span class="icon icon-search2"></span>
                         <input type="text" class="form-control border-0" name="search" placeholder="search">
                     </form>

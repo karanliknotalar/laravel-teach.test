@@ -148,12 +148,12 @@
                         </div>
                         <div class="row">
                             <div class="col-5">
-                                <button class="btn btn-warning btnReset"
+                                <button class="btn btn-group btnReset"
                                         onclick="location.href = '{{ URL::current() }}'">Sıfırla
                                 </button>
                             </div>
                             <div class="col-6">
-                                <button class="btn btn-group btnFilter">Filtrele</button>
+                                <button class="btn btn-warning btnFilter">Filtrele</button>
                             </div>
                         </div>
                     </div>

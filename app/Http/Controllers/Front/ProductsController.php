@@ -89,6 +89,7 @@ class ProductsController extends Controller
     public function getSizesOrColors($request, $column, $category_id = null)
     {
         return ProductQuantity::join("products", "product_quantities.product_id", "products.id")
+            ->select(["product_id","color","size","products.id","products.name","products.category_id","products.status"])
             ->where("products.status", "=", 1)
             ->whereIn('products.category_id', function ($query) use ($category_id) {
                 if (isset($category_id)) {

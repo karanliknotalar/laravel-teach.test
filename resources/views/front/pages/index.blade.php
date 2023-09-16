@@ -107,7 +107,11 @@
                                 <div class="item">
                                     <div class="block-4 text-center">
                                         <figure class="block-4-image">
-                                            <img src="{{ asset($featured_product->image ?? "images/cloth_1.jpg") }}" alt="Image placeholder"
+                                            @php
+                                                $images = isset($featured_product->product_media) ? json_decode($featured_product->product_media->images) : [$featured_product->image ?? "images/cloth_1.jpg"];
+                                                $image = $images[$featured_product->product_media ? $featured_product->product_media->showcase_id : 0];
+                                            @endphp
+                                            <img src="{{ asset($image) }}" alt="{{ $featured_product->name ?? "" }}"
                                                  class="img-fluid">
                                         </figure>
                                         <div class="block-4-text p-4">

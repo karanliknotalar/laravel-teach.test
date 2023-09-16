@@ -27,7 +27,7 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            background-color: rgba(255, 255, 255, 0.7); /* Yarı saydam beyaz arka plan */
+            background-color: rgba(255, 255, 255, 0.7);
             padding: 10px;
             border-radius: 5px;
             display: none;
@@ -38,18 +38,16 @@
         }
 
         .image-container img {
-            transition: opacity 0.3s ease; /* Resim geçiş efekti için */
+            transition: opacity 0.3s ease;
         }
 
         .image-container:hover img {
-            opacity: 0.7; /* Resmi yarı saydam yapmak için */
+            opacity: 0.7;
         }
 
         .overlay button.no-opacity {
-            opacity: 1 !important; /* Düğmelerin saydamlığını sıfırlar */
+            opacity: 1 !important;
         }
-
-
     </style>
     <x-admin.sweet-alert2.sweet-alert2-css/>
     <x-admin.jquery-toast.jquery-toast-css/>
@@ -66,44 +64,60 @@
                 <input type="hidden" name="product_media_id" value="{{ encrypt($product->product_media->id) }}">
 
                 <button class="btn btn-danger btnAllDelete" type="button">
-                    <i class="mdi mdi-image-album"></i>Tümünü Sil
+                    <i class="mdi mdi-delete"></i>Tümünü Sil
                 </button>
                 <a href="{{ URL::previous() }}" class="btn btn-soft-info">Geri Git</a>
             </form>
         </div>
     @endif
 
-    <div class="col-md-12">
+    <div class="col-12 mb-3">
         <form id="ImageUp" method="post"
               class="frame dropzone dz-clickable" enctype="multipart/form-data">
             @csrf
             <input type="hidden" name="product_id" value="{{ encrypt($product->id) }}">
             <input type="hidden" name="color" value="{{ $color }}">
             <div class="dz-default dz-message">
-                <button class="dz-button" type="button" style="font-size: medium"><h3>Resmi sürükle bırak.</h3>
+                <button class="dz-button" type="button" style="font-size: medium">
+                    <h3>Resmi sürükle bırak.</h3>
                 </button>
             </div>
         </form>
     </div>
-    <br>
-
     @if(!empty($product->product_media) and $product->product_media->count() > 0)
         <div class="row m-2">
-            <span class="badge badge-info-lighten p-3">
-                <span class="text-black">Ürün :{{  $product->name }} | Renk: {{ $color }}</span><br>
-                Toplam Resim Sayısı: <span
-                    class="img_count">{{ count(json_decode($product->product_media->images)) }}</span></span>
+            <span class="badge badge-info-lighten pt-3">
+                <p>Ürün: <span class="text-danger">{{  $product->name }}</span></p>
+                <p>Renk: <span class="text-danger">{{  $color }}</span></p>
+                <p>
+                    Toplam Resim Sayısı:
+                    <span class="img_count">
+                        <span class="text-danger">{{ count(json_decode($product->product_media->images)) }}</span>
+                    </span>
+                </p>
+            </span>
         </div>
         <div class="row" data-id="{{ encrypt($product->product_media->id) }}">
             @foreach(json_decode($product->product_media->images) as $key=>$value)
                 <div class="col-lg-4 col-md-12 mb-4 mb-lg-0 img-data">
                     <div class="image-container position-relative">
-                        <img src="{{ asset($value) }}" class="w-100 shadow-1-strong rounded mb-3 p-2" alt=""/>
-                        <div class="overlay">
-                            <button type="button" class="btn btn-danger btnDelete" data-img="{{ $value }}"><i
-                                    class="mdi mdi-delete"></i></button>
-                            <button type="button" class="btn btn-primary" data-img="{{ $value }}"><i
-                                    class="mdi mdi-eye"></i></button>
+                        <div class="product-image">
+                            <img src="{{ asset($value) }}" class="w-100 shadow-1-strong rounded mb-3 p-2" alt=""/>
+                            <div class="overlay">
+                                <button type="button" class="btn btn-danger btnDelete" data-img="{{ $value }}">
+                                    <i class="mdi mdi-delete"></i>
+                                </button>
+                                <button type="button" class="btn btn-primary" data-img="{{ $value }}">
+                                    <i class="mdi mdi-eye"></i>
+                                </button>
+                                <button type="button" class="btn btn-primary btnShowcase" data-img="{{ $value }}">
+                                    <i class="mdi mdi-image-move"></i>
+                                </button>
+                            </div>
+                            @if($product->product_media->showcase_id == $key)
+                                <span class="badge bg-success position-absolute"
+                                      style="top: 14px !important; left: 14px !important;">Vitrin</span>
+                            @endif
                         </div>
                     </div>
                 </div>
@@ -194,6 +208,30 @@
                     swal.fire('Silme işlemi iptal edildi', '', 'error');
                 }
             });
+        });
+
+        $(".btnShowcase").on("click", function (p) {
+            const btn = $(this);
+            const id = btn.closest(".row").data("id");
+            const image = btn.data("img");
+
+            $.ajax({
+                method: "POST",
+                url: "{{ route("set-showcase") }}",
+                data: {"_token": "{{ csrf_token() }}", "image": image, "id": id},
+                success: function (response) {
+                    if (response.result) {
+                        showToast(response.message, "success", 1200);
+                        $(".product-image span").each(function () {
+                            $(this).remove();
+                        })
+                        btn.closest("div.product-image")
+                            .append('<span class="badge bg-success position-absolute" style="top: 14px !important; left: 14px !important;">Vitrin</span>');
+                    } else {
+                        showToast(response.message, "error", 1200);
+                    }
+                }
+            })
         });
     </script>
 @endsection

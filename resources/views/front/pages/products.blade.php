@@ -47,9 +47,12 @@
                                         <div class="block-4 text-center border">
                                             <figure class="block-4-image">
                                                 <a href="{{ route("page.product", ["slug_name" => $product->slug_name]) }}">
-                                                    <img
-                                                        src="{{ $product->image != null ? asset($product->image) : asset("images/cloth_1.jpg") }}"
-                                                        alt="{{ $product->name }}" class="img-fluid">
+                                                    @php
+                                                        $images = isset($product->product_media) ? json_decode($product->product_media->images) : [$product->image ?? "images/cloth_1.jpg"];
+                                                        $image = $images[$product->product_media ? $product->product_media->showcase_id : 0];
+                                                    @endphp
+                                                    <img class="img-fluid" src="{{ $image }}"
+                                                         alt="{{ $product->name }}">
                                                 </a>
                                             </figure>
                                             <div class="block-4-text p-4">
@@ -61,7 +64,7 @@
                                                     $total = Helper::getVatIncluded($product->price, $product->vat->VAT);
                                                 @endphp
                                                 <p class="text-primary font-weight-bold">{{ number_format($total, 2) }}
-                                                ₺</p>
+                                                    ₺</p>
                                             </div>
                                         </div>
                                     </div>
@@ -100,14 +103,14 @@
                                                class="d-flex">
                                                 <i><span>&nbsp;&nbsp;&nbsp;{!! $sub_category->name !!}</span></i>
                                                 <span
-                                                    class="text-black ml-auto">({{ $sub_category->items_count }})</span></a>
+                                                    class="text-black ml-auto">({{ $sub_category->items_count }})</span>
+                                            </a>
                                         </li>
                                     @endforeach
                                 @endforeach
                             @endif
                         </ul>
                     </div>
-
                     <div class="border p-4 rounded mb-4">
                         <div class="mb-4">
                             <h3 class="mb-3 h6 text-uppercase text-black d-block">Fiyata Göre Filtrele</h3>
@@ -145,7 +148,9 @@
                         </div>
                         <div class="row">
                             <div class="col-5">
-                                <button class="btn btn-warning btnReset" onclick="location.href = '{{ URL::current() }}'">Sıfırla</button>
+                                <button class="btn btn-warning btnReset"
+                                        onclick="location.href = '{{ URL::current() }}'">Sıfırla
+                                </button>
                             </div>
                             <div class="col-6">
                                 <button class="btn btn-group btnFilter">Filtrele</button>
@@ -227,7 +232,6 @@
                 max: max
             };
             location.href = addQueryParamsToURL("{!! request()->fullUrlWithoutQuery(["min", "max"]) !!}", params);
-            {{--productsListGet(addQueryParamsToURL("{!! request()->fullUrlWithoutQuery(["min", "max"]) !!}", params));--}}
         }
 
         $('a[aria-controls="collapseSubCategory"]').on('click', function (e) {
@@ -250,7 +254,6 @@
             if (colorList.length > 0)
                 params["color"] = colorList.join(",");
             location.href = addQueryParamsToURL("{!! request()->fullUrlWithoutQuery(["size","color"]) !!}", params)
-            {{--productsListGet(addQueryParamsToURL("{!! request()->fullUrlWithoutQuery(["size","color"]) !!}", params));--}}
         });
 
         function productsListGet(url) {

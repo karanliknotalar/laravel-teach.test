@@ -2,7 +2,8 @@
 
 @section("css")
     <link rel="stylesheet" href="{{ asset('/') }}jquery-toast/jquery.toast.min.css">
-    <link rel="stylesheet" href="https://mdbcdn.b-cdn.net/wp-content/themes/mdbootstrap4/docs-app/css/dist/mdb5/plugins/standard/ecommerce-gallery.min.css">
+    <link rel="stylesheet"
+          href="https://mdbcdn.b-cdn.net/wp-content/themes/mdbootstrap4/docs-app/css/dist/mdb5/plugins/standard/ecommerce-gallery.min.css">
 @endsection
 
 @section("content")
@@ -30,8 +31,9 @@
                         <div class="form-group my-3">
                             <select class="form-control" id="size" name="size">
                                 @foreach($product->product_size as $product_size)
-                                    <option {{ $product_size->size == $product->low_price_product->size ? "selected" : "" }}
-                                            value="{{ $product_size->size }}">
+                                    <option
+                                        {{ $product_size->size == $product->low_price_product->size ? "selected" : "" }}
+                                        value="{{ $product_size->size }}">
                                         {{ $product_size->size }}
                                     </option>
                                 @endforeach
@@ -94,9 +96,11 @@
                                     <div class="block-4 text-center">
                                         <figure class="block-4-image">
                                             <a href="{{ route("page.product", [$product->id, $product->slug_name]) }}">
-                                                <img
-                                                    src="{{ $f_product->image != null ? asset($f_product->image) : asset("images/cloth_1.jpg") }}"
-                                                    alt="{{ $f_product->name }}" class="img-fluid">
+                                                @php
+                                                    $images = isset($f_product->product_media) ? json_decode($f_product->product_media->images) : [$f_product->image ?? "images/cloth_1.jpg"];
+                                                    $image = $images[$f_product->product_media ? $f_product->product_media->showcase_id : 0];
+                                                @endphp
+                                                <img src="{{ asset($image) }}" alt="{{ $f_product->name }}" class="img-fluid">
                                             </a>
                                         </figure>
                                         <div class="block-4-text p-4">

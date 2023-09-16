@@ -50,6 +50,7 @@ class ProductsController extends Controller
             })
             ->with("category:id,name,slug_name")
             ->with("vat:id,VAT")
+            ->with("product_media:product_id,images,showcase_id")
             ->orderBy($request->order ?? "updated_at", $request->director ?? "desc")
             ->whereHas("category", function ($query) use ($category_id) {
                 if (isset($category_id))
@@ -67,7 +68,7 @@ class ProductsController extends Controller
 
         $sizes = $this->getSizesOrColors($request, "size", $category_id);
 
-        $min_max_price = ["min"=>$this->getMinMax(true), "max"=>$this->getMinMax(false)];
+        $min_max_price = ["min" => $this->getMinMax(true), "max" => $this->getMinMax(false)];
 
         $colors = $this->getSizesOrColors($request, "color", $category_id);
 

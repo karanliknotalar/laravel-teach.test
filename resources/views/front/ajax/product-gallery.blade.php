@@ -52,11 +52,11 @@
 
     <div class="gallery-container w-100 p-3 border border-opacity-50 border-1">
         <div class="main-gallery-image mw-100">
-            <img src="{{ asset($images[0]) }}" alt="Ürün 1" class="w-100 h-100 border border-opacity-50 border-1">
+            <img src="{{ asset($images[$showcase_id ?? 0]) }}" alt="Ürün 1" class="w-100 h-100 border border-opacity-50 border-1">
         </div>
         <div class="gallery-thumbnails mt-2">
             @foreach($images as $key=>$item)
-                <div class="gallery-thumbnail {{ $key == 0 ? "selected" : "" }}">
+                <div class="gallery-thumbnail {{ $key == ($showcase_id ?? 0) ? "selected" : "" }}">
                     <img src="{{ asset($item) }}" alt="Ürün 1" class="w-100 h-100">
                 </div>
             @endforeach
@@ -72,12 +72,10 @@
                 thumbnail.addEventListener('click', () => {
                     mainImage.src = thumbnail.src;
 
-                    // Tüm thumbnail'ların çerçevesini kaldır
                     thumbnails.forEach((thumb) => {
                         thumb.parentElement.classList.remove('selected');
                     });
 
-                    // Seçili thumbnail'ın çerçevesini ekle
                     thumbnail.parentElement.classList.add('selected');
                 });
             });

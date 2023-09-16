@@ -103,6 +103,7 @@ Route::group(["prefix" => "admin", "middleware" => ["admin.dashboard.shared", "a
     Route::post("add-image", [ProductMediaController::class, "add"])->name("add-image");
     Route::delete("delete-image", [ProductMediaController::class, "delete"])->name("delete-image");
     Route::post("delete-all-image", [ProductMediaController::class, "delete_all"])->name("delete-all-image");
+    Route::post("set-showcase", [ProductMediaController::class, "set_show_case"])->name("set-showcase");
 
 });
 

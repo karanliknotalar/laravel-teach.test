@@ -18,6 +18,7 @@ class HomeController extends Controller
         $featured_products = Product::where("status", 1)
             ->where("featured", 1)
             ->with("low_price_product:product_id,price")
+            ->with("product_media:id,product_id,images,showcase_id")
             ->limit(10)
             ->inRandomOrder()
             ->get();

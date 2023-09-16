@@ -33,6 +33,7 @@ class ProductController extends Controller
         $f_products = Product::where("status", "=", 1)
             ->with("low_price_product:product_id,price")
             ->with("vat:id,VAT")
+            ->with("product_media:id,product_id,images,showcase_id")
             ->where("category_id", "=", $product->category_id)
             ->where("id", "!=", $product->id)
             ->whereHas('low_price_product', function ($query) {
@@ -69,16 +70,19 @@ class ProductController extends Controller
             ->where("size", "=", $request->size)
             ->where("color", "=", $request->color)
             ->with(["product_media" => function ($query) use ($request) {
-                $query->where('color', $request->color)->select(["product_id", "images"]);
+                $query->where('color', $request->color)->select(["product_id", "images","showcase_id"]);
             }])
             ->select("price", "id", "product_id")
             ->first();
 
         $view = "";
         $product = Product::where("id", decrypt($request->id))->select(["name","image"])->first();
+
         if ($request->ajax()) {
+            $showcase_id = $price->product_media->showcase_id ?? 0;
             $images = isset($price->product_media) ? json_decode($price->product_media->images) : [];
-            $view = view("front.ajax.product-gallery", compact("images","product"))->render();
+
+            $view = view("front.ajax.product-gallery", compact("images","product","showcase_id"))->render();
             return response(
                 [
                     "price" => number_format($price->price, 2),

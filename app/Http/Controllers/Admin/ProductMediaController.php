@@ -16,8 +16,8 @@ class ProductMediaController extends Controller
 
         $product = Product::where("id", $product_id)
             ->with("product_media", function ($query) use ($product_id, $color) {
-            return $query->where(["product_id" => $product_id, "color" => $color]);
-        })->select(["id","name"])->first();
+                return $query->where(["product_id" => $product_id, "color" => $color]);
+            })->select(["id", "name"])->first();
 
         return view("admin.pages.product_media.edit", compact("product", "color"));
     }
@@ -81,7 +81,7 @@ class ProductMediaController extends Controller
 
             $img_count = count($img_arr);
 
-            if ($img_count > 0){
+            if ($img_count > 0) {
                 $productMedia->update([
                     "images" => json_encode(array_values($img_arr))
                 ]);
@@ -94,14 +94,15 @@ class ProductMediaController extends Controller
         return response(["result" => false, "message" => "Hata"]);
     }
 
-    public function delete_all(Request $request){
+    public function delete_all(Request $request)
+    {
         $product_media_id = decrypt($request->product_media_id);
 
         $product_media = ProductMedia::where("id", $product_media_id)->first();
 
         if ($product_media) {
             $img_arr = json_decode($product_media->images, true);
-            foreach ($img_arr as $img){
+            foreach ($img_arr as $img) {
                 Helper::fileDelete($img, true);
             }
 
@@ -109,5 +110,24 @@ class ProductMediaController extends Controller
         }
 
         return back();
+    }
+
+    public function set_show_case(Request $request)
+    {
+        $product_media = ProductMedia::where("id", decrypt($request->id))->select("id", "images")->first();
+
+        if ($product_media) {
+
+            $image_index = array_search($request->image, json_decode($product_media->images, true));
+
+            $result = $product_media->update([
+                "showcase_id" => $image_index
+            ]);
+
+            if ($result) {
+                return response(["result" => true, "message" => "Seçilen resim vitrin yapıldı."]);
+            }
+        }
+        return response(["result" => false, "message" => "Bir hata oluştu. Hiçbir işlem yapılmadı"]);
     }
 }

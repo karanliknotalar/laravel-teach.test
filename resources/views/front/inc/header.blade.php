@@ -6,7 +6,7 @@
                 <div class="col-6 col-md-4 order-2 order-md-1 site-search-icon text-left">
                     <form action="{{ route("page.products") }}" class="site-block-top-search" method="get">
                         <span class="icon icon-search2"></span>
-                        <input type="text" class="form-control border-0" name="search" placeholder="search">
+                        <input type="text" class="form-control border-0" name="search" placeholder="Ürünlerde ara...">
                     </form>
                 </div>
                 <div class="col-12 mb-3 mb-md-0 col-md-4 order-1 order-md-2 text-center">
@@ -14,7 +14,6 @@
                         <a href="{{ route("home.index") }}" class="js-logo-clone">{{ config("app.name") }}</a>
                     </div>
                 </div>
-
                 <div class="col-6 col-md-4 order-3 order-md-3 text-right">
                     <div class="site-top-icons">
                         <ul>

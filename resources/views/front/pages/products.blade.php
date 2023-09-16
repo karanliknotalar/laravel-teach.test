@@ -51,7 +51,7 @@
                                                         $images = isset($product->product_media) ? json_decode($product->product_media->images) : [$product->image ?? "images/cloth_1.jpg"];
                                                         $image = $images[$product->product_media ? $product->product_media->showcase_id : 0];
                                                     @endphp
-                                                    <img class="img-fluid" src="{{ $image }}"
+                                                    <img class="img-fluid" src="{{ asset($image) }}"
                                                          alt="{{ $product->name }}">
                                                 </a>
                                             </figure>

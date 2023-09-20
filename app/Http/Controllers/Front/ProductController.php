@@ -65,38 +65,41 @@ class ProductController extends Controller
 
     public function color(Request $request)
     {
-        $price = ProductQuantity::where("product_id", "=", decrypt($request->id))
+        $productQuantity = ProductQuantity::where("product_id", "=", decrypt($request->id))
             ->with("product:id,VAT_id")
             ->where("size", "=", $request->size)
             ->where("color", "=", $request->color)
             ->with(["product_media" => function ($query) use ($request) {
                 $query->where('color', $request->color)->select(["product_id", "images","showcase_id"]);
             }])
-            ->select("price", "id", "product_id")
+            ->select("price", "id", "product_id","quantity")
             ->first();
 
         $view = "";
         $product = Product::where("id", decrypt($request->id))->select(["name","image"])->first();
 
         if ($request->ajax()) {
-            $showcase_id = $price->product_media->showcase_id ?? 0;
-            $images = isset($price->product_media) ? json_decode($price->product_media->images) : [];
+            $showcase_id = $productQuantity->product_media->showcase_id ?? 0;
+            $images = isset($productQuantity->product_media) ? json_decode($productQuantity->product_media->images) : [];
 
             $view = view("front.ajax.product-gallery", compact("images","product","showcase_id"))->render();
+
             return response(
                 [
-                    "price" => number_format($price->price, 2),
-                    "vat" => number_format(Helper::getVat($price->price, $price->product->vat->VAT), 2),
-                    "total" => number_format(Helper::getVatIncluded($price->price, $price->product->vat->VAT), 2),
+                    "price" => number_format($productQuantity->price, 2),
+                    "vat" => number_format(Helper::getVat($productQuantity->price, $productQuantity->product->vat->VAT), 2),
+                    "total" => number_format(Helper::getVatIncluded($productQuantity->price, $productQuantity->product->vat->VAT), 2),
                     "images" => $view,
+                    "quantity" => $productQuantity->quantity,
                 ]);
         }
         return response(
             [
-                "price" => number_format($price->price, 2),
-                "vat" => number_format(Helper::getVat($price->price, $price->product->vat->VAT), 2),
-                "total" => number_format(Helper::getVatIncluded($price->price, $price->product->vat->VAT), 2),
+                "price" => number_format($productQuantity->price, 2),
+                "vat" => number_format(Helper::getVat($productQuantity->price, $productQuantity->product->vat->VAT), 2),
+                "total" => number_format(Helper::getVatIncluded($productQuantity->price, $productQuantity->product->vat->VAT), 2),
                 "images" => $view,
+                "quantity" => $productQuantity->quantity,
             ]);
     }
 }

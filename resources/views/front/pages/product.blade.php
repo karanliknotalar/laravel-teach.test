@@ -24,8 +24,13 @@
                         @csrf
                         <input type="hidden" name="product_id" value="{{ encrypt($product->id) }}">
                         <h2 class="text-black">{{ $product->name }}</h2>
-                        <div class="mb-5"><span
-                                class="text-success small">Ürün Kodu: {{ $product->product_code }}</span></div>
+                        <div class="mb-4">
+                            <span class="text-success small">Ürün Kodu: {{ $product->product_code }}</span>
+                            <div class="small">
+                                Stok Durumu: <span class="small quantity-status">-</span>
+                            </div>
+                        </div>
+
                         <div>{!! $product->description  ?? "" !!}</div>
 
                         <div class="form-group my-3">
@@ -58,22 +63,24 @@
                                 </div>
                             </div>
                         </div>
-                        <p>
+                        <p class="mb-2">
                             <strong
-                                class="text-primary h4 mb-4 vat">KDV: {{ number_format((($product->low_price_product->price ?? 0) * $product->vat->VAT) / 100, 2) ?? "" }}
+                                class="text-primary h5 price">Fiyat: {{ number_format(($product->low_price_product->price ?? 0), 2) ?? "" }}
                                 ₺</strong>
                         </p>
-                        <p>
+                        <p class="mb-2">
                             <strong
-                                class="text-primary h4 mb-4 price">Fiyat: {{ number_format(($product->low_price_product->price ?? 0), 2) ?? "" }}
+                                class="text-primary h5 vat">KDV: {{ number_format((($product->low_price_product->price ?? 0) * $product->vat->VAT) / 100, 2) ?? "" }}
                                 ₺</strong>
                         </p>
-                        <p>
+                        <p class="mb-2">
                             <strong
-                                class="text-primary h4 mb-4 total">Toplam: {{ number_format(Helper::getVatIncluded(($product->low_price_product->price ?? 0), $product->vat->VAT),2) ?? "" }}
+                                class="text-primary h5 total">Toplam: {{ number_format(Helper::getVatIncluded(($product->low_price_product->price ?? 0), $product->vat->VAT),2) ?? "" }}
                                 ₺</strong>
                         </p>
-                        <p><span id="addCart" class="buy-now btn btn-sm btn-primary">Sepete Ekle</span></p>
+                        <p class="mt-4">
+                            <span id="addCart" class="buy-now btn btn-sm btn-primary">Sepete Ekle</span>
+                        </p>
                     </form>
                 </div>
             </div>
@@ -100,7 +107,8 @@
                                                     $images = isset($f_product->product_media) ? json_decode($f_product->product_media->images) : [$f_product->image ?? "images/cloth_1.jpg"];
                                                     $image = $images[$f_product->product_media ? $f_product->product_media->showcase_id : 0];
                                                 @endphp
-                                                <img src="{{ asset($image) }}" alt="{{ $f_product->name }}" class="img-fluid">
+                                                <img src="{{ asset($image) }}" alt="{{ $f_product->name }}"
+                                                     class="img-fluid">
                                             </a>
                                         </figure>
                                         <div class="block-4-text p-4">
@@ -220,6 +228,8 @@
                         $(".vat").text("KDV: " + response.vat + " ₺")
                         $(".total").text("Toplam: " + response.total + " ₺")
                         $(".product-gallery").html(response.images);
+                        $(".quantity-status").text(response.quantity).parent("div")
+                            .addClass(response.quantity > 0 ? "text-success" : "text-danger");
                     }
                 });
             }

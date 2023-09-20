@@ -33,8 +33,7 @@
     </div>
 
     <div class="row">
-        <div class="col-xl-5 col-lg-6">
-
+        <div class="col-xl-4 col-lg-4">
             <div class="row">
                 <div class="col-sm-6">
                     <div class="card widget-flat">
@@ -42,12 +41,10 @@
                             <div class="float-end">
                                 <i class="mdi mdi-account-multiple widget-icon"></i>
                             </div>
-                            <h5 class="text-muted fw-normal mt-0" title="Number of Customers">Customers</h5>
-                            <h3 class="mt-3 mb-3">36,254</h3>
-                            <p class="mb-0 text-muted">
-                                <span class="text-success me-2"><i class="mdi mdi-arrow-up-bold"></i> 5.27%</span>
-                                <span class="text-nowrap">Since last month</span>
-                            </p>
+                            <h5 class="text-muted fw-normal mt-0" title="Müşteri sayısı">Müşteriler</h5>
+                            <h3 class="mt-3 mb-3">{{ $customerCount ?? 0 }}</h3>
+                            <x-admin.index.change-rate-area
+                            :rate="$rate['customer']"/>
                         </div> <!-- end card-body-->
                     </div> <!-- end card-->
                 </div> <!-- end col-->
@@ -58,12 +55,10 @@
                             <div class="float-end">
                                 <i class="mdi mdi-cart-plus widget-icon"></i>
                             </div>
-                            <h5 class="text-muted fw-normal mt-0" title="Number of Orders">Orders</h5>
-                            <h3 class="mt-3 mb-3">5,543</h3>
-                            <p class="mb-0 text-muted">
-                                <span class="text-danger me-2"><i class="mdi mdi-arrow-down-bold"></i> 1.08%</span>
-                                <span class="text-nowrap">Since last month</span>
-                            </p>
+                            <h5 class="text-muted fw-normal mt-0" title="Number of Orders">Siparişler</h5>
+                            <h3 class="mt-3 mb-3">{{ $orderCount ?? 0}}</h3>
+                            <x-admin.index.change-rate-area
+                                :rate="$rate['order']"/>
                         </div> <!-- end card-body-->
                     </div> <!-- end card-->
                 </div> <!-- end col-->
@@ -76,12 +71,10 @@
                             <div class="float-end">
                                 <i class="mdi mdi-currency-usd widget-icon"></i>
                             </div>
-                            <h5 class="text-muted fw-normal mt-0" title="Average Revenue">Revenue</h5>
-                            <h3 class="mt-3 mb-3">$6,254</h3>
-                            <p class="mb-0 text-muted">
-                                <span class="text-danger me-2"><i class="mdi mdi-arrow-down-bold"></i> 7.00%</span>
-                                <span class="text-nowrap">Since last month</span>
-                            </p>
+                            <h5 class="text-muted fw-normal mt-0" title="Average Revenue">Hasılat</h5>
+                            <h3 class="mt-3 mb-3">{{ number_format($revenue->total_revenue ?? 0, 2) }} ₺</h3>
+                            <x-admin.index.change-rate-area
+                                :rate="$rate['revenue']"/>
                         </div> <!-- end card-body-->
                     </div> <!-- end card-->
                 </div> <!-- end col-->
@@ -104,278 +97,7 @@
             </div> <!-- end row -->
 
         </div> <!-- end col -->
-
-        <div class="col-xl-7 col-lg-6">
-            <div class="card card-h-100">
-                <div class="d-flex card-header justify-content-between align-items-center">
-                    <h4 class="header-title">Projections Vs Actuals</h4>
-                    <div class="dropdown">
-                        <a href="#" class="dropdown-toggle arrow-none card-drop" data-bs-toggle="dropdown"
-                           aria-expanded="false">
-                            <i class="mdi mdi-dots-vertical"></i>
-                        </a>
-                        <div class="dropdown-menu dropdown-menu-end">
-                            <!-- item-->
-                            <a href="javascript:void(0);" class="dropdown-item">Sales Report</a>
-                            <!-- item-->
-                            <a href="javascript:void(0);" class="dropdown-item">Export Report</a>
-                            <!-- item-->
-                            <a href="javascript:void(0);" class="dropdown-item">Profit</a>
-                            <!-- item-->
-                            <a href="javascript:void(0);" class="dropdown-item">Action</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="card-body pt-0">
-                    <div dir="ltr">
-                        <div id="high-performing-product" class="apex-charts" data-colors="#727cf5,#e3eaef"></div>
-                    </div>
-
-                </div> <!-- end card-body-->
-            </div> <!-- end card-->
-
-        </div> <!-- end col -->
-    </div>
-    <!-- end row -->
-
-    <div class="row">
-        <div class="col-lg-8">
-            <div class="card">
-                <div class="d-flex card-header justify-content-between align-items-center">
-                    <h4 class="header-title">Revenue</h4>
-                    <div class="dropdown">
-                        <a href="#" class="dropdown-toggle arrow-none card-drop" data-bs-toggle="dropdown"
-                           aria-expanded="false">
-                            <i class="mdi mdi-dots-vertical"></i>
-                        </a>
-                        <div class="dropdown-menu dropdown-menu-end">
-                            <!-- item-->
-                            <a href="javascript:void(0);" class="dropdown-item">Sales Report</a>
-                            <!-- item-->
-                            <a href="javascript:void(0);" class="dropdown-item">Export Report</a>
-                            <!-- item-->
-                            <a href="javascript:void(0);" class="dropdown-item">Profit</a>
-                            <!-- item-->
-                            <a href="javascript:void(0);" class="dropdown-item">Action</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="card-body pt-0">
-                    <div class="chart-content-bg">
-                        <div class="row text-center">
-                            <div class="col-sm-6">
-                                <p class="text-muted mb-0 mt-3">Current Week</p>
-                                <h2 class="fw-normal mb-3">
-                                    <small class="mdi mdi-checkbox-blank-circle text-primary align-middle me-1"></small>
-                                    <span>$58,254</span>
-                                </h2>
-                            </div>
-                            <div class="col-sm-6">
-                                <p class="text-muted mb-0 mt-3">Previous Week</p>
-                                <h2 class="fw-normal mb-3">
-                                    <small class="mdi mdi-checkbox-blank-circle text-success align-middle me-1"></small>
-                                    <span>$69,524</span>
-                                </h2>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="dash-item-overlay d-none d-md-block" dir="ltr">
-                        <h5>Today's Earning: $2,562.30</h5>
-                        <p class="text-muted font-13 mb-3 mt-2">Etiam ultricies nisi vel augue. Curabitur ullamcorper
-                            ultricies nisi. Nam eget dui.
-                            Etiam rhoncus...</p>
-                        <a href="javascript: void(0);" class="btn btn-outline-primary">View Statements
-                            <i class="mdi mdi-arrow-right ms-2"></i>
-                        </a>
-                    </div>
-                    <div dir="ltr">
-                        <div id="revenue-chart" class="apex-charts mt-3" data-colors="#727cf5,#0acf97"></div>
-                    </div>
-                </div> <!-- end card-body-->
-            </div> <!-- end card-->
-        </div> <!-- end col-->
-
-        <div class="col-lg-4">
-            <div class="card">
-                <div class="d-flex card-header justify-content-between align-items-center">
-                    <h4 class="header-title">Revenue By Location</h4>
-                    <div class="dropdown">
-                        <a href="#" class="dropdown-toggle arrow-none card-drop" data-bs-toggle="dropdown"
-                           aria-expanded="false">
-                            <i class="mdi mdi-dots-vertical"></i>
-                        </a>
-                        <div class="dropdown-menu dropdown-menu-end">
-                            <!-- item-->
-                            <a href="javascript:void(0);" class="dropdown-item">Sales Report</a>
-                            <!-- item-->
-                            <a href="javascript:void(0);" class="dropdown-item">Export Report</a>
-                            <!-- item-->
-                            <a href="javascript:void(0);" class="dropdown-item">Profit</a>
-                            <!-- item-->
-                            <a href="javascript:void(0);" class="dropdown-item">Action</a>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card-body pt-0">
-                    <div class="mb-4 mt-3">
-                        <div id="world-map-markers" style="height: 217px"></div>
-                    </div>
-
-                    <h5 class="mb-1 mt-0 fw-normal">New York</h5>
-                    <div class="progress-w-percent">
-                        <span class="progress-value fw-bold">72k </span>
-                        <div class="progress progress-sm">
-                            <div class="progress-bar" role="progressbar" style="width: 72%;" aria-valuenow="72"
-                                 aria-valuemin="0" aria-valuemax="100"></div>
-                        </div>
-                    </div>
-
-                    <h5 class="mb-1 mt-0 fw-normal">San Francisco</h5>
-                    <div class="progress-w-percent">
-                        <span class="progress-value fw-bold">39k </span>
-                        <div class="progress progress-sm">
-                            <div class="progress-bar" role="progressbar" style="width: 39%;" aria-valuenow="39"
-                                 aria-valuemin="0" aria-valuemax="100"></div>
-                        </div>
-                    </div>
-
-                    <h5 class="mb-1 mt-0 fw-normal">Sydney</h5>
-                    <div class="progress-w-percent">
-                        <span class="progress-value fw-bold">25k </span>
-                        <div class="progress progress-sm">
-                            <div class="progress-bar" role="progressbar" style="width: 39%;" aria-valuenow="39"
-                                 aria-valuemin="0" aria-valuemax="100"></div>
-                        </div>
-                    </div>
-
-                    <h5 class="mb-1 mt-0 fw-normal">Singapore</h5>
-                    <div class="progress-w-percent mb-0">
-                        <span class="progress-value fw-bold">61k </span>
-                        <div class="progress progress-sm">
-                            <div class="progress-bar" role="progressbar" style="width: 61%;" aria-valuenow="61"
-                                 aria-valuemin="0" aria-valuemax="100"></div>
-                        </div>
-                    </div>
-                </div> <!-- end card-body-->
-            </div> <!-- end card-->
-        </div> <!-- end col-->
-    </div>
-    <!-- end row -->
-
-    <div class="row">
-        <div class="col-xl-6 col-lg-12 order-lg-2 order-xl-1">
-            <div class="card">
-                <div class="d-flex card-header justify-content-between align-items-center">
-                    <h4 class="header-title">Top Selling Products</h4>
-                    <a href="javascript:void(0);" class="btn btn-sm btn-light">Export <i
-                            class="mdi mdi-download ms-1"></i></a>
-                </div>
-
-                <div class="card-body pt-0">
-                    <div class="table-responsive">
-                        <table class="table table-centered table-nowrap table-hover mb-0">
-                            <tbody>
-                            <tr>
-                                <td>
-                                    <h5 class="font-14 my-1 fw-normal">ASOS Ridley High Waist</h5>
-                                    <span class="text-muted font-13">07 April 2018</span>
-                                </td>
-                                <td>
-                                    <h5 class="font-14 my-1 fw-normal">$79.49</h5>
-                                    <span class="text-muted font-13">Price</span>
-                                </td>
-                                <td>
-                                    <h5 class="font-14 my-1 fw-normal">82</h5>
-                                    <span class="text-muted font-13">Quantity</span>
-                                </td>
-                                <td>
-                                    <h5 class="font-14 my-1 fw-normal">$6,518.18</h5>
-                                    <span class="text-muted font-13">Amount</span>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <h5 class="font-14 my-1 fw-normal">Marco Lightweight Shirt</h5>
-                                    <span class="text-muted font-13">25 March 2018</span>
-                                </td>
-                                <td>
-                                    <h5 class="font-14 my-1 fw-normal">$128.50</h5>
-                                    <span class="text-muted font-13">Price</span>
-                                </td>
-                                <td>
-                                    <h5 class="font-14 my-1 fw-normal">37</h5>
-                                    <span class="text-muted font-13">Quantity</span>
-                                </td>
-                                <td>
-                                    <h5 class="font-14 my-1 fw-normal">$4,754.50</h5>
-                                    <span class="text-muted font-13">Amount</span>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <h5 class="font-14 my-1 fw-normal">Half Sleeve Shirt</h5>
-                                    <span class="text-muted font-13">17 March 2018</span>
-                                </td>
-                                <td>
-                                    <h5 class="font-14 my-1 fw-normal">$39.99</h5>
-                                    <span class="text-muted font-13">Price</span>
-                                </td>
-                                <td>
-                                    <h5 class="font-14 my-1 fw-normal">64</h5>
-                                    <span class="text-muted font-13">Quantity</span>
-                                </td>
-                                <td>
-                                    <h5 class="font-14 my-1 fw-normal">$2,559.36</h5>
-                                    <span class="text-muted font-13">Amount</span>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <h5 class="font-14 my-1 fw-normal">Lightweight Jacket</h5>
-                                    <span class="text-muted font-13">12 March 2018</span>
-                                </td>
-                                <td>
-                                    <h5 class="font-14 my-1 fw-normal">$20.00</h5>
-                                    <span class="text-muted font-13">Price</span>
-                                </td>
-                                <td>
-                                    <h5 class="font-14 my-1 fw-normal">184</h5>
-                                    <span class="text-muted font-13">Quantity</span>
-                                </td>
-                                <td>
-                                    <h5 class="font-14 my-1 fw-normal">$3,680.00</h5>
-                                    <span class="text-muted font-13">Amount</span>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <h5 class="font-14 my-1 fw-normal">Marco Shoes</h5>
-                                    <span class="text-muted font-13">05 March 2018</span>
-                                </td>
-                                <td>
-                                    <h5 class="font-14 my-1 fw-normal">$28.49</h5>
-                                    <span class="text-muted font-13">Price</span>
-                                </td>
-                                <td>
-                                    <h5 class="font-14 my-1 fw-normal">69</h5>
-                                    <span class="text-muted font-13">Quantity</span>
-                                </td>
-                                <td>
-                                    <h5 class="font-14 my-1 fw-normal">$1,965.81</h5>
-                                    <span class="text-muted font-13">Amount</span>
-                                </td>
-                            </tr>
-
-                            </tbody>
-                        </table>
-                    </div> <!-- end table-responsive-->
-                </div> <!-- end card-body-->
-            </div> <!-- end card-->
-        </div> <!-- end col-->
-
-        <div class="col-xl-3 col-lg-6 order-lg-1">
+        <div class="col-xl-3 col-lg-6">
             <div class="card">
                 <div class="d-flex card-header justify-content-between align-items-center">
                     <h4 class="header-title">Total Sales</h4>
@@ -420,133 +142,92 @@
                             <span class="float-end">$154.02</span>
                         </p>
                     </div>
-                </div> <!-- end card-body-->
-            </div> <!-- end card-->
-        </div> <!-- end col-->
+                </div>
+            </div>
+        </div>
 
-        <div class="col-xl-3 col-lg-6 order-lg-1">
+        <div class="col-xl-5 col-lg-6">
             <div class="card">
                 <div class="d-flex card-header justify-content-between align-items-center">
-                    <h4 class="header-title">Recent Activity</h4>
-                    <div class="dropdown">
-                        <a href="#" class="dropdown-toggle arrow-none card-drop" data-bs-toggle="dropdown"
-                           aria-expanded="false">
-                            <i class="mdi mdi-dots-vertical"></i>
-                        </a>
-                        <div class="dropdown-menu dropdown-menu-end">
-                            <!-- item-->
-                            <a href="javascript:void(0);" class="dropdown-item">Sales Report</a>
-                            <!-- item-->
-                            <a href="javascript:void(0);" class="dropdown-item">Export Report</a>
-                            <!-- item-->
-                            <a href="javascript:void(0);" class="dropdown-item">Profit</a>
-                            <!-- item-->
-                            <a href="javascript:void(0);" class="dropdown-item">Action</a>
+                    <h4 class="header-title">Hasılat</h4>
+                </div>
+                <div class="card-body pt-0">
+                    <div class="chart-content-bg">
+                        <div class="row text-center">
+                            <div class="col-sm-6">
+                                <p class="text-muted mb-0 mt-3">Bu Hafta</p>
+                                <h2 class="fw-normal mb-3">
+                                    <small class="mdi mdi-checkbox-blank-circle text-primary align-middle me-1"></small>
+                                    <span>{{ number_format($revenue->current_week_revenue ?? 0, 2) }} ₺</span>
+                                </h2>
+                            </div>
+                            <div class="col-sm-6">
+                                <p class="text-muted mb-0 mt-3">Geçen Hafta</p>
+                                <h2 class="fw-normal mb-3">
+                                    <small class="mdi mdi-checkbox-blank-circle text-success align-middle me-1"></small>
+                                    <span>{{ number_format($revenue->last_week_revenue ?? 0, 2) }} ₺</span>
+                                </h2>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="dash-item-overlay d-none d-md-block" dir="ltr">
+                        <h5>Bugün Kazanılan: {{ number_format($revenue->today_revenue ?? 0, 2) }} ₺</h5>
+                    </div>
+                    <div dir="ltr">
+                        <div id="revenue-chart" class="apex-charts mt-3" data-colors="#727cf5,#0acf97"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @if(isset($topProducts) and $topProducts->count() > 0)
+        <div class="row">
+            <div class="col-xl-12 col-lg-12 order-lg-2 order-xl-1">
+                <div class="card">
+                    <div class="d-flex card-header justify-content-between align-items-center">
+                        <h4 class="header-title">Çok Satılan {{ $topProducts->count() }} ürün</h4>
+                    </div>
+                    <div class="card-body pt-0">
+                        <div class="table-responsive">
+                            <table class="table table-centered table-nowrap table-hover mb-0">
+                                <tbody>
+                                <th>Ürün Adı</th>
+                                <th>Net Fiyat (Renge/Boyuta Göre Listelenir)</th>
+                                <th>Toplam Stok Satış</th>
+                                <th>Toplam Ödenen + KDV</th>
+                                @foreach($topProducts as $topProduct)
+                                    <tr>
+                                        <td>
+                                            <h5 class="font-14 my-1 fw-normal">{{ $topProduct->product->name }}</h5>
+                                            <span
+                                                class="text-muted font-13">{{ Carbon::create($topProduct->product->created_at)->format("d/m/y H:i") }}</span>
+                                        </td>
+                                        <td>
+                                            @foreach($topProduct->productQuantity as $quantity)
+                                                <h5 class="font-14 my-1 fw-normal">{{ number_format($quantity->price, 2) }}
+                                                    ₺</h5>
+                                            @endforeach
+                                        </td>
+                                        <td>
+                                            <h5 class="font-14 my-1 fw-normal">{{ $topProduct->total_quantity }}</h5>
+                                        </td>
+                                        <td>
+                                            <h5 class="font-14 my-1 fw-normal">{{ number_format($topProduct->total_amount, 2) }}
+                                                ₺</h5>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
-
-                <div class="card-body py-0 mb-3" data-simplebar style="max-height: 403px;">
-                    <div class="timeline-alt py-0">
-                        <div class="timeline-item">
-                            <i class="mdi mdi-upload bg-info-lighten text-info timeline-icon"></i>
-                            <div class="timeline-item-info">
-                                <a href="javascript:void(0);" class="text-info fw-bold mb-1 d-block">You sold an
-                                    item</a>
-                                <small>Paul Burgess just purchased “Hyper - Admin Dashboard”!</small>
-                                <p class="mb-0 pb-2">
-                                    <small class="text-muted">5 minutes ago</small>
-                                </p>
-                            </div>
-                        </div>
-
-                        <div class="timeline-item">
-                            <i class="mdi mdi-airplane bg-primary-lighten text-primary timeline-icon"></i>
-                            <div class="timeline-item-info">
-                                <a href="javascript:void(0);" class="text-primary fw-bold mb-1 d-block">Product on the
-                                    Bootstrap Market</a>
-                                <small>Dave Gamache added
-                                    <span class="fw-bold">Admin Dashboard</span>
-                                </small>
-                                <p class="mb-0 pb-2">
-                                    <small class="text-muted">30 minutes ago</small>
-                                </p>
-                            </div>
-                        </div>
-
-                        <div class="timeline-item">
-                            <i class="mdi mdi-microphone bg-info-lighten text-info timeline-icon"></i>
-                            <div class="timeline-item-info">
-                                <a href="javascript:void(0);" class="text-info fw-bold mb-1 d-block">Robert Delaney</a>
-                                <small>Send you message
-                                    <span class="fw-bold">"Are you there?"</span>
-                                </small>
-                                <p class="mb-0 pb-2">
-                                    <small class="text-muted">2 hours ago</small>
-                                </p>
-                            </div>
-                        </div>
-
-                        <div class="timeline-item">
-                            <i class="mdi mdi-upload bg-primary-lighten text-primary timeline-icon"></i>
-                            <div class="timeline-item-info">
-                                <a href="javascript:void(0);" class="text-primary fw-bold mb-1 d-block">Audrey Tobey</a>
-                                <small>Uploaded a photo
-                                    <span class="fw-bold">"Error.jpg"</span>
-                                </small>
-                                <p class="mb-0 pb-2">
-                                    <small class="text-muted">14 hours ago</small>
-                                </p>
-                            </div>
-                        </div>
-
-                        <div class="timeline-item">
-                            <i class="mdi mdi-upload bg-info-lighten text-info timeline-icon"></i>
-                            <div class="timeline-item-info">
-                                <a href="javascript:void(0);" class="text-info fw-bold mb-1 d-block">You sold an
-                                    item</a>
-                                <small>Paul Burgess just purchased “Hyper - Admin Dashboard”!</small>
-                                <p class="mb-0 pb-2">
-                                    <small class="text-muted">16 hours ago</small>
-                                </p>
-                            </div>
-                        </div>
-
-                        <div class="timeline-item">
-                            <i class="mdi mdi-airplane bg-primary-lighten text-primary timeline-icon"></i>
-                            <div class="timeline-item-info">
-                                <a href="javascript:void(0);" class="text-primary fw-bold mb-1 d-block">Product on the
-                                    Bootstrap Market</a>
-                                <small>Dave Gamache added
-                                    <span class="fw-bold">Admin Dashboard</span>
-                                </small>
-                                <p class="mb-0 pb-2">
-                                    <small class="text-muted">22 hours ago</small>
-                                </p>
-                            </div>
-                        </div>
-
-                        <div class="timeline-item">
-                            <i class="mdi mdi-microphone bg-info-lighten text-info timeline-icon"></i>
-                            <div class="timeline-item-info">
-                                <a href="javascript:void(0);" class="text-info fw-bold mb-1 d-block">Robert Delaney</a>
-                                <small>Send you message
-                                    <span class="fw-bold">"Are you there?"</span>
-                                </small>
-                                <p class="mb-0 pb-2">
-                                    <small class="text-muted">2 days ago</small>
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- end timeline -->
-                </div> <!-- end slimscroll -->
             </div>
-            <!-- end card-->
         </div>
-        <!-- end col -->
+    @endif
 
-    </div>
 @endsection
 
 @section("js")
@@ -559,5 +240,92 @@
     <script src="{{ $asset }}vendor/admin-resources/jquery.vectormap/jquery-jvectormap-1.2.2.min.js"></script>
     <script src="{{ $asset }}vendor/admin-resources/jquery.vectormap/maps/jquery-jvectormap-world-mill-en.js"></script>
     <!-- Dashboard App js -->
-    <script src="{{ $asset }}js/pages/demo.dashboard.js"></script>
+    {{--    <script src="{{ $asset }}js/dashboard.js"></script>--}}
+    <script>
+        $(document).ready(function (e) {
+
+            // use this code if ajax request for chart data
+            {{--$.ajax({--}}
+            {{--    method: "GET",--}}
+            {{--    url: "{{ route("dashboard.index") }}",--}}
+            {{--    data: {"_token": "{{ csrf_token() }}",},--}}
+            {{--    success: function (response) {--}}
+
+            {{--        const lineOpt = {--}}
+            {{--            chart: {height: 370, type: "line", dropShadow: {enabled: !0, opacity: .2, blur: 7, left: -7, top: 7}},--}}
+            {{--            dataLabels: {enabled: !1},--}}
+            {{--            stroke: {curve: "smooth", width: 4},--}}
+            {{--            series: response.data,--}}
+            {{--            colors: ["#727cf5", "#0acf97"],--}}
+            {{--            zoom: {enabled: !1},--}}
+            {{--            legend: {show: !1},--}}
+            {{--            xaxis: {--}}
+            {{--                type: "string",--}}
+            {{--                categories: ["Pzt", "Sal", "Çar", "Per", "Cum", "Cmt", "Paz"],--}}
+            {{--                tooltip: {enabled: !1},--}}
+            {{--                axisBorder: {show: !1}--}}
+            {{--            },--}}
+            {{--            grid: {strokeDashArray: 7},--}}
+            {{--            yaxis: {--}}
+            {{--                labels: {--}}
+            {{--                    formatter: function (e) {--}}
+            {{--                        return e + "K"--}}
+            {{--                    }, offsetX: -15--}}
+            {{--                }--}}
+            {{--            }--}}
+            {{--        };--}}
+            {{--        new ApexCharts(document.querySelector("#revenue-chart"), lineOpt).render();--}}
+            {{--    }--}}
+            {{--});--}}
+            // use this code if ajax request for chart data end
+
+            $("#dash-daterange").daterangepicker({singleDatePicker: !0});
+
+            const donutOpt = {
+                chart: {height: 202, type: "donut"},
+                legend: {show: !1},
+                stroke: {colors: ["transparent"]},
+                series: [44, 55, 41, 17],
+                labels: ["Direct", "Affilliate", "Sponsored", "E-mail"],
+                colors: ["#727cf5", "#0acf97", "#fa5c7c", "#ffbc00"],
+                responsive: [{breakpoint: 480, options: {chart: {width: 200}, legend: {position: "bottom"}}}]
+            };
+            new ApexCharts(document.querySelector("#average-sales"), donutOpt).render();
+
+
+            window.Apex = {
+                chart: {parentHeightOffset: 0, toolbar: {show: !1}},
+                grid: {padding: {left: 0, right: 0}},
+            };
+
+            const lineOpt = {
+                chart: {height: 370, type: "line", dropShadow: {enabled: !0, opacity: .2, blur: 7, left: -7, top: 7}},
+                dataLabels: {enabled: !1},
+                stroke: {curve: "smooth", width: 4},
+                series:
+                    [
+                        {name: "Bu Hafta", data: [{{ $chartData['currentWeek'] }}]},
+                        {name: "Geçen Hafta", data: [{{ $chartData['subWeek'] }}]},
+                    ],
+                colors: ["#727cf5", "#0acf97"],
+                zoom: {enabled: !1},
+                legend: {show: !1},
+                xaxis: {
+                    type: "string",
+                    categories: ["Pzt", "Sal", "Çar", "Per", "Cum", "Cmt", "Paz"],
+                    tooltip: {enabled: !1},
+                    axisBorder: {show: !1}
+                },
+                grid: {strokeDashArray: 7},
+                yaxis: {
+                    labels: {
+                        formatter: function (e) {
+                            return e + "K"
+                        }, offsetX: -15
+                    }
+                }
+            };
+            new ApexCharts(document.querySelector("#revenue-chart"), lineOpt).render();
+        })
+    </script>
 @endsection

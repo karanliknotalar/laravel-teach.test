@@ -13,6 +13,7 @@ use Auth;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 
 class CartController extends Controller
@@ -217,7 +218,10 @@ class CartController extends Controller
 
         if ($invoice) {
             $cartItems = session("cart", []);
-            foreach ($cartItems as $cartItem) {
+            foreach ($cartItems as $key => $cartItem) {
+
+                $product_id = explode("_", $key)[0];
+                $product_quantity_id = explode("_", $key)[1];
 
                 Order::create([
                     "user_id" => $invoice->user_id,
@@ -230,6 +234,11 @@ class CartController extends Controller
                     "color" => $cartItem["color"],
                     "quantity" => $cartItem["quantity"],
                 ]);
+
+                $product_quantity = ProductQuantity::where('id', $product_quantity_id);
+                if ($product_quantity){
+                    $product_quantity->decrement('quantity', $cartItem["quantity"]);
+                }
             }
             session()->forget("cart");
             session()->forget("coupon");

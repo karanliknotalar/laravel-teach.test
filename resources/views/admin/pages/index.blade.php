@@ -11,27 +11,10 @@
     <div class="row">
         <div class="col-12">
             <div class="page-title-box">
-                <div class="page-title-right">
-                    <form class="d-flex">
-                        <div class="input-group">
-                            <input type="text" class="form-control form-control-light" id="dash-daterange">
-                            <span class="input-group-text bg-primary border-primary text-white">
-                                                    <i class="mdi mdi-calendar-range font-13"></i>
-                                                </span>
-                        </div>
-                        <a href="javascript: void(0);" class="btn btn-primary ms-2">
-                            <i class="mdi mdi-autorenew"></i>
-                        </a>
-                        <a href="javascript: void(0);" class="btn btn-primary ms-1">
-                            <i class="mdi mdi-filter-variant"></i>
-                        </a>
-                    </form>
-                </div>
                 <h4 class="page-title">Dashboard</h4>
             </div>
         </div>
     </div>
-
     <div class="row">
         <div class="col-xl-4 col-lg-4">
             <div class="row">
@@ -44,11 +27,10 @@
                             <h5 class="text-muted fw-normal mt-0" title="Müşteri sayısı">Müşteriler</h5>
                             <h3 class="mt-3 mb-3">{{ $customerCount ?? 0 }}</h3>
                             <x-admin.index.change-rate-area
-                            :rate="$rate['customer']"/>
-                        </div> <!-- end card-body-->
-                    </div> <!-- end card-->
-                </div> <!-- end col-->
-
+                                :rate="$rate['customer']"/>
+                        </div>
+                    </div>
+                </div>
                 <div class="col-sm-6">
                     <div class="card widget-flat">
                         <div class="card-body">
@@ -59,11 +41,10 @@
                             <h3 class="mt-3 mb-3">{{ $orderCount ?? 0}}</h3>
                             <x-admin.index.change-rate-area
                                 :rate="$rate['order']"/>
-                        </div> <!-- end card-body-->
-                    </div> <!-- end card-->
-                </div> <!-- end col-->
-            </div> <!-- end row -->
-
+                        </div>
+                    </div>
+                </div>
+            </div>
             <div class="row">
                 <div class="col-sm-6">
                     <div class="card widget-flat">
@@ -75,72 +56,40 @@
                             <h3 class="mt-3 mb-3">{{ number_format($revenue->total_revenue ?? 0, 2) }} ₺</h3>
                             <x-admin.index.change-rate-area
                                 :rate="$rate['revenue']"/>
-                        </div> <!-- end card-body-->
-                    </div> <!-- end card-->
-                </div> <!-- end col-->
-
+                        </div>
+                    </div>
+                </div>
                 <div class="col-sm-6">
                     <div class="card widget-flat">
                         <div class="card-body">
                             <div class="float-end">
                                 <i class="mdi mdi-pulse widget-icon"></i>
                             </div>
-                            <h5 class="text-muted fw-normal mt-0" title="Growth">Growth</h5>
-                            <h3 class="mt-3 mb-3">+ 30.56%</h3>
+                            <h5 class="text-muted fw-normal mt-0" title="Growth">Toplam İndirim</h5>
+                            <h3 class="mt-3 mb-3">{{ number_format($totalCouponPrice ?? 0, 2) }}₺</h3>
                             <p class="mb-0 text-muted">
-                                <span class="text-success me-2"><i class="mdi mdi-arrow-up-bold"></i> 4.87%</span>
-                                <span class="text-nowrap">Since last month</span>
+                                <span>Kullanılan toplam kupon indirimlerini ifade eder.</span>
                             </p>
-                        </div> <!-- end card-body-->
-                    </div> <!-- end card-->
-                </div> <!-- end col-->
-            </div> <!-- end row -->
-
-        </div> <!-- end col -->
-        <div class="col-xl-3 col-lg-6">
-            <div class="card">
-                <div class="d-flex card-header justify-content-between align-items-center">
-                    <h4 class="header-title">Total Sales</h4>
-                    <div class="dropdown">
-                        <a href="#" class="dropdown-toggle arrow-none card-drop" data-bs-toggle="dropdown"
-                           aria-expanded="false">
-                            <i class="mdi mdi-dots-vertical"></i>
-                        </a>
-                        <div class="dropdown-menu dropdown-menu-end">
-                            <!-- item-->
-                            <a href="javascript:void(0);" class="dropdown-item">Sales Report</a>
-                            <!-- item-->
-                            <a href="javascript:void(0);" class="dropdown-item">Export Report</a>
-                            <!-- item-->
-                            <a href="javascript:void(0);" class="dropdown-item">Profit</a>
-                            <!-- item-->
-                            <a href="javascript:void(0);" class="dropdown-item">Action</a>
                         </div>
                     </div>
                 </div>
-
+            </div>
+        </div>
+        <div class="col-xl-3 col-lg-6">
+            <div class="card">
+                <div class="d-flex card-header justify-content-between align-items-center">
+                    <h4 class="header-title">Toplam Satış</h4>
+                </div>
                 <div class="card-body pt-0">
-                    <div id="average-sales" class="apex-charts mb-4 mt-2"
-                         data-colors="#727cf5,#0acf97,#fa5c7c,#ffbc00"></div>
-
-
+                    <div id="average-sales" class="apex-charts mb-4 mt-2"></div>
                     <div class="chart-widget-list">
-                        <p>
-                            <i class="mdi mdi-square text-primary"></i> Direct
-                            <span class="float-end">$300.56</span>
-                        </p>
-                        <p>
-                            <i class="mdi mdi-square text-danger"></i> Affilliate
-                            <span class="float-end">$135.18</span>
-                        </p>
-                        <p>
-                            <i class="mdi mdi-square text-success"></i> Sponsored
-                            <span class="float-end">$48.96</span>
-                        </p>
-                        <p class="mb-0">
-                            <i class="mdi mdi-square text-warning"></i> E-mail
-                            <span class="float-end">$154.02</span>
-                        </p>
+                        @foreach($donutChartData["categories"] as $key=>$val)
+                            <p>
+                                <i class="mdi mdi-square"
+                                   style="color: {{ $donutChartData["colors"][$key] }}"></i> {{ $val }}
+                                <span class="float-end">{{ number_format($donutChartData["prices"][$key], 2) }}₺</span>
+                            </p>
+                        @endforeach
                     </div>
                 </div>
             </div>
@@ -279,15 +228,13 @@
             {{--});--}}
             // use this code if ajax request for chart data end
 
-            $("#dash-daterange").daterangepicker({singleDatePicker: !0});
-
             const donutOpt = {
                 chart: {height: 202, type: "donut"},
                 legend: {show: !1},
                 stroke: {colors: ["transparent"]},
-                series: [44, 55, 41, 17],
-                labels: ["Direct", "Affilliate", "Sponsored", "E-mail"],
-                colors: ["#727cf5", "#0acf97", "#fa5c7c", "#ffbc00"],
+                series: [{{ implode(",", $donutChartData["prices"]) }}],
+                labels: "{{ implode(",", $donutChartData["categories"]) }}".split(","),
+                colors: "{{ implode(",", $donutChartData["colors"]) }}".split(","),
                 responsive: [{breakpoint: 480, options: {chart: {width: 200}, legend: {position: "bottom"}}}]
             };
             new ApexCharts(document.querySelector("#average-sales"), donutOpt).render();

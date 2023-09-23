@@ -2,22 +2,20 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Requests\Admin\ServiceRequest;
-use App\Models\Service;
+use App\Models\ShippingCompany;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 
-class ServiceController extends Controller
+class ShippingCompanyController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $services = Service::all();
-
-        return view("admin.pages.service.index", compact("services"));
+        $shipping_companies = ShippingCompany::all();
+        return view("admin.pages.shipping_company.index", compact("shipping_companies"));
     }
 
     /**
@@ -25,20 +23,18 @@ class ServiceController extends Controller
      */
     public function create()
     {
-        return view("admin.pages.service.edit");
+        //
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(ServiceRequest $request)
+    public function store(Request $request)
     {
 
-        $result = Service::create([
-            "title" => $request["title"],
-            "content" => $request["content"] ?? null,
-            "icon" => $request["icon"] ?? null,
-            "status" => $request["status"] == "on",
+        $result = ShippingCompany::create([
+            "name" => $request["name"],
+            "tracking_url" => $request["tracking_url"],
         ]);
 
         return $result ?
@@ -60,26 +56,24 @@ class ServiceController extends Controller
     public function edit(string $id)
     {
         $id = decrypt($id);
-        $service = Service::where("id", $id)->firstOrFail();
-
-        return view("admin.pages.service.edit", compact("service"));
+        $shipping_companies = ShippingCompany::all();
+        $shipping_company = ShippingCompany::where("id", $id)->first();
+        return view("admin.pages.shipping_company.index", compact("shipping_companies", "shipping_company"));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(ServiceRequest $request, string $id)
+    public function update(Request $request, string $id)
     {
         $id = decrypt($id);
-        $service = Service::query()->where("id", "=", $id)->firstOrFail();
+        $shippingCompany = ShippingCompany::where("id", "=", $id)->first();
 
-        if ($service) {
+        if ($shippingCompany) {
 
-            $result = $service->update([
-                "title" => $request["title"],
-                "content" => $request["content"] ?? null,
-                "icon" => $request["icon"] ?? null,
-                "status" => $request["status"] == "on",
+            $result = $shippingCompany->update([
+                "name" => $request["name"],
+                "tracking_url" => $request["tracking_url"],
             ]);
 
             return $result ?
@@ -99,22 +93,22 @@ class ServiceController extends Controller
         $result = false;
 
         try {
-            $id = decrypt($id);
-
-            $result = Service::where("id", $id)->firstOrFail()->delete();
-
+            if ($id != 1 && $id != 2){
+                $id = decrypt($id);
+                $shippingCompany = ShippingCompany::where("id", $id)->first();
+                $result = $shippingCompany->delete();
+            }
         } catch (Exception $e) {
-
             $error = $e->getMessage();
         } finally {
-
             return response(["result" => (bool)$result, "error" => $error]);
         }
     }
+
     public function update_status(Request $request, $id)
     {
         $id = decrypt($id);
-        $service = Service::where("id", "=", $id)->firstOrFail();
+        $service = ShippingCompany::where("id", "=", $id)->first();
 
         if ($service) {
 

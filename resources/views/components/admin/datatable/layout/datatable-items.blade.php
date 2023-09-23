@@ -1,5 +1,5 @@
 <div class="row">
-    <div class="col-12 float-end">
+    <div class="col-12 float-end {{ isset($addNewRoute) ? "" : "mb-2" }}">
         @if(isset($addNewRoute))
             <a href="{{ $addNewRoute }}" class="btn btn-success my-2 float-end">Yeni EKle</a>
         @endif

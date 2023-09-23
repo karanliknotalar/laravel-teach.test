@@ -84,6 +84,7 @@ Route::group(["prefix" => "admin", "middleware" => ["admin.dashboard.shared", "a
     Route::resource("service", "Admin\ServiceController")->except("show");
     Route::resource("vat", "Admin\VatController")->except("show");
     Route::resource("order", "Admin\OrderController");
+    Route::resource("shipping-company", "Admin\ShippingCompanyController");
 
     Route::post("product/update-status/{id}", "Admin\ProductController@update_status")->name("product.update-status");
     Route::post("product/featured-status/{id}", "Admin\ProductController@featured_status")->name("product.featured-status");
@@ -91,6 +92,7 @@ Route::group(["prefix" => "admin", "middleware" => ["admin.dashboard.shared", "a
     Route::post("category/update-status/{id}", "Admin\CategoryController@update_status")->name("category.update-status");
     Route::post("service/update-status/{id}", "Admin\ServiceController@update_status")->name("service.update-status");
     Route::post("coupon/update-status/{id}", "Admin\CouponController@update_status")->name("coupon.update-status");
+    Route::post("shipping-company/update-status/{id}", "Admin\ShippingCompanyController@update_status")->name("shipping-company.update-status");
 
     Route::get("about", [AboutController::class, "edit"])->name("about.edit");
     Route::post("about", [AboutController::class, "update"])->name("about.update");

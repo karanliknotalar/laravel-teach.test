@@ -113,6 +113,12 @@
                 :icon-name="'ri-settings-fill'"
             />
 
+            <x-admin.helpers.sidebar-single-menu-item
+                :url='route("shipping-company.index")'
+                :name="'Kargo Şirketleri'"
+                :icon-name="'ri-settings-fill'"
+            />
+
 
         </ul>
         <div class="clearfix"></div>

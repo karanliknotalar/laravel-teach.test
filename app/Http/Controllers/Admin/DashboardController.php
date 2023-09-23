@@ -190,7 +190,7 @@ class DashboardController extends Controller
         if ($data) {
             foreach ($data as $item) {
 
-                $cat_name = $item->product->category->name;
+                $cat_name = isset($item->product->category) ? $item->product->category->name : "null";
                 $sub_cat_name = isset($item->product->category->base_category)
                     ? $item->product->category->base_category->name . ' '
                     : '';

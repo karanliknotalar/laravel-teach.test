@@ -32,19 +32,11 @@
 
     <!-- Sidebar -left -->
     <div class="h-100" id="leftside-menu-container" data-simplebar>
-        <!-- Leftbar User -->
-        <div class="leftbar-user">
-            <a href="pages-profile.html">
-                <img src="{{ $asset }}images/users/avatar-1.jpg" alt="user-image" height="42"
-                     class="rounded-circle shadow-sm">
-                <span class="leftbar-user-name mt-2">Dominic Keller</span>
-            </a>
-        </div>
 
         <!--- Sidemenu -->
         <ul class="side-nav">
 
-            <li class="side-nav-title">Navigation</li>
+            <li class="side-nav-title">Menü</li>
 
             <x-admin.helpers.sidebar-single-menu-item
                 :url='route("dashboard.index")'
@@ -56,8 +48,46 @@
                 :url='route("category.index")'
                 :name="'Kategoriler'"
                 :icon-name="'mdi mdi-box-shadow'"
-                :count="$categoryCount"
+                :count="$categoryCount ?? null"
             />
+
+            <li class="side-nav-item">
+                <a data-bs-toggle="collapse" href="#sidebarEcommerce" aria-expanded="false" aria-controls="sidebarEcommerce" class="side-nav-link">
+                    <i class="uil-store"></i>
+                    <span> E-ticaret </span>
+                    <span class="menu-arrow"></span>
+                </a>
+                <div class="collapse" id="sidebarEcommerce">
+                    <ul class="side-nav-second-level">
+                        <x-admin.helpers.sidebar-single-menu-item
+                            :url='route("product.index")'
+                            :name="'Ürünler'"
+                            :count="$productCount ?? null"
+                        />
+                        <x-admin.helpers.sidebar-single-menu-item
+                            :url='route("order.index")'
+                            :name="'Siparişler'"
+                            :count="$orderIncompleteCount ?? null"
+                            :counter-color="'bg-danger'"
+                        />
+                        <x-admin.helpers.sidebar-single-menu-item
+                            :url='route("coupon.index")'
+                            :name="'Kuponlar'"
+                            :count="$couponCount ?? null"
+                        />
+                        <x-admin.helpers.sidebar-single-menu-item
+                            :url='route("vat.index")'
+                            :name="'KDV Oranları'"
+                            :count="$vatCount ?? null"
+                        />
+                        <x-admin.helpers.sidebar-single-menu-item
+                            :url='route("shipping-company.index")'
+                            :name="'Kargo Şirketleri'"
+                            :count="$shippingCompanyCount ?? null"
+                        />
+                    </ul>
+                </div>
+            </li>
 
             <x-admin.helpers.sidebar-single-menu-item
                 :url='route("slider.index")'
@@ -65,23 +95,12 @@
                 :icon-name="'uil-sliders-v-alt'"
                 :count="$sliderCount"
             />
-            <x-admin.helpers.sidebar-single-menu-item
-                :url='route("product.index")'
-                :name="'Ürünler'"
-                :icon-name="'ri-product-hunt-fill'"
-                :count="$productCount"
-            />
+
             <x-admin.helpers.sidebar-single-menu-item
                 :url='route("service.index")'
                 :name="'Hizmetler'"
                 :icon-name="'mdi mdi-truck-minus'"
                 :count="$serviceCount"
-            />
-            <x-admin.helpers.sidebar-single-menu-item
-                :url='route("order.index")'
-                :name="'Siparişler'"
-                :icon-name="'uil-store'"
-                :count="''"
             />
 
             <x-admin.helpers.sidebar-single-menu-item
@@ -102,23 +121,6 @@
                 :name="'Site Ayarları'"
                 :icon-name="'ri-settings-fill'"
             />
-            <x-admin.helpers.sidebar-single-menu-item
-                :url='route("coupon.index")'
-                :name="'Kuponlar'"
-                :icon-name="'ri-settings-fill'"
-            />
-            <x-admin.helpers.sidebar-single-menu-item
-                :url='route("vat.index")'
-                :name="'KDV Oranları'"
-                :icon-name="'ri-settings-fill'"
-            />
-
-            <x-admin.helpers.sidebar-single-menu-item
-                :url='route("shipping-company.index")'
-                :name="'Kargo Şirketleri'"
-                :icon-name="'ri-settings-fill'"
-            />
-
 
         </ul>
         <div class="clearfix"></div>

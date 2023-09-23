@@ -3,6 +3,9 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Models\Invoice;
+use App\Models\Shipping;
+use App\Models\ShippingCompany;
+use App\Models\ShippingInfo;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 
@@ -30,7 +33,23 @@ class OrderController extends Controller
      */
     public function store(Request $request)
     {
-        //
+//        return $request->all();
+
+        $invoiceId = decrypt($request["invoice_id"]);
+
+        $result = ShippingInfo::create([
+            "invoice_id" => $invoiceId,
+            "shipping_companies_id" => $request["shipping_companies_id"],
+            "tracking_number" => $request["tracking_number"],
+        ]);
+
+        if ($result) {
+            Invoice::where("id", $invoiceId)->update(["order_status" => 1]);
+        }
+
+        return $result ?
+            back()->with("status", "Kayıt işlemi başarılı.") :
+            back()->withErrors(["Kayıt işlemi sırasında hata oluştu."]);
     }
 
     /**
@@ -44,7 +63,6 @@ class OrderController extends Controller
             ->with("coupon:id,name,price")
             ->with("user:id,name,email")
             ->first();
-//        return $invoice;
         return view("admin.pages.order.detail", compact("invoice"));
     }
 
@@ -53,7 +71,11 @@ class OrderController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $id = decrypt($id);
+        $invoice = Invoice::where("id", $id)->select("id")->first();
+        $shippingInfo = ShippingInfo::where("invoice_id", $id)->first();
+        $shippingCompanies = ShippingCompany::where("status", 1)->select(["id", "name"])->get();
+        return view("admin.pages.order.edit", compact("invoice", "shippingInfo", "shippingCompanies"));
     }
 
     /**
@@ -61,7 +83,16 @@ class OrderController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $id = decrypt($id);
+
+        $result = ShippingInfo::where("id", $id)->update([
+            "shipping_companies_id" => $request["shipping_companies_id"],
+            "tracking_number" => $request["tracking_number"],
+        ]);
+
+        return $result ?
+            back()->with("status", "Güncelleme işlemi başarılı.") :
+            back()->withErrors(["Güncelleme işlemi sırasında hata oluştu."]);
     }
 
     /**

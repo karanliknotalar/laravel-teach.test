@@ -18,11 +18,11 @@
                             @endif
                         </h4>
                         <div class="mb-4">
-                            <h2 class="mb-1 text-muted">Blabla.com</h2>
+                            <h2 class="mb-1 text-muted">{{ app()->config['app.name'] }}</h2>
                         </div>
                         <div class="text-muted">
-                            <p class="mb-1">Site Adı</p>
-                            <p class="mb-1"><i class="uil uil-envelope-alt me-1"></i>Site Mail</p>
+                            <p class="mb-1">{{ app()->config['app.name'] }}</p>
+                            <p class="mb-1"><i class="uil uil-envelope-alt me-1"></i>{{ app()->config['app.url'] }}</p>
                             <p><i class="uil uil-phone me-1"></i>Site Telefon</p>
                         </div>
                     </div>

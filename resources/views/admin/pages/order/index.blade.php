@@ -13,7 +13,8 @@
                 <div class="card-body">
                     <div class="row mb-2">
                         <div class="col-xl-8">
-                            <form class="row gy-2 gx-2 align-items-center justify-content-xl-start justify-content-between">
+                            <form
+                                class="row gy-2 gx-2 align-items-center justify-content-xl-start justify-content-between">
                                 <div class="col-auto">
                                     <label for="inputPassword2" class="visually-hidden">Search</label>
                                     <input type="search" class="form-control" id="inputPassword2"
@@ -38,7 +39,7 @@
                         <div class="col-xl-4">
                             <div class="text-xl-end mt-xl-0 mt-2">
                                 <button type="button" class="btn btn-danger mb-2 me-2"><i
-                                            class="mdi mdi-basket me-1"></i> Add New Order
+                                        class="mdi mdi-basket me-1"></i> Add New Order
                                 </button>
                                 <button type="button" class="btn btn-light mb-2">Export</button>
                             </div>
@@ -82,7 +83,8 @@
                                         </td>
                                         <td>
                                             @if($invoice->payment_status == 1)
-                                                <h5><span class="badge badge-success-lighten"><i class="mdi mdi-credit-card"></i> Ödendi</span></h5>
+                                                <h5><span class="badge badge-success-lighten"><i
+                                                            class="mdi mdi-credit-card"></i> Ödendi</span></h5>
                                             @endif
                                         </td>
                                         <td>
@@ -95,15 +97,19 @@
                                             @if($invoice->order_status == 0)
                                                 <h5><span class="badge badge-info-lighten">Hazırlanıyor...</span></h5>
                                             @endif
-
+                                            @if($invoice->order_status == 1)
+                                                <h5><span class="badge badge-success-lighten">Kargolandı</span></h5>
+                                            @endif
                                         </td>
                                         <td>
-                                            <a href="{{ route("order.show", ["order" => encrypt($invoice->id)]) }}" class="action-icon"> <i
-                                                        class="mdi mdi-eye"></i></a>
+                                            <a href="{{ route("order.show", ["order" => encrypt($invoice->id)]) }}"
+                                               class="action-icon"> <i
+                                                    class="mdi mdi-eye"></i></a>
+                                            <a href="{{ route("order.edit", ["order" => encrypt($invoice->id)]) }}"
+                                               class="action-icon"> <i
+                                                    class="mdi mdi-square-edit-outline"></i></a>
                                             <a href="javascript:void(0);" class="action-icon"> <i
-                                                        class="mdi mdi-square-edit-outline"></i></a>
-                                            <a href="javascript:void(0);" class="action-icon"> <i
-                                                        class="mdi mdi-delete"></i></a>
+                                                    class="mdi mdi-delete"></i></a>
                                         </td>
                                     </tr>
                                 @endforeach
